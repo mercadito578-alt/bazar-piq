@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <meta name="theme-color" content="#FF6B00">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -10,18 +11,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-/* ── RESET Y BASE ─────────────────────────────────────── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{height:100%;}
-body{
-  background:#f4f6f9;
-  font-family:'Barlow',sans-serif;
-  color:#0d1b2a;
-  padding-bottom:72px;
-  font-size:14px;
-  min-height:100%;
-  overflow-x:hidden;
-}
+body{background:#f4f6f9;font-family:'Barlow',sans-serif;color:#0d1b2a;padding-bottom:72px;font-size:14px;min-height:100%;overflow-x:hidden;}
 :root{
   --navy:#0d1b2a;--navy-mid:#1b2d45;
   --blue:#FF6B00;--accent:#FF9A4D;
@@ -30,12 +22,9 @@ body{
   --employ:#7c3aed;--admin:#b45309;--gratis:#059669;
   --header-h:56px;--nav-h:60px;
 }
-#splash-screen{
-  position:fixed;top:0;left:0;width:100%;height:100%;
-  background:linear-gradient(160deg,#0d1b2a 0%,#1b2d45 50%,#0d1b2a 100%);
-  z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  transition:opacity .5s ease,visibility .5s ease;
-}
+
+/* ── SPLASH ─────────────────────────────────────────────── */
+#splash-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(160deg,#0d1b2a 0%,#1b2d45 50%,#0d1b2a 100%);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .5s ease,visibility .5s ease;}
 #splash-screen.oculto{opacity:0;visibility:hidden;}
 .splash-logo-wrap{text-align:center;margin-bottom:32px;}
 .splash-titulo{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:38px;letter-spacing:2px;color:#fff;text-transform:uppercase;line-height:1.1;}
@@ -50,17 +39,81 @@ body{
 .splash-msg{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:2px;color:rgba(255,255,255,.6);text-transform:uppercase;}
 .splash-barra-wrap{width:180px;height:4px;background:rgba(255,255,255,.15);border-radius:2px;margin-top:8px;overflow:hidden;}
 .splash-barra{height:100%;background:linear-gradient(90deg,#FF6B00,#FF9A4D);border-radius:2px;width:0%;transition:width .05s linear;}
+
+/* ── HEADER ─────────────────────────────────────────────── */
 .header{background:linear-gradient(135deg,var(--navy),var(--navy-mid));padding:0 12px;position:sticky;top:0;z-index:1000;height:var(--header-h);min-height:var(--header-h);display:flex;align-items:center;justify-content:center;border-bottom:2px solid var(--blue);box-shadow:0 3px 12px rgba(0,0,0,.35);flex-shrink:0;}
 .header-logo{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:15px;letter-spacing:1px;color:var(--white);text-transform:uppercase;text-align:center;line-height:1.15;}
 .header-logo span{color:var(--accent);}
 .btn-back-nav{position:absolute;left:10px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);border-radius:6px;width:38px;height:38px;min-width:38px;min-height:38px;display:flex;align-items:center;justify-content:center;color:var(--white);font-size:18px;cursor:pointer;flex-shrink:0;}
+
+/* ── NAV INFERIOR ───────────────────────────────────────── */
 .nav-bottom{position:fixed;bottom:0;left:0;width:100%;background:var(--navy);display:flex;border-top:2px solid var(--blue);z-index:1000;box-shadow:0 -3px 15px rgba(0,0,0,.4);height:var(--nav-h);min-height:var(--nav-h);}
 .nav-item{flex:1;text-align:center;padding:10px 4px 8px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;color:var(--gray-400);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-width:0;white-space:nowrap;}
 .nav-item .ni{font-size:17px;line-height:1;}
 .nav-item.active{color:var(--accent);border-top:3px solid var(--accent);}
+
+/* ── BANNER GRATIS ──────────────────────────────────────── */
 .banner-gratis{background:linear-gradient(135deg,#7f1d1d,#991b1b);color:#fca5a5;padding:10px 14px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;text-align:center;line-height:1.4;}
-.banner-mes-venta{background:linear-gradient(135deg,#7c2d12,#c2410c);color:#fff;padding:14px 16px;font-family:'Barlow',sans-serif;font-size:13px;font-weight:600;text-align:center;line-height:1.6;border-bottom:2px solid #FF6B00;}
-.banner-mes-venta .bmv-titulo{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:16px;letter-spacing:1px;margin-bottom:6px;}
+
+/* ── BANNER MES DE LA VENTA — ESTILO URGENCIA ───────────── */
+.banner-mes-venta{
+  background:linear-gradient(135deg,#E53E00 0%,#FF6B00 50%,#FF8C00 100%);
+  color:#fff;
+  padding:14px 16px;
+  text-align:center;
+  line-height:1.5;
+  border-bottom:3px solid #FFD700;
+  box-shadow:0 4px 20px rgba(255,107,0,.6);
+  animation:banner-pulso 2s ease infinite;
+  position:relative;
+  overflow:hidden;
+}
+.banner-mes-venta::before{
+  content:'';
+  position:absolute;top:0;left:-100%;width:60%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);
+  animation:banner-shine 2.5s ease infinite;
+}
+@keyframes banner-shine{0%{left:-100%;}100%{left:200%;}}
+@keyframes banner-pulso{0%,100%{box-shadow:0 4px 20px rgba(255,107,0,.6);}50%{box-shadow:0 4px 30px rgba(255,107,0,.9),0 0 40px rgba(255,107,0,.4);}}
+.banner-mv-live{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(0,0,0,.3);border-radius:20px;
+  padding:2px 10px;font-size:10px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;
+  margin-bottom:6px;
+}
+.banner-mv-punto{
+  width:8px;height:8px;background:#ff4444;border-radius:50%;
+  animation:punto-parpadeo .8s ease infinite alternate;
+  box-shadow:0 0 6px #ff4444;
+}
+@keyframes punto-parpadeo{0%{opacity:1;transform:scale(1);}100%{opacity:.3;transform:scale(.7);}}
+.banner-mv-titulo{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:800;font-size:20px;letter-spacing:1px;
+  text-transform:uppercase;line-height:1.1;
+  text-shadow:0 2px 8px rgba(0,0,0,.4);
+  margin-bottom:4px;
+}
+.banner-mv-sub{
+  font-family:'Barlow',sans-serif;
+  font-size:12px;font-weight:600;
+  color:rgba(255,255,255,.95);
+  margin-bottom:6px;
+}
+.banner-mv-cta{
+  display:inline-block;
+  background:#FFD700;color:#000;
+  font-family:'Barlow Condensed',sans-serif;font-weight:800;
+  font-size:14px;letter-spacing:1px;text-transform:uppercase;
+  padding:6px 18px;border-radius:20px;
+  box-shadow:0 3px 10px rgba(0,0,0,.3);
+  animation:cta-bounce .6s ease infinite alternate;
+}
+@keyframes cta-bounce{0%{transform:scale(1);}100%{transform:scale(1.05);}}
+
+/* ── CARDS PRODUCTOS ────────────────────────────────────── */
 .card-p{background:var(--white);border-radius:10px;border:1px solid var(--gray-200);overflow:hidden;box-shadow:0 2px 8px rgba(13,27,42,.07);}
 .img-p-lista{width:100%;height:155px;object-fit:contain;background:var(--gray-100);padding:8px;display:block;}
 .card-body-p{padding:10px 12px 12px;}
@@ -71,6 +124,8 @@ body{
 .badge-entrega{background:#fff3e0;color:#FF6B00;padding:3px 7px;border-radius:4px;font-size:10px;font-weight:700;display:inline-block;margin-top:4px;}
 .badge-domicilio{background:#d4edda;color:#155724;padding:3px 7px;border-radius:4px;font-size:10px;font-weight:700;display:inline-block;margin-top:4px;}
 .btn-ver-p{background:var(--blue);color:var(--white);border:none;padding:8px;width:100%;border-radius:6px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;cursor:pointer;margin-top:8px;}
+
+/* ── CARDS EMPLEO ───────────────────────────────────────── */
 .card-empleo{background:var(--white);border-radius:10px;border:1px solid var(--gray-200);border-left:4px solid var(--employ);padding:14px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.06);}
 .card-empleo.solicitud{border-left-color:var(--success);}
 .empleo-tipo{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;}
@@ -83,13 +138,19 @@ body{
 .pill-horario{background:#fff3e0;color:var(--blue);}
 .pill-ubic{background:#fef3c7;color:#92400e;}
 .pill-transporte{background:#e0e7ff;color:var(--employ);}
+
+/* ── SECCIONES ──────────────────────────────────────────── */
 .section-card{background:var(--white);border-radius:10px;border:1px solid var(--gray-200);padding:16px;margin-bottom:14px;box-shadow:0 2px 8px rgba(13,27,42,.06);}
 .section-title{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gray-400);margin-bottom:10px;}
+
+/* ── SALDO WIDGET ───────────────────────────────────────── */
 .saldo-widget{background:linear-gradient(135deg,var(--navy),var(--navy-mid));border-radius:12px;padding:16px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 4px 14px rgba(13,27,42,.25);}
 .saldo-info .saldo-lbl{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:2px;}
 .saldo-info .saldo-num{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:32px;color:var(--white);line-height:1;}
 .saldo-info .saldo-num.bajo{color:#f87171;}
 .saldo-recarga-btn{background:var(--accent);color:var(--navy);border:none;border-radius:8px;padding:10px 14px;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:11px;cursor:pointer;white-space:nowrap;text-align:center;}
+
+/* ── BOTONES ────────────────────────────────────────────── */
 .btn-p,.btn-dark,.btn-out,.btn-success,.btn-warn,.btn-employ,.btn-admin,.btn-gratis,.btn-toggle-on,.btn-toggle-off{display:block;width:100%;border-radius:7px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;cursor:pointer;margin-bottom:8px;padding:11px 16px;border:none;min-height:42px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .btn-p{background:var(--blue);color:var(--white);}
 .btn-dark{background:var(--navy);color:var(--white);}
@@ -101,7 +162,11 @@ body{
 .btn-gratis{background:linear-gradient(135deg,#047857,#059669);color:var(--white);font-size:15px;padding:12px;}
 .btn-toggle-on{background:linear-gradient(135deg,#064e3b,#059669);color:var(--white);font-size:14px;padding:12px;}
 .btn-toggle-off{background:linear-gradient(135deg,#7f1d1d,#b91c1c);color:var(--white);font-size:14px;padding:12px;}
+.btn-urgencia{background:linear-gradient(135deg,#E53E00,#FF6B00);color:var(--white);font-size:15px;padding:12px;border-radius:7px;font-family:'Barlow Condensed',sans-serif;font-weight:800;cursor:pointer;margin-bottom:8px;border:none;width:100%;min-height:42px;box-shadow:0 4px 15px rgba(255,107,0,.4);animation:btn-urgencia-pulso 1.5s ease infinite alternate;}
+@keyframes btn-urgencia-pulso{0%{box-shadow:0 4px 15px rgba(255,107,0,.4);}100%{box-shadow:0 4px 25px rgba(255,107,0,.7);}}
 .btn-config{background:var(--gray-100);color:var(--navy);border:1px solid var(--gray-200);border-radius:8px;padding:10px 14px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px;width:100%;margin-bottom:6px;min-height:40px;white-space:nowrap;}
+
+/* ── PRODUCTOS PANEL TIENDA ─────────────────────────────── */
 .prod-row{background:var(--white);border:1px solid var(--gray-200);border-radius:10px;padding:10px;margin-bottom:8px;display:flex;align-items:center;gap:10px;}
 .prod-row.sin-stock{border-color:var(--danger);background:#fff5f5;}
 .prod-row img{width:48px;height:48px;object-fit:cover;border-radius:8px;flex-shrink:0;}
@@ -112,11 +177,15 @@ body{
 .prod-row-acciones{display:grid;grid-template-columns:1fr 1fr;gap:4px;flex-shrink:0;width:72px;}
 .btn-mini{border:none;border-radius:5px;padding:5px 0;font-size:13px;font-family:'Barlow Condensed',sans-serif;font-weight:700;cursor:pointer;white-space:nowrap;text-align:center;min-width:32px;}
 .alerta-inventario{background:#fee2e2;border:1px solid var(--danger);border-radius:6px;padding:4px 8px;font-size:10px;color:var(--danger);font-weight:700;margin-top:3px;display:inline-block;}
+
+/* ── FORMULARIOS ────────────────────────────────────────── */
 .fc{width:100%;padding:10px 12px;border:1.5px solid var(--gray-200);border-radius:7px;font-family:'Barlow',sans-serif;font-size:14px;color:var(--navy);background:var(--white);margin-bottom:10px;outline:none;display:block;}
 .fc:focus{border-color:var(--blue);}
 .fl{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--gray-600);margin-bottom:4px;display:block;}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .pass-strength{height:4px;border-radius:2px;margin-bottom:8px;transition:width .3s;background:var(--gray-200);}
+
+/* ── FILTROS ────────────────────────────────────────────── */
 .filtro-cats{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
 .filtro-cats::-webkit-scrollbar{display:none;}
 .filtro-btn{white-space:nowrap;background:var(--white);border:1.5px solid var(--gray-200);border-radius:20px;padding:5px 12px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;cursor:pointer;flex-shrink:0;color:var(--navy);}
@@ -133,6 +202,8 @@ body{
 .badge-filtros-activos{background:var(--blue);color:#fff;border-radius:50%;width:16px;height:16px;font-size:9px;font-family:'Barlow Condensed',sans-serif;font-weight:800;display:inline-flex;align-items:center;justify-content:center;margin-left:4px;}
 .btn-ver-mas-prods{background:var(--white);border:2px solid var(--blue);border-radius:8px;padding:12px;width:100%;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;color:var(--blue);cursor:pointer;margin-top:10px;grid-column:1/-1;}
 .btn-ver-mas-tienda{background:linear-gradient(135deg,var(--navy),var(--navy-mid));color:var(--white);border:none;border-radius:8px;padding:10px 14px;width:100%;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;cursor:pointer;margin-top:10px;display:flex;align-items:center;justify-content:center;gap:6px;}
+
+/* ── SKELETON ───────────────────────────────────────────── */
 .skeleton-card{background:var(--white);border-radius:10px;border:1px solid var(--gray-200);overflow:hidden;}
 .skeleton-img{width:100%;height:155px;background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;}
 .skeleton-body{padding:10px 12px 12px;}
@@ -141,22 +212,32 @@ body{
 .skeleton-line.med{width:80%;}
 .skeleton-line.long{width:100%;}
 @keyframes shimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
+
+/* ── LOADER ─────────────────────────────────────────────── */
 .loading-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(13,27,42,.75);display:none;flex-direction:column;justify-content:center;align-items:center;z-index:2000;}
 .spinner{width:42px;height:42px;border:3px solid rgba(255,255,255,.2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
+
+/* ── MODALES ────────────────────────────────────────────── */
 .modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(13,27,42,.78);z-index:3000;overflow-y:auto;}
 .modal-box{background:var(--white);margin:16px auto;max-width:480px;border-radius:14px;padding:22px;border-top:4px solid var(--blue);}
 .modal-box.admin-modal{border-top-color:var(--admin);}
 .modal-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:20px;color:var(--navy);margin-bottom:16px;}
+
+/* ── CONTRATO ───────────────────────────────────────────── */
 .contrato-box{background:#f8fafc;border:2px solid var(--blue);border-radius:10px;padding:16px;margin-bottom:12px;max-height:260px;overflow-y:auto;font-size:12px;line-height:1.6;color:var(--navy-mid);}
 .contrato-box h6{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:13px;color:var(--navy);margin:10px 0 4px;text-transform:uppercase;letter-spacing:1px;}
 .checklist-aviso{background:#fff3cd;border:1px solid var(--warning);border-radius:8px;padding:10px;font-size:11px;margin-bottom:12px;color:#78350f;}
+
+/* ── ADMIN ──────────────────────────────────────────────── */
 .admin-tienda-row{background:var(--white);border:1px solid var(--gray-200);border-radius:8px;padding:12px;margin-bottom:8px;}
 .admin-mini-btn{border:none;border-radius:5px;padding:6px 10px;font-size:12px;font-family:'Barlow Condensed',sans-serif;font-weight:700;cursor:pointer;margin-right:4px;margin-bottom:4px;}
 .mov-fila{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--gray-100);font-size:12px;}
 .mov-RECARGA,.mov-REGALO{color:var(--success);font-weight:700;}
 .mov-COBRO,.mov-COBRO_EMPLEO{color:var(--danger);font-weight:700;}
 .mov-DESCUENTO{color:var(--warning);font-weight:700;}
+
+/* ── PEDIDO ─────────────────────────────────────────────── */
 .item-pedido-edit{background:var(--gray-100);border:1px solid var(--gray-200);border-radius:8px;padding:10px;margin-bottom:8px;}
 .item-pedido-nombre{font-weight:700;font-size:13px;color:var(--navy);margin-bottom:5px;}
 .item-pedido-controles{display:flex;align-items:center;gap:8px;}
@@ -167,6 +248,8 @@ body{
 .nota-item{font-size:11px;color:#FF6B00;margin-top:5px;cursor:pointer;text-decoration:underline dotted;}
 .resumen-pedido{background:var(--gray-100);padding:14px;border-radius:10px;margin-top:16px;border:1px dashed var(--gray-400);}
 .btn-pedido-completo{background:linear-gradient(135deg,#e05c00,#ff6b00);color:var(--white);border:none;padding:14px 20px;width:90%;border-radius:10px;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:18px;cursor:pointer;margin:16px auto 0;display:block;text-align:center;}
+
+/* ── MISC ───────────────────────────────────────────────── */
 .metric-pill{background:var(--gray-200);padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;margin-right:5px;display:inline-block;color:var(--navy);}
 .horario-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:20px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;margin-bottom:8px;}
 .horario-badge.en-horario{background:#d1fae5;color:#065f46;}
@@ -285,7 +368,6 @@ body{
     <div class="splash-barra-wrap"><div class="splash-barra" id="splash-barra"></div></div>
   </div>
 </div>
-
 <script>
 (function(){
   var num=5,total=5000,intervalo=50,transcurrido=0;
@@ -321,11 +403,15 @@ body{
 <!-- ═══ BANNER GRATIS ═══ -->
 <div id="banner-gratis" class="banner-gratis d-none"></div>
 
-<!-- ═══ BANNER MES DE LA VENTA ═══ -->
+<!-- ═══ BANNER MES DE LA VENTA — URGENCIA ═══ -->
 <div id="banner-mes-venta" class="banner-mes-venta d-none">
-  <div class="bmv-titulo">🔥 ¡El Mes de la Venta ya empezó y el tiempo vuela! 🔥</div>
-  Mientras lo piensas, tu competencia ya se está ganando a los clientes de la zona. ¡No te quedes atrás!<br>
-  Ven a publicar tu negocio HOY mismo en Bazar Parque Industrial Querétaro y haz que te vean primero. ⏳🚀
+  <div class="banner-mv-live">
+    <div class="banner-mv-punto"></div>
+    EN VIVO &nbsp;|&nbsp; ⏰ TIEMPO LIMITADO
+  </div>
+  <div class="banner-mv-titulo">🔥 ¡EL MES DE LA VENTA YA EMPEZÓ!</div>
+  <div class="banner-mv-sub">Tu competencia ya está publicando y ganando clientes de la zona.<br>¡No te quedes atrás — actúa AHORA!</div>
+  <div class="banner-mv-cta">🚀 PUBLICA HOY EN BAZAR PIQ ⏳</div>
 </div>
 
 <!-- Modal Contrato -->
@@ -732,7 +818,7 @@ body{
 <div id="p-vender" class="d-none" style="padding:12px;">
   <div class="section-card" style="border-left:4px solid var(--warning);">
     <div class="section-title">⚡ Venta Rápida</div>
-    <button id="btn-producto-unico" class="btn-warn">🔥 ¡PUBLICA YA, NO TE QUEDES FUERA!</button>
+    <button id="btn-producto-unico" class="btn-urgencia">🔥 ¡PUBLICA YA, NO TE QUEDES FUERA!</button>
   </div>
   <div class="section-card" style="border-left:4px solid var(--navy);">
     <div class="section-title">🏪 Mi Negocio</div>
@@ -782,44 +868,88 @@ body{
 </div>
 
 <script>
-// ═══════════════════════════════════════════
-//  CONFIGURACIÓN — URL DEL BACKEND GS
-// ═══════════════════════════════════════════
-var APP_URL = 'https://script.google.com/macros/s/AKfycbz9j2Z_2AyeCIQXlb9KZEnbxp-EDrNThcU9tMi1F4h-reRyZbIfJMiPRRPWvbrZ7YqO/exec';
+// ═══════════════════════════════════════════════════════════
+//  CONFIGURACIÓN — PROXY CLOUDFLARE → GOOGLE APPS SCRIPT
+// ═══════════════════════════════════════════════════════════
+var APP_URL = 'https://bazar-piq-proxy.mercadito578.workers.dev';
+var GS_URL_REAL = 'https://script.google.com/macros/s/AKfycbz9j2Z_2AyeCIQXlb9KZEnbxp-EDrNThcU9tMi1F4h-reRyZbIfJMiPRRPWvbrZ7YqO/exec';
 
-// ═══════════════════════════════════════════
-//  FUNCIÓN CENTRAL DE LLAMADAS AL BACKEND
-// ═══════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
+//  ACCIONES QUE USAN POST (datos grandes)
+// ═══════════════════════════════════════════════════════════
+var ACCIONES_POST = [
+  'subirFotoEnCarpeta','subirPdfComisiones','subirPdfTerminos',
+  'guardarProducto','guardarProductoUnico','registrarTiendaServidor',
+  'registrarUsuarioUnico','registrarEmpresaServidor',
+  'publicarOfertaEmpleoConCobro','publicarBuscoEmpleo',
+  'actualizarMenuDisponible','adminGuardarCfgComisiones',
+  'adminGuardarPrioridades','actualizarTienda'
+];
+
+// ═══════════════════════════════════════════════════════════
+//  FUNCIÓN CENTRAL DE API — GET o POST automático
+// ═══════════════════════════════════════════════════════════
 function _api(action, params, callback) {
-  var url = APP_URL + '?action=' + encodeURIComponent(action);
-  if (params) {
-    Object.keys(params).forEach(function(k) {
-      var v = params[k];
-      if (typeof v === 'object') v = JSON.stringify(v);
-      url += '&' + encodeURIComponent(k) + '=' + encodeURIComponent(v);
-    });
+  var usaPost = ACCIONES_POST.indexOf(action) !== -1;
+  if (usaPost) {
+    var body = Object.assign({action: action}, params || {});
+    fetch(APP_URL, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(body)
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(data){ if(callback) callback(data); })
+    .catch(function(e){ console.error('POST error:', action, e); if(callback) callback(null); });
+  } else {
+    var url = APP_URL + '?action=' + encodeURIComponent(action);
+    if (params) {
+      Object.keys(params).forEach(function(k) {
+        var v = params[k];
+        if (typeof v === 'object') v = JSON.stringify(v);
+        url += '&' + encodeURIComponent(k) + '=' + encodeURIComponent(v);
+      });
+    }
+    fetch(url)
+    .then(function(r){ return r.json(); })
+    .then(function(data){ if(callback) callback(data); })
+    .catch(function(e){ console.error('GET error:', action, e); if(callback) callback(null); });
   }
-  fetch(url)
-    .then(function(r) { return r.json(); })
-    .then(function(data) { if (callback) callback(data); })
-    .catch(function(e) { console.error('API error:', action, e); if (callback) callback(null); });
 }
 
-function _apiPost(action, params, callback) {
-  var body = Object.assign({action: action}, params || {});
-  fetch(APP_URL, {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify(body)
-  })
-    .then(function(r) { return r.json(); })
-    .then(function(data) { if (callback) callback(data); })
-    .catch(function(e) { console.error('API POST error:', action, e); if (callback) callback(null); });
+// ═══════════════════════════════════════════════════════════
+//  COMPRIMIR IMAGEN — max 700px, calidad 65%
+// ═══════════════════════════════════════════════════════════
+function comprimirImagen(file, callback) {
+  var r = new FileReader();
+  r.onload = function(ev) {
+    var img = new Image();
+    img.onload = function() {
+      var w = img.width, h = img.height, mx = 700, my = 700;
+      if (w > mx) { h = Math.round(h * mx / w); w = mx; }
+      if (h > my) { w = Math.round(w * my / h); h = my; }
+      var c = document.createElement('canvas');
+      c.width = w; c.height = h;
+      c.getContext('2d').drawImage(img, 0, 0, w, h);
+      callback(c.toDataURL('image/jpeg', 0.65));
+    };
+    img.src = ev.target.result;
+  };
+  r.readAsDataURL(file);
 }
 
-// ═══════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
+//  COMPRIMIR PDF — chunked base64
+// ═══════════════════════════════════════════════════════════
+function leerPdfBase64(file, callback) {
+  var r = new FileReader();
+  r.onload = function(e) { callback(e.target.result); };
+  r.readAsDataURL(file);
+}
+
+// ═══════════════════════════════════════════════════════════
 //  GLOBALES
-// ═══════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
 var tiendaActiva=null,usuarioActivo=null,allProds=[],ordenComida=[];
 var historial=['p-comprar'],paginaActual='p-comprar';
 var pedidoWaTel='',pedidoWaTienda='',comunidadesVendedor=[];
@@ -856,13 +986,12 @@ var TIEMPOS_ENTREGA=[
 function evalPass(inp,barra){var v=document.getElementById(inp).value,s=0;if(v.length>=8)s++;if(v.length>=12)s++;if(/[A-Z]/.test(v))s++;if(/[0-9]/.test(v))s++;if(/[^A-Za-z0-9]/.test(v))s++;var cols=['','#d63b3b','#e08c00','#f59e0b','#3b82f6','#059669'],pcts=[0,20,40,60,80,100];var b=document.getElementById(barra);b.style.width=pcts[s]+'%';b.style.background=cols[s];}
 function validarPass(p,min){if(!p||p.length<min)return 'Mínimo '+min+' caracteres';if(!/[A-Za-z]/.test(p))return 'Debe incluir letras';if(!/[0-9]/.test(p))return 'Debe incluir números';return null;}
 function carpetaEnSecuencia(){var idx=_fotoSecuenciaIdx%CARPETAS_SECUENCIA.length;_fotoSecuenciaIdx++;return CARPETAS_SECUENCIA[idx];}
-function comprimirImagen(file,callback){var r=new FileReader();r.onload=function(ev){var img=new Image();img.onload=function(){var w=img.width,h=img.height,mx=700,my=700;if(w>mx){h=Math.round(h*mx/w);w=mx;}if(h>my){w=Math.round(w*my/h);h=my;}var c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);callback(c.toDataURL('image/jpeg',0.65));};img.src=ev.target.result;};r.readAsDataURL(file);}
 function horaQueretaro(){var now=new Date();return new Date(now.getTime()+now.getTimezoneOffset()*60000+(-6*3600000));}
 function tiendaEnHorario(t){if(!t||!t.h_abre||!t.h_cierra)return true;var ahora=horaQueretaro(),h=ahora.getHours(),m=ahora.getMinutes(),minA=h*60+m;var pA=t.h_abre.split(':'),pC=t.h_cierra.split(':');return minA>=(parseInt(pA[0])*60+(parseInt(pA[1])||0))&&minA<(parseInt(pC[0])*60+(parseInt(pC[1])||0));}
 function diasHastaVencer(fp){if(!fp)return 30;var pub=new Date(fp),vence=new Date(pub.getTime()+30*24*3600*1000);return Math.ceil((vence-new Date())/(1000*3600*24));}
 function verPdfComisiones(){if(!PDF_COMISIONES_URL){alert('No hay PDF de comisiones disponible.');return;}window.open(PDF_COMISIONES_URL,'_blank');}
 function verPdfPoliticas(){if(!PDF_POLITICAS_URL){alert('No hay PDF de políticas disponible.');return;}window.open(PDF_POLITICAS_URL,'_blank');}
-function generarLinkProducto(id,esUnico){return APP_URL+'#prod='+encodeURIComponent(id)+(esUnico?'&tipo=unico':'');}
+function generarLinkProducto(id){return 'https://mercadito578-alt.github.io/bazar-piq/?prod='+encodeURIComponent(id);}
 
 // ═══ MODO GRATUITO ═══
 function aplicarModoGratis(activo){
@@ -893,7 +1022,7 @@ function ir(id,guardar){
   if(guardar&&historial[historial.length-1]!==id)historial.push(id);
   paginaActual=id;
   var roots=['p-comprar','p-vender','p-empleo','p-admin-panel'];
-  document.getElementById('main-back').classList.toggle('d-none',roots.indexOf(id)===-1?false:true);
+  document.getElementById('main-back').classList.toggle('d-none',roots.indexOf(id)!==-1);
   ['p-comprar','p-vender','p-empleo','p-form','p-detalle','p-admin-panel','p-tienda-vitrina'].forEach(function(pg){var el=document.getElementById(pg);if(el)el.classList.add('d-none');});
   document.getElementById(id).classList.remove('d-none');
   ['nav-comprar','nav-vender','nav-empleo'].forEach(function(n){document.getElementById(n).classList.remove('active');});
@@ -980,7 +1109,7 @@ function verArticulosTienda(nombreTienda){
   cont.innerHTML='<div style="text-align:center;padding:40px;"><div class="spinner" style="margin:auto;"></div></div>';
   var prods=allProds.filter(function(p){return (p.nombre_tienda||'').toLowerCase()===nombreTienda.toLowerCase();});
   if(!prods.length){cont.innerHTML='<div style="text-align:center;padding:40px;color:var(--gray-400);">Sin productos disponibles</div>';return;}
-  var linkTienda=APP_URL+'?tienda='+encodeURIComponent(nombreTienda);
+  var linkTienda='https://mercadito578-alt.github.io/bazar-piq/?tienda='+encodeURIComponent(nombreTienda);
   var h='<div style="background:linear-gradient(135deg,var(--navy),var(--navy-mid));border-radius:12px;padding:16px;margin-bottom:16px;color:#fff;"><div style="font-family:\'Barlow Condensed\',sans-serif;font-weight:800;font-size:22px;">🏪 '+nombreTienda+'</div><div style="font-size:11px;color:var(--accent);margin-top:4px;">'+prods.length+' producto(s) disponible(s)</div><button id="btn-compartir-vitrina" style="background:#FF6B00;color:#fff;border:none;border-radius:8px;padding:8px 14px;font-family:\'Barlow Condensed\',sans-serif;font-weight:700;font-size:13px;cursor:pointer;margin-top:10px;">📤 Compartir esta tienda</button></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">';
   prods.forEach(function(p){var sb='';if(p.stock){if(String(p.stock).toLowerCase()==='bajo pedido')sb='<span style="font-size:10px;background:#fffbeb;color:#92400e;padding:2px 5px;border-radius:4px;display:inline-block;margin-top:3px;">📋 Bajo Pedido</span>';else if(parseInt(p.stock)>0)sb='<span style="font-size:10px;background:#fff3e0;color:#FF6B00;padding:2px 5px;border-radius:4px;display:inline-block;margin-top:3px;">📦 '+p.stock+'</span>';}h+='<div class="card-p"><img src="'+p.foto+'" class="img-p-lista" loading="lazy"><div class="card-body-p"><span class="badge-cat">'+(p.categoria||'')+'</span><div class="card-price">$'+p.precio+'</div><div class="card-name">'+p.prod_nombre+'</div>'+sb+'<button class="btn-ver-p" data-prod-id-v="'+p.id_prod+'">VER DETALLE</button></div></div>';});
   h+='</div>';cont.innerHTML=h;
@@ -1063,8 +1192,10 @@ function comCargarValores(cfg){if(!cfg)return;['basico','medio','pro'].forEach(f
 function comLeerFormulario(){var cfg={paquetes:{basico:{costo_paquete:parseFloat(document.getElementById('paq-basico-costo').value)||0,limite:parseInt(document.getElementById('paq-basico-limite').value)||0},medio:{costo_paquete:parseFloat(document.getElementById('paq-medio-costo').value)||0,limite:parseInt(document.getElementById('paq-medio-limite').value)||0},pro:{costo_paquete:parseFloat(document.getElementById('paq-pro-costo').value)||0,limite:parseInt(document.getElementById('paq-pro-limite').value)||0}},rangos:[],tiempos:{},empleo:{}};for(var i=0;i<=8;i++){var el=document.getElementById('rango-'+i);cfg.rangos.push(el?parseFloat(el.value)||0:0);}var mt={'1-2':'tiempo-1-2','2-3':'tiempo-2-3','3-4':'tiempo-3-4','5-6':'tiempo-5-6'};Object.keys(mt).forEach(function(k){var el=document.getElementById(mt[k]);cfg.tiempos[k]=el?parseFloat(el.value)||0:0;});cfg.empleo={costo_publicacion:parseFloat((document.getElementById('emp-costo-oferta')||{}).value)||0};return cfg;}
 function comActualizarPreview(){var cfg=comLeerFormulario(),previewEl=document.getElementById('com-preview'),textoEl=document.getElementById('com-preview-texto');if(!previewEl||!textoEl)return;var lineas=[];['basico','medio','pro'].forEach(function(p){var paq=cfg.paquetes[p];if(paq.costo_paquete>0&&paq.limite>0){var em={basico:'⭐',medio:'🌟',pro:'💎'};lineas.push(em[p]+' <b>'+p.charAt(0).toUpperCase()+p.slice(1)+'</b>: $'+paq.costo_paquete.toFixed(2)+' · '+paq.limite+' pubs');}});if(cfg.empleo.costo_publicacion>0)lineas.push('💼 Empleo: $'+cfg.empleo.costo_publicacion.toFixed(2));if(lineas.length>0){previewEl.style.display='block';textoEl.innerHTML=lineas.join('<br>');}else previewEl.style.display='none';}
 function guardarComisiones(){var cfg=comLeerFormulario();document.getElementById('loader').style.display='flex';_api('adminGuardarCfgComisiones',{categoria:_comCatActual,cfg:JSON.stringify(cfg)},function(r){document.getElementById('loader').style.display='none';if(r&&r.ok){_comCfgActual=cfg;alert('✅ Guardado.');document.getElementById('modal-comisiones').style.display='none';}else alert('❌ Error.');});}
-function subirPdfComisiones(){var inp=document.getElementById('pdf-comisiones-input');if(!inp||!inp.files||!inp.files[0]){alert('Selecciona un PDF.');return;}var file=inp.files[0];if(file.type!=='application/pdf'){alert('El archivo debe ser PDF.');return;}document.getElementById('loader').style.display='flex';var r=new FileReader();r.onload=function(e){_api('subirPdfComisiones',{base64:e.target.result,nombre:file.name},function(url){document.getElementById('loader').style.display='none';if(url){PDF_COMISIONES_URL=url;var el=document.getElementById('pdf-link-actual');if(el)el.innerHTML='📄 <a href="'+url+'" target="_blank" style="color:var(--blue);">Ver PDF subido</a>';alert('✅ PDF de comisiones subido.');}else alert('Error al subir.');});};r.readAsDataURL(file);}
-function subirPdfPoliticas(){var inp=document.getElementById('pdf-politicas-input');if(!inp||!inp.files||!inp.files[0]){alert('Selecciona un PDF.');return;}var file=inp.files[0];if(file.type!=='application/pdf'){alert('El archivo debe ser PDF.');return;}document.getElementById('loader').style.display='flex';var r=new FileReader();r.onload=function(e){_api('subirPdfTerminos',{base64:e.target.result,nombre:file.name},function(url){document.getElementById('loader').style.display='none';if(url){PDF_POLITICAS_URL=url;var el=document.getElementById('pdf-politicas-link-actual');if(el)el.innerHTML='📄 <a href="'+url+'" target="_blank" style="color:var(--blue);">Ver PDF subido</a>';alert('✅ PDF de políticas subido.');}else alert('Error al subir.');});};r.readAsDataURL(file);}
+
+// ═══ PDF ═══
+function subirPdfComisiones(){var inp=document.getElementById('pdf-comisiones-input');if(!inp||!inp.files||!inp.files[0]){alert('Selecciona un PDF.');return;}var file=inp.files[0];if(file.type!=='application/pdf'){alert('El archivo debe ser PDF.');return;}document.getElementById('loader').style.display='flex';leerPdfBase64(file,function(b64){_api('subirPdfComisiones',{base64:b64,nombre:file.name},function(url){document.getElementById('loader').style.display='none';if(url){PDF_COMISIONES_URL=url;var el=document.getElementById('pdf-link-actual');if(el)el.innerHTML='📄 <a href="'+url+'" target="_blank" style="color:var(--blue);">Ver PDF subido</a>';alert('✅ PDF de comisiones subido.');}else alert('Error al subir.');});});}
+function subirPdfPoliticas(){var inp=document.getElementById('pdf-politicas-input');if(!inp||!inp.files||!inp.files[0]){alert('Selecciona un PDF.');return;}var file=inp.files[0];if(file.type!=='application/pdf'){alert('El archivo debe ser PDF.');return;}document.getElementById('loader').style.display='flex';leerPdfBase64(file,function(b64){_api('subirPdfTerminos',{base64:b64,nombre:file.name},function(url){document.getElementById('loader').style.display='none';if(url){PDF_POLITICAS_URL=url;var el=document.getElementById('pdf-politicas-link-actual');if(el)el.innerHTML='📄 <a href="'+url+'" target="_blank" style="color:var(--blue);">Ver PDF subido</a>';alert('✅ PDF de políticas subido.');}else alert('Error al subir.');});});}
 function exportarPdfComisiones(){var cfg=comLeerFormulario();document.getElementById('loader').style.display='flex';_api('generarPdfComisiones',{categoria:_comCatActual,cfg:JSON.stringify(cfg)},function(url){document.getElementById('loader').style.display='none';if(url)window.open(url,'_blank');else alert('Error.');});}
 
 // ═══ SESIÓN ═══
@@ -1128,15 +1259,16 @@ function panelTienda(){
     var paqH='';
     if(!esGratis){if(tiendaActiva.paquete_activo){var pubs=tiendaActiva.pubs_restantes||0,pubColor=pubs<=5?'bajo':'';paqH='<div class="paq-info-card"><div style="display:flex;justify-content:space-between;align-items:center;"><div><div style="font-size:11px;color:var(--gray-400);">Paquete activo</div><span class="paq-badge paq-'+tiendaActiva.paquete_activo+'">'+tiendaActiva.paquete_activo.toUpperCase()+'</span></div>'+(tiendaActiva.fecha_exp?'<div style="text-align:right;"><div style="font-size:10px;color:var(--gray-400);">Vence</div><div style="font-family:\'Barlow Condensed\',sans-serif;font-weight:800;font-size:15px;color:var(--warning);">'+tiendaActiva.fecha_exp+'</div></div>':'')+'</div><div class="pubs-restantes"><div class="lbl">Publicaciones disponibles</div><div class="num '+pubColor+'">'+pubs+'</div></div></div>';}else paqH='<div class="paq-info-card"><span class="paq-badge paq-sin">Sin paquete activo</span></div>';}
     var saldoHtml='';
-    if(!esGratis){if(tiendaActiva.saldo<=0)saldoHtml='<div class="saldo-cero-box"><div class="lbl">⚠️ Sin Saldo</div><div class="val">$0.00</div></div><button class="btn-warn" id="btn-saldo-sin">💳 RECARGAR SALDO</button>';else{var sc=tiendaActiva.saldo<10?'bajo':'';saldoHtml='<div class="saldo-widget"><div class="saldo-info"><div class="saldo-lbl">💰 Saldo</div><div class="saldo-num '+sc+'">$'+tiendaActiva.saldo.toFixed(2)+'</div></div><div style="display:flex;flex-direction:column;gap:6px;"><div class="saldo-recarga-btn" id="btn-saldo-recarga-paq">📦 PAQUETE</div><div class="saldo-recarga-btn" style="background:#38bdf8;" id="btn-saldo-recarga-wa">💳 RECARGAR</div></div></div>';}}else saldoHtml='<div style="background:#d1fae5;border:1px solid #6ee7b7;border-radius:10px;padding:12px;margin-bottom:14px;font-family:\'Barlow Condensed\',sans-serif;font-weight:800;font-size:15px;color:#065f46;text-align:center;">🔥 ¡Publica ya, no te quedes fuera!</div>';
+    if(!esGratis){if(tiendaActiva.saldo<=0)saldoHtml='<div class="saldo-cero-box"><div class="lbl">⚠️ Sin Saldo</div><div class="val">$0.00</div></div><button class="btn-warn" id="btn-saldo-sin">💳 RECARGAR SALDO</button>';else{var sc=tiendaActiva.saldo<10?'bajo':'';saldoHtml='<div class="saldo-widget"><div class="saldo-info"><div class="saldo-lbl">💰 Saldo</div><div class="saldo-num '+sc+'">$'+tiendaActiva.saldo.toFixed(2)+'</div></div><div style="display:flex;flex-direction:column;gap:6px;"><div class="saldo-recarga-btn" id="btn-saldo-recarga-paq">📦 PAQUETE</div><div class="saldo-recarga-btn" style="background:#38bdf8;" id="btn-saldo-recarga-wa">💳 RECARGAR</div></div></div>';}}else saldoHtml='<div style="background:linear-gradient(135deg,#E53E00,#FF6B00);border-radius:10px;padding:12px;margin-bottom:14px;font-family:\'Barlow Condensed\',sans-serif;font-weight:800;font-size:15px;color:#fff;text-align:center;box-shadow:0 4px 15px rgba(255,107,0,.4);">🔥 ¡Publica ya, no te quedes fuera!</div>';
     var puedePublicar=esGratis||(tiendaActiva.paquete_activo&&(tiendaActiva.pubs_restantes||0)>0)||(tiendaActiva.saldo>0);
     var enServicio=tiendaActiva.estatus==='ABIERTO';
     var horarioBadge=esComida?'<div class="horario-badge '+(enServicio?'en-horario':'fuera-horario')+'">'+(enServicio?'🟢 En servicio':'🔴 Fuera de servicio')+'</div>':'';
     var prodsSinStock=misP.filter(function(p){if(p.categoria==='Comida y Bebida')return false;var s=String(p.stock||'');return s!=='Bajo Pedido'&&parseInt(s||'0')<=0&&p.oculto_por_stock==='SI';});
     var alertaStock=prodsSinStock.length>0?'<div class="alerta-stock">⚠️ '+prodsSinStock.length+' producto(s) con stock en 0. Se eliminarán en 50 hrs.</div>':'';
-    var linkTienda=APP_URL+'?tienda='+encodeURIComponent(tiendaActiva.nombre);
+    var linkTienda='https://mercadito578-alt.github.io/bazar-piq/?tienda='+encodeURIComponent(tiendaActiva.nombre);
     var textoPublicar=esGratis?'🔥 ¡PUBLICA YA, NO TE QUEDES FUERA!':'+ AGREGAR PRODUCTO';
-    var h='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:6px;"><div><h2 style="font-family:\'Barlow Condensed\',sans-serif;font-weight:800;font-size:22px;margin-bottom:2px;">'+tiendaActiva.nombre+'</h2><p style="font-size:11px;color:var(--gray-400);">'+(tiendaActiva.categoria||'—')+' · '+(tiendaActiva.entrega_modo||'—')+'</p></div><div style="display:flex;gap:6px;flex-shrink:0;"><button id="btn-config-tienda" class="btn-config" style="width:auto;margin-bottom:0;">⚙️</button><button id="btn-compartir-mi-tienda" style="background:#FF6B00;color:#fff;border:none;border-radius:7px;padding:8px 10px;font-family:\'Barlow Condensed\',sans-serif;font-weight:700;font-size:12px;cursor:pointer;">📤 Compartir</button></div></div>'+alertaStock+paqH+saldoHtml+horarioBadge+(esComida?'<button id="btn-menu-dia" class="btn-warn" style="font-size:13px;padding:10px;">📋 MENÚ DISPONIBLE HOY</button>':'')+(puedePublicar?'<button id="btn-agregar-prod" class="'+(esGratis?'btn-gratis':'btn-p')+'">'+textoPublicar+'</button>':'<div style="background:#fee2e2;border:1px solid var(--danger);border-radius:8px;padding:12px;margin-bottom:8px;text-align:center;font-size:13px;color:var(--danger);font-weight:700;">🔒 Necesitas saldo o paquete activo para publicar</div>')+'<hr style="margin:14px 0;"><div id="sec-consultas-wa"></div><h3 style="font-family:\'Barlow Condensed\',sans-serif;font-weight:700;font-size:14px;color:var(--gray-400);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;">MIS PRODUCTOS</h3>';
+    var btnClasePublicar=esGratis?'btn-urgencia':'btn-p';
+    var h='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:6px;"><div><h2 style="font-family:\'Barlow Condensed\',sans-serif;font-weight:800;font-size:22px;margin-bottom:2px;">'+tiendaActiva.nombre+'</h2><p style="font-size:11px;color:var(--gray-400);">'+(tiendaActiva.categoria||'—')+' · '+(tiendaActiva.entrega_modo||'—')+'</p></div><div style="display:flex;gap:6px;flex-shrink:0;"><button id="btn-config-tienda" class="btn-config" style="width:auto;margin-bottom:0;">⚙️</button><button id="btn-compartir-mi-tienda" style="background:#FF6B00;color:#fff;border:none;border-radius:7px;padding:8px 10px;font-family:\'Barlow Condensed\',sans-serif;font-weight:700;font-size:12px;cursor:pointer;">📤 Compartir</button></div></div>'+alertaStock+paqH+saldoHtml+horarioBadge+(esComida?'<button id="btn-menu-dia" class="btn-warn" style="font-size:13px;padding:10px;">📋 MENÚ DISPONIBLE HOY</button>':'')+(puedePublicar?'<button id="btn-agregar-prod" class="'+btnClasePublicar+'">'+textoPublicar+'</button>':'<div style="background:#fee2e2;border:1px solid var(--danger);border-radius:8px;padding:12px;margin-bottom:8px;text-align:center;font-size:13px;color:var(--danger);font-weight:700;">🔒 Necesitas saldo o paquete activo para publicar</div>')+'<hr style="margin:14px 0;"><div id="sec-consultas-wa"></div><h3 style="font-family:\'Barlow Condensed\',sans-serif;font-weight:700;font-size:14px;color:var(--gray-400);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;">MIS PRODUCTOS</h3>';
     if(misP.length===0)h+='<p style="color:var(--gray-400);font-size:13px;text-align:center;padding:16px;">Aún no tienes productos.</p>';
     misP.forEach(function(p){var sinStock=p.oculto_por_stock==='SI';var stockCero=!sinStock&&String(p.stock||'')!=='Bajo Pedido'&&parseInt(p.stock||'1')<=0;var rowClass='prod-row'+(sinStock||stockCero?' sin-stock':'');var alertaInv=(sinStock||stockCero)?'<span class="alerta-inventario">⚠️ REVISAR INVENTARIO</span>':'';h+='<div class="'+rowClass+'"><img src="'+p.foto+'" alt=""><div class="prod-row-info"><div class="prod-row-nombre">'+p.prod_nombre+'</div><div class="prod-row-precio">$'+p.precio+'</div><div class="prod-row-stock">Stock: '+(p.stock||'0')+'</div>'+alertaInv+'</div><div class="prod-row-acciones"><button class="btn-mini" style="background:#e0e7ff;color:var(--blue);" onclick="editarStock(\''+p.id_prod+'\',\''+p.stock+'\')">📦</button><button class="btn-mini" style="background:#d1fae5;color:var(--success);" onclick="editarPrecio(\''+p.id_prod+'\',\''+p.precio+'\')">💲</button><button class="btn-mini" style="background:#fff3cd;color:#78350f;" onclick="subirFotoProducto(\''+p.id_prod+'\')">📸</button><button class="btn-mini" style="background:#fee2e2;color:var(--danger);" onclick="borrarP(\''+p.id_prod+'\')">🗑️</button></div></div>';});
     document.getElementById('cont-form').innerHTML=h;
@@ -1152,7 +1284,9 @@ function panelTienda(){
 // ═══ CONSULTAS WA ═══
 function _cargarConsultasWA(tienda){_api('obtenerConsultasWA',{tienda:tienda},function(consultas){var sec=document.getElementById('sec-consultas-wa');if(!sec)return;if(!consultas||!consultas.length){sec.innerHTML='';return;}var h='<div style="background:#fffbeb;border:2px solid var(--warning);border-radius:10px;padding:14px;margin-bottom:14px;"><div style="font-family:\'Barlow Condensed\',sans-serif;font-weight:800;font-size:15px;color:#78350f;margin-bottom:10px;">📲 Consultas recibidas por WhatsApp</div>';consultas.forEach(function(c){h+='<div style="background:var(--white);border:1px solid var(--gray-200);border-radius:8px;padding:10px;margin-bottom:8px;"><div style="font-weight:700;font-size:13px;color:var(--navy);margin-bottom:4px;">'+c.prod_nombre+'</div><div style="font-size:11px;color:var(--gray-400);margin-bottom:8px;">📅 '+c.fecha+'</div><div style="display:flex;gap:6px;"><button class="btn-mini" style="background:#d1fae5;color:var(--success);padding:7px 12px;" onclick="responderConsultaWA(\''+c.id+'\',\''+c.id_prod+'\',true)">✅ Sí vendí</button><button class="btn-mini" style="background:#fee2e2;color:var(--danger);padding:7px 12px;" onclick="responderConsultaWA(\''+c.id+'\',\''+c.id_prod+'\',false)">❌ No vendí</button></div></div>';});h+='</div>';sec.innerHTML=h;});}
 function responderConsultaWA(idConsulta,idProd,vendio){document.getElementById('loader').style.display='flex';_api('responderConsultaWA',{idConsulta:idConsulta,idProd:idProd,vendio:String(vendio)},function(r){document.getElementById('loader').style.display='none';if(r&&r.ok){if(vendio&&r.stock_nuevo!==undefined)alert('✅ Venta registrada. Stock: '+r.stock_nuevo);else if(!vendio)alert('OK. Consulta eliminada.');panelTienda();}});}
-function subirFotoProducto(id){var inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.onchange=function(){if(!inp.files||!inp.files[0])return;document.getElementById('loader').style.display='flex';comprimirImagen(inp.files[0],function(b64){_api('subirFotoEnCarpeta',{base64:b64,nombre:'F_'+Date.now()+'.jpg',folderId:carpetaEnSecuencia()},function(url){if(url){_api('actualizarFotoProducto',{id:id,url:url},function(){document.getElementById('loader').style.display='none';alert('✅ Foto actualizada.');panelTienda();});}else{document.getElementById('loader').style.display='none';alert('Error.');}});});};inp.click();}
+
+// ═══ FOTOS ═══
+function subirFotoProducto(id){var inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.onchange=function(){if(!inp.files||!inp.files[0])return;document.getElementById('loader').style.display='flex';comprimirImagen(inp.files[0],function(b64){_api('subirFotoEnCarpeta',{base64:b64,nombre:'F_'+Date.now()+'.jpg',folderId:carpetaEnSecuencia()},function(url){if(url){_api('actualizarFotoProducto',{id:id,url:url},function(){document.getElementById('loader').style.display='none';alert('✅ Foto actualizada.');panelTienda();});}else{document.getElementById('loader').style.display='none';alert('Error al subir foto.');}});});};inp.click();}
 function abrirModalPaqueteTienda(nombre){document.getElementById('modal-recarga-titulo').textContent='📦 Solicitar Paquete';var optsP='<option value="basico">⭐ Básico</option><option value="medio">🌟 Medio</option><option value="pro">💎 Pro</option>';document.getElementById('modal-recarga-contenido').innerHTML='<label class="fl">Tienda</label><input type="text" id="rec-tienda-v" class="fc" value="'+nombre+'" readonly><label class="fl">Paquete deseado</label><select id="rec-paquete" class="fc">'+optsP+'</select><button onclick="enviarSolicitudPaquete()" class="btn-success">📲 SOLICITAR POR WHATSAPP</button>';document.getElementById('modal-recarga').style.display='block';}
 function enviarSolicitudPaquete(){var tienda=(document.getElementById('rec-tienda-v')||{}).value||'',paq=(document.getElementById('rec-paquete')||{}).value||'';var msj='📦 *SOLICITUD DE PAQUETE — Bazar PIQ*\n\n🏪 Tienda: *'+tienda+'*\n📦 Paquete: *'+paq.toUpperCase()+'*';document.getElementById('modal-recarga').style.display='none';window.open('https://wa.me/'+SOPORTE_WA_JS+'?text='+encodeURIComponent(msj));}
 function abrirModalRecargaWA(nombre,tipo){document.getElementById('modal-recarga-titulo').textContent='💳 Solicitar Recarga';document.getElementById('modal-recarga-contenido').innerHTML='<label class="fl">'+(tipo==='tienda'?'Tienda':tipo==='empresa'?'Empresa':'Usuario')+'</label><input type="text" id="rec-nom-v" class="fc" value="'+nombre+'" readonly><label class="fl">Monto ($)</label><input type="number" id="rec-monto-v" class="fc" placeholder="Ej: 50" min="1"><button onclick="enviarSolicitudRecarga(\''+tipo+'\')" class="btn-success">📲 SOLICITAR POR WHATSAPP</button>';document.getElementById('modal-recarga').style.display='block';}
@@ -1181,8 +1315,9 @@ function formProducto(){
   var optsUnd=UNIDADES.map(function(u){return '<option>'+u+'</option>';}).join('');
   var optsTiempo=TIEMPOS_ENTREGA.map(function(t){var dis=(t.rapido&&!tienePaquete&&!esGratis)?' disabled':'';return '<option value="'+t.v+'"'+dis+'>'+t.l+(t.rapido?' ⚡':'')+'</option>';}).join('');
   var textoPub=esGratis?'🔥 ¡PUBLICA YA, NO TE QUEDES FUERA!':'GUARDAR PRODUCTO';
+  var btnClase=esGratis?'btn-urgencia':'btn-p';
   document.getElementById('cont-form').innerHTML=
-    (esGratis?'<div style="background:#d1fae5;border:1px solid #6ee7b7;border-radius:8px;padding:10px;margin-bottom:14px;font-size:13px;font-weight:700;color:#065f46;">🔥 ¡Publica ya, no te quedes fuera!</div>':'')+
+    (esGratis?'<div style="background:linear-gradient(135deg,#E53E00,#FF6B00);border-radius:8px;padding:12px;margin-bottom:14px;font-family:\'Barlow Condensed\',sans-serif;font-weight:800;font-size:14px;color:#fff;text-align:center;box-shadow:0 4px 15px rgba(255,107,0,.4);">🔥 ¡Publica ya, no te quedes fuera! — Es tu momento</div>':'')+
     '<h2 class="h2-form">Nuevo Producto</h2>'+
     '<label class="fl">Nombre — Marca</label><input id="pn" class="fc" placeholder="Ej: Silla ergonómica — Secretlab">'+
     '<div class="form-row"><div><label class="fl">Precio ($)</label><input id="pp" type="number" class="fc" placeholder="$" oninput="actualizarPrevProd()"></div><div><label class="fl">Unidad</label><select id="pund" class="fc">'+optsUnd+'</select></div></div>'+
@@ -1193,9 +1328,10 @@ function formProducto(){
     '<div class="form-row"><div><label class="fl">Condición</label><select id="pcond" class="fc"><option>Nuevo</option><option>Usado</option></select></div>'+
     (esComida?'<div><label class="fl">Stock</label><div style="padding:10px;background:var(--gray-100);border-radius:7px;font-size:12px;color:var(--blue);font-weight:600;margin-bottom:10px;">📋 Bajo Pedido</div></div>':'<div><label class="fl">Stock (obligatorio)</label><input id="pp-stock" type="number" class="fc" placeholder="Cantidad" min="1"></div>')+'</div>'+
     '<textarea id="pd" class="fc" rows="3" placeholder="Descripción del producto"></textarea>'+
-    '<label class="fl">📸 Fotos (1 o 2)</label><div id="fotos-preview-panel" class="fotos-preview"></div>'+
+    '<label class="fl">📸 Fotos (1 o 2 — se comprimen automáticamente)</label>'+
+    '<div id="fotos-preview-panel" class="fotos-preview"></div>'+
     '<input id="pf" type="file" class="fc" accept="image/*" multiple style="margin-bottom:6px;">'+
-    '<button id="btn-guardar-prod" class="'+(esGratis?'btn-gratis':'btn-p')+'">'+textoPub+'</button>';
+    '<button id="btn-guardar-prod" class="'+btnClase+'">'+textoPub+'</button>';
   document.getElementById('btn-guardar-prod').addEventListener('click',subirP);
   window._fotosSeleccionadas=[];
   document.getElementById('pf').addEventListener('change',manejarFotos);
@@ -1204,7 +1340,45 @@ function formProducto(){
 function actualizarPrevProd(){var precio=parseFloat((document.getElementById('pp')||{}).value||0)||0;var tv=(document.getElementById('p-tiempo')||{}).value||'inmediato';var tObj=TIEMPOS_ENTREGA.find(function(x){return x.v===tv;})||{dias:0,rapido:false};var el1=document.getElementById('prev-precio-final'),el2=document.getElementById('prev-com-prod'),alertaEl=document.getElementById('prev-saldo-alerta');if(alertaEl)alertaEl.style.display='none';if(!tiendaActiva||(tiendaActiva.modo_gratuito_global||modoGratuitoGlobal)){if(el1)el1.textContent='🔥 ¡Publica ya!';if(el2)el2.textContent='';return;}if(tObj.rapido&&tiendaActiva.paquete_activo){if(el1)el1.textContent='Incluido en paquete';if(el2)el2.textContent='⚡ Solo paquete, sin cobro de saldo';return;}if(tiendaActiva.paquete_activo){if(precio>0){var cobroPaq=calcularCobroPreview(precio,tiendaActiva.categoria||'Otros',tObj.dias,true);if(cobroPaq>0){if(el1)el1.textContent='$'+cobroPaq.toFixed(2);if(el2)el2.textContent='% tiempo sobre $'+precio+' + 1 pub';var sA=tiendaActiva.saldo||0;if(alertaEl&&sA<cobroPaq){alertaEl.style.display='block';alertaEl.textContent='❌ Saldo insuficiente. Necesitas $'+cobroPaq.toFixed(2);}}else{if(el1)el1.textContent='1 pub del paquete';if(el2)el2.textContent='Sin recargo de saldo';}}else{if(el1)el1.textContent='1 pub del paquete';if(el2)el2.textContent='';}return;}if(precio>0){var cobro=calcularCobroPreview(precio,tiendaActiva.categoria||'Otros',tObj.dias,false);if(cobro>0){if(el1)el1.textContent='$'+cobro.toFixed(2);if(el2){if(tObj.dias>=2)el2.textContent='% de tiempo sobre $'+precio+' (≥2 días)';else el2.textContent='Rango de precio — entrega en '+tObj.l;}var saldo=tiendaActiva.saldo||0;if(alertaEl&&saldo<cobro){alertaEl.style.display='block';alertaEl.textContent='❌ Saldo insuficiente. Necesitas $'+cobro.toFixed(2)+' — Tu saldo: $'+saldo.toFixed(2);}}else{if(el1)el1.textContent='$0.00';if(el2)el2.textContent=tObj.l;}}else{if(el1)el1.textContent='$0.00';if(el2)el2.textContent='Ingresa el precio para ver el costo';}}
 function manejarFotos(){var inp=document.getElementById('pf');if(!inp||!inp.files.length)return;var panel=document.getElementById('fotos-preview-panel');window._fotosSeleccionadas=window._fotosSeleccionadas||[];if(window._fotosSeleccionadas.length+inp.files.length>2){alert('Máximo 2 fotos.');inp.value='';return;}Array.from(inp.files).forEach(function(file){window._fotosSeleccionadas.push(file);var r=new FileReader();r.onload=function(e){var idx=window._fotosSeleccionadas.length-1;var div=document.createElement('div');div.className='foto-preview-item';div.innerHTML='<img src="'+e.target.result+'"><button class="foto-preview-del" onclick="quitarFotoPreview('+idx+')">✕</button>';panel.appendChild(div);};r.readAsDataURL(file);});inp.value='';}
 function quitarFotoPreview(idx){window._fotosSeleccionadas.splice(idx,1);var panel=document.getElementById('fotos-preview-panel');panel.innerHTML='';(window._fotosSeleccionadas||[]).forEach(function(file,i){var r=new FileReader();r.onload=function(e){var div=document.createElement('div');div.className='foto-preview-item';div.innerHTML='<img src="'+e.target.result+'"><button class="foto-preview-del" onclick="quitarFotoPreview('+i+')">✕</button>';panel.appendChild(div);};r.readAsDataURL(file);});}
-function subirP(){var fotos=window._fotosSeleccionadas||[];if(fotos.length===0){alert('Agrega al menos una foto.');return;}var nombre=(document.getElementById('pn')||{}).value||'',precio=(document.getElementById('pp')||{}).value||'';if(!nombre){alert('Falta el nombre.');return;}if(!precio){alert('Falta el precio.');return;}var esComida=tiendaActiva.categoria==='Comida y Bebida',esRopa=tiendaActiva.categoria==='Ropa y Calzado';var talla='';if(esRopa){talla=(document.getElementById('ptalla')||{}).value||'';if(!talla){alert('La talla es obligatoria.');return;}}var stk=esComida?'Bajo Pedido':((document.getElementById('pp-stock')||{}).value||'0');if(!esComida&&(!stk||parseInt(stk)<=0)){alert('El stock es obligatorio.');return;}var tv=(document.getElementById('p-tiempo')||{}).value||'inmediato';var tObj=TIEMPOS_ENTREGA.find(function(x){return x.v===tv;})||{dias:0,rapido:false};var esGratis=tiendaActiva.modo_gratuito_global||modoGratuitoGlobal;if(!esGratis&&!tiendaActiva.paquete_activo){var cobro=calcularCobroPreview(parseFloat(precio),tiendaActiva.categoria||'Otros',tObj.dias,false);if(cobro>0&&(tiendaActiva.saldo||0)<cobro){alert('❌ Saldo insuficiente.\n\nNecesitas $'+cobro.toFixed(2)+'.\nTu saldo: $'+(tiendaActiva.saldo||0).toFixed(2));return;}}document.getElementById('loader').style.display='flex';var urls=[],secIdx=_fotoSecuenciaIdx;function sig(idx){if(idx>=fotos.length){var obj={nombre_tienda:tiendaActiva.nombre,prod_nombre:nombre,precio:parseFloat(precio),desc:(document.getElementById('pd')||{}).value||'',stock:stk,talla:talla,ubicacion:tiendaActiva.ubicacion_tienda||'',whatsapp:tiendaActiva.whatsapp||tiendaActiva.tel,foto:urls[0]||'',foto2:urls[1]||'',entrega:tiendaActiva.entrega_modo||'Punto Medio',categoria:tiendaActiva.categoria||'Otros',unidad_medida:(document.getElementById('pund')||{}).value||'Pieza',es_gratis_origen:tiendaActiva.es_gratis_origen||'NO',condicion:(document.getElementById('pcond')||{}).value||'Nuevo',tiempo_entrega:tv};_api('guardarProducto',{obj:JSON.stringify(obj)},function(r){document.getElementById('loader').style.display='none';window._fotosSeleccionadas=[];if(r&&r.saldo_nuevo!==null&&r.saldo_nuevo!==undefined)tiendaActiva.saldo=r.saldo_nuevo;if(r&&r.pubs_restantes!==undefined)tiendaActiva.pubs_restantes=r.pubs_restantes;alert('🎉 ¡Guardado!'+(r&&r.cobro>0?'\nCobro: $'+r.cobro.toFixed(2):'')+(r&&r.pubs_restantes!==undefined?'\nPubs restantes: '+r.pubs_restantes:''));panelTienda();});return;}var carpeta=CARPETAS_SECUENCIA[(secIdx+idx)%CARPETAS_SECUENCIA.length];comprimirImagen(fotos[idx],function(b64){_api('subirFotoEnCarpeta',{base64:b64,nombre:'P_'+Date.now()+'_'+idx+'.jpg',folderId:carpeta},function(url){urls.push(url||'');sig(idx+1);});});}sig(0);}
+function subirP(){
+  var fotos=window._fotosSeleccionadas||[];
+  if(fotos.length===0){alert('Agrega al menos una foto.');return;}
+  var nombre=(document.getElementById('pn')||{}).value||'',precio=(document.getElementById('pp')||{}).value||'';
+  if(!nombre){alert('Falta el nombre.');return;}
+  if(!precio){alert('Falta el precio.');return;}
+  var esComida=tiendaActiva.categoria==='Comida y Bebida',esRopa=tiendaActiva.categoria==='Ropa y Calzado';
+  var talla='';
+  if(esRopa){talla=(document.getElementById('ptalla')||{}).value||'';if(!talla){alert('La talla es obligatoria.');return;}}
+  var stk=esComida?'Bajo Pedido':((document.getElementById('pp-stock')||{}).value||'0');
+  if(!esComida&&(!stk||parseInt(stk)<=0)){alert('El stock es obligatorio.');return;}
+  var tv=(document.getElementById('p-tiempo')||{}).value||'inmediato';
+  var tObj=TIEMPOS_ENTREGA.find(function(x){return x.v===tv;})||{dias:0,rapido:false};
+  var esGratis=tiendaActiva.modo_gratuito_global||modoGratuitoGlobal;
+  if(!esGratis&&!tiendaActiva.paquete_activo){var cobro=calcularCobroPreview(parseFloat(precio),tiendaActiva.categoria||'Otros',tObj.dias,false);if(cobro>0&&(tiendaActiva.saldo||0)<cobro){alert('❌ Saldo insuficiente.\n\nNecesitas $'+cobro.toFixed(2)+'.\nTu saldo: $'+(tiendaActiva.saldo||0).toFixed(2));return;}}
+  document.getElementById('loader').style.display='flex';
+  var urls=[],secIdx=_fotoSecuenciaIdx;
+  function sig(idx){
+    if(idx>=fotos.length){
+      var obj={nombre_tienda:tiendaActiva.nombre,prod_nombre:nombre,precio:parseFloat(precio),desc:(document.getElementById('pd')||{}).value||'',stock:stk,talla:talla,ubicacion:tiendaActiva.ubicacion_tienda||'',whatsapp:tiendaActiva.whatsapp||tiendaActiva.tel,foto:urls[0]||'',foto2:urls[1]||'',entrega:tiendaActiva.entrega_modo||'Punto Medio',categoria:tiendaActiva.categoria||'Otros',unidad_medida:(document.getElementById('pund')||{}).value||'Pieza',es_gratis_origen:tiendaActiva.es_gratis_origen||'NO',condicion:(document.getElementById('pcond')||{}).value||'Nuevo',tiempo_entrega:tv};
+      _api('guardarProducto',{obj:JSON.stringify(obj)},function(r){
+        document.getElementById('loader').style.display='none';
+        window._fotosSeleccionadas=[];
+        if(r&&r.saldo_nuevo!==null&&r.saldo_nuevo!==undefined)tiendaActiva.saldo=r.saldo_nuevo;
+        if(r&&r.pubs_restantes!==undefined)tiendaActiva.pubs_restantes=r.pubs_restantes;
+        alert('🎉 ¡Guardado!'+(r&&r.cobro>0?'\nCobro: $'+r.cobro.toFixed(2):'')+(r&&r.pubs_restantes!==undefined?'\nPubs restantes: '+r.pubs_restantes:''));
+        panelTienda();
+      });
+      return;
+    }
+    var carpeta=CARPETAS_SECUENCIA[(secIdx+idx)%CARPETAS_SECUENCIA.length];
+    comprimirImagen(fotos[idx],function(b64){
+      _api('subirFotoEnCarpeta',{base64:b64,nombre:'P_'+Date.now()+'_'+idx+'.jpg',folderId:carpeta},function(url){
+        urls.push(url||'');sig(idx+1);
+      });
+    });
+  }
+  sig(0);
+}
 
 // ═══ EMPLEO ═══
 function cargarListaEmpleo(){var lista=document.getElementById('empleo-lista');lista.innerHTML='<div style="text-align:center;padding:30px;color:var(--gray-400);">Cargando...</div>';if(tabEmpleoActivo==='ofertas')_api('obtenerOfertasEmpleo',null,function(it){renderEmpleo(it||[],'oferta');});else _api('obtenerSolicitudesEmpleo',null,function(it){renderEmpleo(it||[],'solicitud');});}
@@ -1215,23 +1389,72 @@ function selTransporte(val){window._transporteSeleccionado=val;var btnSi=documen
 function publicarOferta(){var empresa=document.getElementById('oe-empresa').value.trim(),puesto=document.getElementById('oe-puesto').value.trim();if(!empresa||!puesto){alert('Faltan datos');return;}var comsTrans=[];if(window._transporteSeleccionado==='SI'){document.querySelectorAll('input[name="com_trans"]:checked').forEach(function(x){comsTrans.push(x.value);});}document.getElementById('loader').style.display='flex';var obj={empresa:empresa,puesto:puesto,sueldo:(document.getElementById('oe-sueldo')||{}).value||'',horario:(document.getElementById('oe-horario')||{}).value||'',turnos:(document.getElementById('oe-turnos')||{}).value||'1',descripcion:(document.getElementById('oe-desc')||{}).value||'',whatsapp:(document.getElementById('oe-wa')||{}).value||'',ubicacion:(document.getElementById('oe-ubicacion')||{}).value||'',empresa_login:empresaActiva?empresaActiva.nombre:'',transporte:window._transporteSeleccionado||'NO',comunidades_transporte:comsTrans.join(',')};_api('publicarOfertaEmpleoConCobro',{obj:JSON.stringify(obj)},function(r){document.getElementById('loader').style.display='none';if(r&&r.ok===false&&r.msg==='saldo_insuficiente'){alert('❌ Saldo insuficiente.');return;}if(r&&r.ok){if(empresaActiva&&r.saldo_nuevo!==null&&r.saldo_nuevo!==undefined)empresaActiva.saldo=r.saldo_nuevo;alert('🎉 ¡Vacante publicada!');if(empresaActiva)panelEmpresa();else ir('p-empleo');}});}
 
 // ═══ EMPRESAS ═══
-function formPublicarOferta(){if(empresaActiva){var esGratis=empresaActiva.modo_gratuito_global||modoGratuitoGlobal;if(!esGratis&&(empresaActiva.saldo||0)<=0){ir('p-form');document.getElementById('cont-form').innerHTML='<h2 class="h2-form">🏢 '+empresaActiva.nombre+'</h2><div class="saldo-cero-box"><div class="lbl">⚠️ Sin Saldo</div><div class="val">$0.00</div></div><button id="btn-emp-recarga" class="btn-employ">💳 SOLICITAR RECARGA</button><button onclick="empresaActiva=null;ir(\'p-empleo\');" class="btn-out" style="border-color:var(--danger);color:var(--danger);">🚪 Cerrar sesión</button>';document.getElementById('btn-emp-recarga').addEventListener('click',function(){abrirModalRecargaWA(empresaActiva.nombre,'empresa');});return;}ir('p-form');mostrarFormOferta();return;}ir('p-form');var btnComs=modoGratuitoGlobal?'':'<button onclick="verPdfComisiones()" class="pdf-viewer-btn" style="font-size:13px;padding:10px;margin-top:6px;">📄 VER COMISIONES</button>';document.getElementById('cont-form').innerHTML='<h2 class="h2-form">🏢 Área de Reclutadores</h2><button id="btn-empresa-nueva" class="btn-employ">📝 REGISTRAR MI EMPRESA</button><button id="btn-empresa-login" class="btn-dark">🔐 YA TENGO CUENTA</button><button id="btn-empresa-recuperar" class="btn-out" style="font-size:13px;">🔑 Recuperar contraseña</button>'+btnComs;document.getElementById('btn-empresa-nueva').addEventListener('click',function(){abrirContrato(function(){mostrarFormRegistroEmpresa();});});document.getElementById('btn-empresa-login').addEventListener('click',mostrarLoginEmpresa);document.getElementById('btn-empresa-recuperar').addEventListener('click',abrirModalRecuperar);}
+function formPublicarOferta(){if(empresaActiva){var esGratis=empresaActiva.modo_gratuito_global||modoGratuitoGlobal;if(!esGratis&&(empresaActiva.saldo||0)<=0){ir('p-form');document.getElementById('cont-form').innerHTML='<h2 class="h2-form">🏢 '+empresaActiva.nombre+'</h2><div class="saldo-cero-box"><div class="lbl">⚠️ Sin Saldo</div><div class="val">$0.00</div></div><button id="btn-emp-recarga" class="btn-employ">💳 SOLICITAR RECARGA</button><button onclick="empresaActiva=null;ir(\'p-empleo\');" class="btn-out" style="border-color:var(--danger);color:var(--danger);">🚪 Cerrar sesión</button>';document.getElementById('btn-emp-recarga').addEventListener('click',function(){abrirModalRecargaWA(empresaActiva.nombre,'empresa');});return;}ir('p-form');mostrarFormOferta();return;}ir('p-form');var btnComs=modoGratuitoGlobal?'':'<button onclick="verPdfComisiones()" class="pdf-viewer-btn" style="font-size:13px;padding:10px;">📄 VER COMISIONES</button>';document.getElementById('cont-form').innerHTML='<h2 class="h2-form">🏢 Área de Reclutadores</h2><button id="btn-empresa-nueva" class="btn-employ">📝 REGISTRAR MI EMPRESA</button><button id="btn-empresa-login" class="btn-dark">🔐 YA TENGO CUENTA</button><button id="btn-empresa-recuperar" class="btn-out" style="font-size:13px;">🔑 Recuperar contraseña</button>'+btnComs;document.getElementById('btn-empresa-nueva').addEventListener('click',function(){abrirContrato(function(){mostrarFormRegistroEmpresa();});});document.getElementById('btn-empresa-login').addEventListener('click',mostrarLoginEmpresa);document.getElementById('btn-empresa-recuperar').addEventListener('click',abrirModalRecuperar);}
 function mostrarFormRegistroEmpresa(){var optsU=COMUNIDADES.map(function(c){return '<option>'+c+'</option>';}).join('');var SECTORES=['Comercio','Restaurantes','Manufactura','Construcción','Tecnología','Salud','Educación','Transporte','Agropecuario','Servicios','Otro'];document.getElementById('cont-form').innerHTML='<h2 class="h2-form">🏢 Registrar Empresa</h2><label class="fl">Nombre</label><input id="en" class="fc" placeholder="Nombre de la empresa"><label class="fl">Contraseña (mín. 8)</label><input id="ep" type="password" class="fc" oninput="evalPass(\'ep\',\'ep-barra\')"><div id="ep-barra" class="pass-strength" style="width:0%;"></div><label class="fl">Confirmar</label><input id="ep2" type="password" class="fc"><label class="fl">WhatsApp</label><input id="et" class="fc" placeholder="5214421234567"><label class="fl">Sector</label><select id="esect" class="fc">'+SECTORES.map(function(s){return '<option>'+s+'</option>';}).join('')+'</select><label class="fl">Ubicación</label><select id="eubic" class="fc">'+optsU+'</select><button id="btn-crear-empresa" class="btn-employ">CREAR CUENTA</button><button id="btn-cancelar-empresa" class="btn-out">Cancelar</button>';document.getElementById('btn-crear-empresa').addEventListener('click',function(){var n=document.getElementById('en').value.trim(),p=document.getElementById('ep').value,p2=document.getElementById('ep2').value,t=document.getElementById('et').value.trim();if(!n){alert('Ingresa el nombre.');return;}var er=validarPass(p,8);if(er){alert(er);return;}if(p!==p2){alert('No coinciden.');return;}if(!t){alert('Ingresa WhatsApp.');return;}document.getElementById('loader').style.display='flex';var obj={nombre:n,pass:p,tel:t,sector:document.getElementById('esect').value,ubicacion:document.getElementById('eubic').value,whatsapp:t};_api('registrarEmpresaServidor',{obj:JSON.stringify(obj)},function(res){document.getElementById('loader').style.display='none';if(res==='OK'){_api('loginEmpresa',{nombre:n,pass:p},function(user){if(user){empresaActiva=user;localStorage.setItem('emp_n',user.nombre);alert('🎉 Empresa registrada');panelEmpresa();}else mostrarLoginEmpresa();});}else if(res==='WA_DUPLICADO')alert('❌ Ya existe una cuenta con ese WhatsApp.');else alert('Ya existe una empresa con ese nombre.');});});document.getElementById('btn-cancelar-empresa').addEventListener('click',formPublicarOferta);}
 function mostrarLoginEmpresa(){var sN=localStorage.getItem('emp_n')||'';document.getElementById('cont-form').innerHTML='<h2 class="h2-form">🔐 Acceso Empresa</h2><label class="fl">Nombre</label><input id="eln" class="fc" value="'+sN+'"><label class="fl">Contraseña</label><input id="elp" type="password" class="fc"><button id="btn-login-empresa" class="btn-employ">ENTRAR</button><button id="btn-recuperar-emp" class="btn-out" style="font-size:13px;">🔑 ¿Olvidaste tu contraseña?</button><button id="btn-cancelar-login-emp" class="btn-out">Cancelar</button>';document.getElementById('btn-login-empresa').addEventListener('click',function(){var n=document.getElementById('eln').value.trim(),p=document.getElementById('elp').value;if(!n||!p){alert('Ingresa datos.');return;}document.getElementById('loader').style.display='flex';_api('loginEmpresa',{nombre:n,pass:p},function(user){document.getElementById('loader').style.display='none';if(user){empresaActiva=user;localStorage.setItem('emp_n',user.nombre);panelEmpresa();}else alert('Datos incorrectos.');});});document.getElementById('btn-recuperar-emp').addEventListener('click',abrirModalRecuperar);document.getElementById('btn-cancelar-login-emp').addEventListener('click',formPublicarOferta);}
-function panelEmpresa(){ir('p-form');var esGratis=empresaActiva.modo_gratuito_global||modoGratuitoGlobal,saldo=empresaActiva.saldo||0;var saldoHtml=esGratis?'':'<div class="saldo-widget"><div class="saldo-info"><div class="saldo-lbl">💰 Saldo</div><div class="saldo-num'+(saldo<10?' bajo':'')+'">$'+saldo.toFixed(2)+'</div></div><div class="saldo-recarga-btn" id="btn-saldo-empresa">💳 RECARGAR</div></div>';var btnComs=esGratis?'':'<button onclick="verPdfComisiones()" class="pdf-viewer-btn" style="font-size:13px;padding:10px;">📄 VER COMISIONES</button>';document.getElementById('cont-form').innerHTML='<h2 class="h2-form" style="margin-bottom:4px;">'+empresaActiva.nombre+'</h2><p style="font-size:11px;color:var(--gray-400);margin-bottom:12px;">'+empresaActiva.sector+'</p>'+saldoHtml+'<button id="btn-pub-nueva-oferta" class="btn-employ">+ PUBLICAR NUEVA VACANTE</button><button id="btn-mis-vacantes" class="btn-out" style="border-color:var(--employ);color:var(--employ);">📋 MIS VACANTES</button>'+btnComs+'<button id="btn-cerrar-empresa" class="btn-out" style="font-size:12px;border-color:var(--danger);color:var(--danger);">🚪 Cerrar sesión</button><button id="btn-eliminar-empresa" class="btn-out" style="font-size:12px;border-color:#7f1d1d;color:#7f1d1d;">🗑️ Eliminar mi empresa</button>';if(!esGratis&&document.getElementById('btn-saldo-empresa'))document.getElementById('btn-saldo-empresa').addEventListener('click',function(){abrirModalRecargaWA(empresaActiva.nombre,'empresa');});document.getElementById('btn-pub-nueva-oferta').addEventListener('click',function(){var esG=empresaActiva.modo_gratuito_global||modoGratuitoGlobal;if(!esG&&(empresaActiva.saldo||0)<=0){abrirModalRecargaWA(empresaActiva.nombre,'empresa');return;}ir('p-form');mostrarFormOferta();});document.getElementById('btn-mis-vacantes').addEventListener('click',mostrarMisVacantes);document.getElementById('btn-cerrar-empresa').addEventListener('click',function(){empresaActiva=null;ir('p-empleo');});document.getElementById('btn-eliminar-empresa').addEventListener('click',function(){eliminarMiEmpresa();});}
+function panelEmpresa(){ir('p-form');var esGratis=empresaActiva.modo_gratuito_global||modoGratuitoGlobal,saldo=empresaActiva.saldo||0;var saldoHtml=esGratis?'':'<div class="saldo-widget"><div class="saldo-info"><div class="saldo-lbl">💰 Saldo</div><div class="saldo-num'+(saldo<10?' bajo':'')+'">$'+saldo.toFixed(2)+'</div></div><div class="saldo-recarga-btn" id="btn-saldo-empresa">💳 RECARGAR</div></div>';var btnComs=esGratis?'':'<button onclick="verPdfComisiones()" class="pdf-viewer-btn" style="font-size:13px;padding:10px;">📄 VER COMISIONES</button>';document.getElementById('cont-form').innerHTML='<h2 class="h2-form" style="margin-bottom:4px;">'+empresaActiva.nombre+'</h2><p style="font-size:11px;color:var(--gray-400);margin-bottom:12px;">'+empresaActiva.sector+'</p>'+saldoHtml+'<button id="btn-pub-nueva-oferta" class="btn-employ">+ PUBLICAR NUEVA VACANTE</button><button id="btn-mis-vacantes" class="btn-out" style="border-color:var(--employ);color:var(--employ);">📋 MIS VACANTES</button>'+btnComs+'<button id="btn-cerrar-empresa" class="btn-out" style="font-size:12px;border-color:var(--danger);color:var(--danger);">🚪 Cerrar sesión</button><button id="btn-eliminar-empresa" class="btn-out" style="font-size:12px;border-color:#7f1d1d;color:#7f1d1d;">🗑️ Eliminar mi empresa</button>';if(!esGratis&&document.getElementById('btn-saldo-empresa'))document.getElementById('btn-saldo-empresa').addEventListener('click',function(){abrirModalRecargaWA(empresaActiva.nombre,'empresa');});document.getElementById('btn-pub-nueva-oferta').addEventListener('click',function(){var esG=empresaActiva.modo_gratuito_global||modoGratuitoGlobal;if(!esG&&(empresaActiva.saldo||0)<=0){abrirModalRecargaWA(empresaActiva.nombre,'empresa');return;}ir('p-form');mostrarFormOferta();});document.getElementById('btn-mis-vacantes').addEventListener('click',mostrarMisVacantes);document.getElementById('btn-cerrar-empresa').addEventListener('click',function(){empresaActiva=null;ir('p-empleo');});document.getElementById('btn-eliminar-empresa').addEventListener('click',eliminarMiEmpresa);}
 function mostrarMisVacantes(){ir('p-form');document.getElementById('loader').style.display='flex';_api('obtenerOfertasEmpresa',{empresaNombre:empresaActiva.nombre},function(lista){document.getElementById('loader').style.display='none';var h='<h2 class="h2-form">📋 Mis Vacantes</h2>';if(!lista||!lista.length)h+='<p style="color:var(--gray-400);text-align:center;padding:20px;">Sin vacantes</p>';else lista.forEach(function(v){h+='<div class="card-empleo" style="margin-bottom:12px;"><div style="display:flex;justify-content:space-between;align-items:flex-start;"><div><div class="empleo-puesto">'+v.puesto+'</div><div style="font-size:12px;color:var(--gray-400);">'+v.fecha+'</div></div><button class="admin-mini-btn" style="background:#d1fae5;color:var(--success);flex-shrink:0;" onclick="marcarVacanteCubierta(\''+v.id+'\')">✅ Cubierta</button></div></div>';});h+='<button onclick="panelEmpresa()" class="btn-out" style="margin-top:14px;">⬅ Volver</button>';document.getElementById('cont-form').innerHTML=h;});}
 function marcarVacanteCubierta(id){if(!confirm('¿Marcar como cubierta?'))return;document.getElementById('loader').style.display='flex';_api('eliminarOfertaEmpleo',{idOferta:id,empresaNombre:empresaActiva.nombre},function(r){document.getElementById('loader').style.display='none';if(r&&r.ok){alert('✅');mostrarMisVacantes();}});}
 function formBuscoEmpleo(){abrirContrato(function(){ir('p-form');document.getElementById('cont-form').innerHTML='<h2 class="h2-form">👤 Busco Trabajo</h2><label class="fl">Tu nombre</label><input id="be-nombre" class="fc" placeholder="Nombre completo"><label class="fl">Oficio o profesión</label><input id="be-oficio" class="fc" placeholder="Ej: Electricista..."><label class="fl">Experiencia</label><textarea id="be-desc" class="fc" rows="4" placeholder="Tu experiencia..."></textarea><label class="fl">WhatsApp</label><input id="be-wa" class="fc" placeholder="521442..."><button id="btn-pub-busco-ok" class="btn-success">PUBLICAR MI PERFIL</button>';document.getElementById('btn-pub-busco-ok').addEventListener('click',function(){var nombre=document.getElementById('be-nombre').value.trim(),oficio=document.getElementById('be-oficio').value.trim();if(!nombre||!oficio){alert('Faltan datos');return;}document.getElementById('loader').style.display='flex';var obj={nombre:nombre,oficio:oficio,descripcion:document.getElementById('be-desc').value,whatsapp:document.getElementById('be-wa').value};_api('publicarBuscoEmpleo',{obj:JSON.stringify(obj)},function(){document.getElementById('loader').style.display='none';alert('🎉 ¡Perfil publicado!');ir('p-empleo');});});});}
 
 // ═══ USUARIOS VENTA ÚNICA ═══
-function formProductoUnico(){if(usuarioActivo){var esGratis=modoGratuitoGlobal,saldo=usuarioActivo.saldo||0;if(!esGratis&&saldo<=0){ir('p-form');document.getElementById('cont-form').innerHTML='<h2 class="h2-form">👤 '+usuarioActivo.usuario+'</h2><div class="saldo-cero-box"><div class="lbl">⚠️ Sin Saldo — No puedes publicar</div><div class="val">$0.00</div></div><button id="btn-uu-recarga" class="btn-warn">💳 SOLICITAR RECARGA</button><button onclick="cerrarSesionUsuario()" class="btn-out" style="border-color:var(--danger);color:var(--danger);">🚪 Cerrar sesión</button>';document.getElementById('btn-uu-recarga').addEventListener('click',function(){abrirModalRecargaWA(usuarioActivo.usuario,'usuario');});return;}ir('p-form');renderFormUnico();return;}ir('p-form');var btnComs=modoGratuitoGlobal?'':'<button onclick="verPdfComisiones()" class="pdf-viewer-btn" style="font-size:13px;padding:10px;">📄 VER COMISIONES</button>';document.getElementById('cont-form').innerHTML='<h2 class="h2-form">👤 Venta Única</h2><p style="font-size:13px;color:var(--gray-600);margin-bottom:16px;">Publica tu producto fácilmente.</p><button id="btn-uu-nuevo" class="btn-warn">📝 CREAR CUENTA</button><button id="btn-uu-login" class="btn-dark">🔐 YA TENGO CUENTA</button><button id="btn-uu-recuperar" class="btn-out" style="font-size:13px;">🔑 Recuperar contraseña</button>'+btnComs;document.getElementById('btn-uu-nuevo').addEventListener('click',function(){abrirContrato(function(){mostrarFormRegistroUsuario();});});document.getElementById('btn-uu-login').addEventListener('click',mostrarLoginUsuario);document.getElementById('btn-uu-recuperar').addEventListener('click',abrirModalRecuperar);}
+function formProductoUnico(){if(usuarioActivo){var esGratis=modoGratuitoGlobal,saldo=usuarioActivo.saldo||0;if(!esGratis&&saldo<=0){ir('p-form');document.getElementById('cont-form').innerHTML='<h2 class="h2-form">👤 '+usuarioActivo.usuario+'</h2><div class="saldo-cero-box"><div class="lbl">⚠️ Sin Saldo — No puedes publicar</div><div class="val">$0.00</div></div><button id="btn-uu-recarga" class="btn-warn">💳 SOLICITAR RECARGA</button><button onclick="cerrarSesionUsuario()" class="btn-out" style="border-color:var(--danger);color:var(--danger);">🚪 Cerrar sesión</button>';document.getElementById('btn-uu-recarga').addEventListener('click',function(){abrirModalRecargaWA(usuarioActivo.usuario,'usuario');});return;}ir('p-form');renderFormUnico();return;}ir('p-form');var btnComs=modoGratuitoGlobal?'':'<button onclick="verPdfComisiones()" class="pdf-viewer-btn" style="font-size:13px;padding:10px;">📄 VER COMISIONES</button>';document.getElementById('cont-form').innerHTML='<h2 class="h2-form">👤 Venta Única</h2><p style="font-size:13px;color:var(--gray-600);margin-bottom:16px;">Publica tu producto fácilmente.</p><button id="btn-uu-nuevo" class="btn-urgencia">🔥 ¡PUBLICA YA, NO TE QUEDES FUERA!</button><button id="btn-uu-login" class="btn-dark">🔐 YA TENGO CUENTA</button><button id="btn-uu-recuperar" class="btn-out" style="font-size:13px;">🔑 Recuperar contraseña</button>'+btnComs;document.getElementById('btn-uu-nuevo').addEventListener('click',function(){abrirContrato(function(){mostrarFormRegistroUsuario();});});document.getElementById('btn-uu-login').addEventListener('click',mostrarLoginUsuario);document.getElementById('btn-uu-recuperar').addEventListener('click',abrirModalRecuperar);}
 function mostrarFormRegistroUsuario(){document.getElementById('cont-form').innerHTML='<h2 class="h2-form">👤 Crear Cuenta</h2><label class="fl">Usuario</label><input id="uu-n" class="fc" placeholder="Nombre o apodo"><label class="fl">Contraseña (mín. 8)</label><input id="uu-p" type="password" class="fc" oninput="evalPass(\'uu-p\',\'uu-barra\')"><div id="uu-barra" class="pass-strength" style="width:0%;"></div><label class="fl">Confirmar contraseña</label><input id="uu-p2" type="password" class="fc"><label class="fl">Teléfono / WhatsApp</label><input id="uu-tel" class="fc" type="tel" placeholder="5214421234567"><label class="fl">Modalidad de entrega preferida</label><select id="uu-entrega" class="fc"><option value="Domicilio">🏠 A domicilio</option><option value="Punto Medio">🤝 Punto Medio</option></select><button id="btn-crear-uu" class="btn-warn">CREAR CUENTA</button><button id="btn-cancelar-uu" class="btn-out">Cancelar</button>';document.getElementById('btn-crear-uu').addEventListener('click',function(){var u=document.getElementById('uu-n').value.trim(),p=document.getElementById('uu-p').value,p2=document.getElementById('uu-p2').value,tel=document.getElementById('uu-tel').value.trim(),entrega=document.getElementById('uu-entrega').value;if(!u||!p){alert('Faltan datos');return;}var ep=validarPass(p,8);if(ep){alert(ep);return;}if(p!==p2){alert('No coinciden');return;}if(!tel){alert('Ingresa WhatsApp');return;}document.getElementById('loader').style.display='flex';var obj={usuario:u,pass:p,tel:tel,entrega_modo:entrega};_api('registrarUsuarioUnico',{obj:JSON.stringify(obj)},function(res){document.getElementById('loader').style.display='none';if(res==='OK'){_api('loginUsuarioUnico',{usuario:u,pass:p},function(user){if(user){usuarioActivo=user;try{localStorage.setItem('uu_n',u);localStorage.setItem('uu_p',p);}catch(e){}renderFormUnico();}else mostrarLoginUsuario();});}else if(res==='WA_DUPLICADO')alert('❌ Máximo 2 cuentas por WhatsApp.');else alert('Ya existe ese usuario.');});});document.getElementById('btn-cancelar-uu').addEventListener('click',formProductoUnico);}
 function mostrarLoginUsuario(){var sN=localStorage.getItem('uu_n')||'',sP=localStorage.getItem('uu_p')||'';document.getElementById('cont-form').innerHTML='<h2 class="h2-form">🔐 Acceso Usuario</h2><label class="fl">Usuario</label><input id="uu-ln" class="fc" value="'+sN+'"><label class="fl">Contraseña</label><input id="uu-lp" type="password" class="fc" value="'+sP+'"><button id="btn-login-uu" class="btn-warn">ENTRAR</button><button id="btn-olvide-uu" class="btn-out" style="font-size:13px;">🔑 ¿Olvidaste tu contraseña?</button><button id="btn-cancelar-login-uu" class="btn-out">Cancelar</button>';document.getElementById('btn-login-uu').addEventListener('click',function(){var u=document.getElementById('uu-ln').value.trim(),p=document.getElementById('uu-lp').value;document.getElementById('loader').style.display='flex';_api('loginUsuarioUnico',{usuario:u,pass:p},function(user){document.getElementById('loader').style.display='none';if(user){usuarioActivo=user;try{localStorage.setItem('uu_n',u);localStorage.setItem('uu_p',p);}catch(e){}formProductoUnico();}else alert('Datos incorrectos.');});});document.getElementById('btn-olvide-uu').addEventListener('click',abrirModalRecuperar);document.getElementById('btn-cancelar-login-uu').addEventListener('click',formProductoUnico);}
-function renderFormUnico(){var esGratis=modoGratuitoGlobal,saldo=usuarioActivo.saldo||0;var opts=CATEGORIAS.map(function(c){return '<option>'+c+'</option>';}).join('');var optsUnd=UNIDADES.map(function(u){return '<option>'+u+'</option>';}).join('');var optsTiempo=TIEMPOS_ENTREGA.filter(function(t){return !t.rapido||esGratis;}).map(function(t){return '<option value="'+t.v+'">'+t.l+'</option>';}).join('');var saldoHtml=esGratis?'':'<div class="saldo-widget" style="margin-bottom:12px;"><div class="saldo-info"><div class="saldo-lbl">💰 Saldo</div><div class="saldo-num'+(saldo<10?' bajo':'')+'">$'+saldo.toFixed(2)+'</div></div><button id="btn-uu-recarga-top" class="saldo-recarga-btn">💳 RECARGAR</button></div>';var textoPub=esGratis?'🔥 ¡PUBLICA YA, NO TE QUEDES FUERA!':'PUBLICAR';document.getElementById('cont-form').innerHTML=(esGratis?'<div style="background:#d1fae5;border:1px solid #6ee7b7;border-radius:8px;padding:10px;margin-bottom:14px;font-size:13px;font-weight:700;color:#065f46;">🔥 ¡Publica ya, no te quedes fuera!</div>':'')+'<h2 class="h2-form">🚀 Publicar Producto</h2><p style="font-size:12px;color:var(--gray-400);margin-bottom:10px;">👤 '+usuarioActivo.usuario+' &nbsp;<button onclick="cerrarSesionUsuario()" style="background:none;border:none;color:var(--danger);font-size:11px;cursor:pointer;text-decoration:underline;">Cerrar sesión</button> &nbsp;<button onclick="eliminarMiCuentaUsuario()" style="background:none;border:none;color:#7f1d1d;font-size:11px;cursor:pointer;text-decoration:underline;">🗑️ Eliminar cuenta</button></p>'+saldoHtml+'<label class="fl">Nombre — Marca</label><input id="upn" class="fc" placeholder="Ej: Smartphone Samsung"><div class="form-row"><div><label class="fl">Precio ($)</label><input id="upp" type="number" class="fc" placeholder="$" oninput="actualizarPrevUnico()"></div><div><label class="fl">Unidad</label><select id="upund" class="fc">'+optsUnd+'</select></div></div><div class="form-row"><div><label class="fl">Categoría</label><select id="upcat" class="fc" onchange="mostrarTallaUnico(this.value)">'+opts+'</select></div><div><label class="fl">Condición</label><select id="upcond" class="fc"><option>Nuevo</option><option>Usado</option></select></div></div><div id="sec-talla-uu" class="d-none"><label class="fl">👕 Talla (obligatorio)</label><input id="uptalla" class="fc" placeholder="Ej: M, 28, XL..."></div><label class="fl">Stock (obligatorio)</label><input id="upstock" type="number" class="fc" placeholder="Ej: 1" min="1"><textarea id="upd" class="fc" rows="3" placeholder="Descripción del producto"></textarea><label class="fl">WhatsApp</label><input id="uw" class="fc" value="'+usuarioActivo.tel+'" placeholder="521442..."><label class="fl">🛵 Modalidad de entrega</label><select id="up-entrega" class="fc"><option value="Domicilio">🏠 A domicilio</option><option value="Punto Medio">🤝 Punto Medio</option><option value="Tienda">🏪 Solo en tienda</option></select><label class="fl">⏱️ Tiempo de entrega</label><select id="up-tiempo" class="fc" onchange="actualizarPrevUnico()">'+optsTiempo+'</select>'+(esGratis?'':'<div style="background:linear-gradient(135deg,var(--navy),var(--navy-mid));color:#fff;border-radius:8px;padding:10px;margin-bottom:6px;"><div style="font-size:9px;color:var(--accent);font-family:\'Barlow Condensed\',sans-serif;letter-spacing:1px;text-transform:uppercase;">COSTO ESTIMADO</div><div id="prev-uu-costo" style="font-family:\'Barlow Condensed\',sans-serif;font-weight:800;font-size:18px;">$0.00</div><div id="prev-uu-desc" style="font-size:10px;color:#a7f3d0;margin-top:2px;"></div></div><div id="prev-uu-alerta" style="display:none;background:#fee2e2;border:1px solid var(--danger);border-radius:8px;padding:10px;margin-bottom:10px;font-size:12px;color:var(--danger);font-weight:700;"></div>')+'<label class="fl">📸 Fotos (1 o 2)</label><div id="fotos-preview-uu" class="fotos-preview"></div><input id="upf" type="file" class="fc" accept="image/*" multiple><button id="btn-pub-uu" class="'+(esGratis?'btn-gratis':'btn-warn')+'">'+textoPub+'</button><hr style="margin:14px 0;"><h3 style="font-family:\'Barlow Condensed\',sans-serif;font-weight:700;font-size:13px;color:var(--gray-400);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;">MIS PUBLICACIONES</h3><div id="mis-pubs-uu"><div style="text-align:center;padding:14px;color:var(--gray-400);">Cargando...</div></div>';if(document.getElementById('btn-uu-recarga-top'))document.getElementById('btn-uu-recarga-top').addEventListener('click',function(){abrirModalRecargaWA(usuarioActivo.usuario,'usuario');});window._fotosUU=[];document.getElementById('upf').addEventListener('change',function(){var panel=document.getElementById('fotos-preview-uu');Array.from(this.files).forEach(function(file){if(window._fotosUU.length>=2){alert('Máximo 2 fotos.');return;}window._fotosUU.push(file);var r=new FileReader();r.onload=function(e){var idx=window._fotosUU.length-1;var div=document.createElement('div');div.className='foto-preview-item';div.innerHTML='<img src="'+e.target.result+'"><button class="foto-preview-del" onclick="quitarFotoUU('+idx+')">✕</button>';panel.appendChild(div);};r.readAsDataURL(file);});this.value='';});document.getElementById('btn-pub-uu').addEventListener('click',subirProductoUnico);if(!esGratis)actualizarPrevUnico();_api('obtenerProductos',null,function(prods){var misPubs=(prods||[]).filter(function(p){return p.nombre_tienda==='Particular: '+usuarioActivo.usuario;});var h='';if(!misPubs.length)h='<p style="color:var(--gray-400);font-size:13px;text-align:center;padding:10px;">Sin publicaciones activas.</p>';else misPubs.forEach(function(p){var dias=diasHastaVencer(p.fecha_publicacion);var vcls=dias>7?'vigencia-ok':dias>0?'vigencia-warn':'vigencia-vencida';h+='<div class="prod-row"><img src="'+p.foto+'" alt=""><div class="prod-row-info"><div class="prod-row-nombre">'+p.prod_nombre+'</div><div class="prod-row-precio">$'+p.precio+'</div><span class="vigencia-badge '+vcls+'">⏳ '+Math.max(0,dias)+'d</span></div><div class="prod-row-acciones"><button class="btn-mini" style="background:#d1fae5;color:var(--success);" onclick="abrirConfirmarVenta(\''+p.id_prod+'\',\''+p.prod_nombre.replace(/'/g,"\\'")+'\')" title="Venta concluida">✅</button><button class="btn-mini" style="background:#fee2e2;color:var(--danger);" onclick="eliminarPubUnica(\''+p.id_prod+'\')">🗑️</button></div></div>';});if(document.getElementById('mis-pubs-uu'))document.getElementById('mis-pubs-uu').innerHTML=h;});}
+function renderFormUnico(){var esGratis=modoGratuitoGlobal,saldo=usuarioActivo.saldo||0;var opts=CATEGORIAS.map(function(c){return '<option>'+c+'</option>';}).join('');var optsUnd=UNIDADES.map(function(u){return '<option>'+u+'</option>';}).join('');var optsTiempo=TIEMPOS_ENTREGA.filter(function(t){return !t.rapido||esGratis;}).map(function(t){return '<option value="'+t.v+'">'+t.l+'</option>';}).join('');var saldoHtml=esGratis?'':'<div class="saldo-widget" style="margin-bottom:12px;"><div class="saldo-info"><div class="saldo-lbl">💰 Saldo</div><div class="saldo-num'+(saldo<10?' bajo':'')+'">$'+saldo.toFixed(2)+'</div></div><button id="btn-uu-recarga-top" class="saldo-recarga-btn">💳 RECARGAR</button></div>';var textoPub=esGratis?'🔥 ¡PUBLICA YA, NO TE QUEDES FUERA!':'PUBLICAR';var btnClasePub=esGratis?'btn-urgencia':'btn-warn';document.getElementById('cont-form').innerHTML=(esGratis?'<div style="background:linear-gradient(135deg,#E53E00,#FF6B00);border-radius:8px;padding:12px;margin-bottom:14px;font-family:\'Barlow Condensed\',sans-serif;font-weight:800;font-size:14px;color:#fff;text-align:center;box-shadow:0 4px 15px rgba(255,107,0,.4);">🔥 ¡Publica ya, no te quedes fuera! — Es tu momento</div>':'')+'<h2 class="h2-form">🚀 Publicar Producto</h2><p style="font-size:12px;color:var(--gray-400);margin-bottom:10px;">👤 '+usuarioActivo.usuario+' &nbsp;<button onclick="cerrarSesionUsuario()" style="background:none;border:none;color:var(--danger);font-size:11px;cursor:pointer;text-decoration:underline;">Cerrar sesión</button> &nbsp;<button onclick="eliminarMiCuentaUsuario()" style="background:none;border:none;color:#7f1d1d;font-size:11px;cursor:pointer;text-decoration:underline;">🗑️ Eliminar cuenta</button></p>'+saldoHtml+'<label class="fl">Nombre — Marca</label><input id="upn" class="fc" placeholder="Ej: Smartphone Samsung"><div class="form-row"><div><label class="fl">Precio ($)</label><input id="upp" type="number" class="fc" placeholder="$" oninput="actualizarPrevUnico()"></div><div><label class="fl">Unidad</label><select id="upund" class="fc">'+optsUnd+'</select></div></div><div class="form-row"><div><label class="fl">Categoría</label><select id="upcat" class="fc" onchange="mostrarTallaUnico(this.value)">'+opts+'</select></div><div><label class="fl">Condición</label><select id="upcond" class="fc"><option>Nuevo</option><option>Usado</option></select></div></div><div id="sec-talla-uu" class="d-none"><label class="fl">👕 Talla (obligatorio)</label><input id="uptalla" class="fc" placeholder="Ej: M, 28, XL..."></div><label class="fl">Stock (obligatorio)</label><input id="upstock" type="number" class="fc" placeholder="Ej: 1" min="1"><textarea id="upd" class="fc" rows="3" placeholder="Descripción del producto"></textarea><label class="fl">WhatsApp</label><input id="uw" class="fc" value="'+usuarioActivo.tel+'" placeholder="521442..."><label class="fl">🛵 Modalidad de entrega</label><select id="up-entrega" class="fc"><option value="Domicilio">🏠 A domicilio</option><option value="Punto Medio">🤝 Punto Medio</option><option value="Tienda">🏪 Solo en tienda</option></select><label class="fl">⏱️ Tiempo de entrega</label><select id="up-tiempo" class="fc" onchange="actualizarPrevUnico()">'+optsTiempo+'</select>'+(esGratis?'':'<div style="background:linear-gradient(135deg,var(--navy),var(--navy-mid));color:#fff;border-radius:8px;padding:10px;margin-bottom:6px;"><div style="font-size:9px;color:var(--accent);font-family:\'Barlow Condensed\',sans-serif;letter-spacing:1px;text-transform:uppercase;">COSTO ESTIMADO</div><div id="prev-uu-costo" style="font-family:\'Barlow Condensed\',sans-serif;font-weight:800;font-size:18px;">$0.00</div><div id="prev-uu-desc" style="font-size:10px;color:#a7f3d0;margin-top:2px;"></div></div><div id="prev-uu-alerta" style="display:none;background:#fee2e2;border:1px solid var(--danger);border-radius:8px;padding:10px;margin-bottom:10px;font-size:12px;color:var(--danger);font-weight:700;"></div>')+'<label class="fl">📸 Fotos (1 o 2 — se comprimen automáticamente)</label><div id="fotos-preview-uu" class="fotos-preview"></div><input id="upf" type="file" class="fc" accept="image/*" multiple><button id="btn-pub-uu" class="'+btnClasePub+'">'+textoPub+'</button><hr style="margin:14px 0;"><h3 style="font-family:\'Barlow Condensed\',sans-serif;font-weight:700;font-size:13px;color:var(--gray-400);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;">MIS PUBLICACIONES</h3><div id="mis-pubs-uu"><div style="text-align:center;padding:14px;color:var(--gray-400);">Cargando...</div></div>';
+  if(document.getElementById('btn-uu-recarga-top'))document.getElementById('btn-uu-recarga-top').addEventListener('click',function(){abrirModalRecargaWA(usuarioActivo.usuario,'usuario');});
+  window._fotosUU=[];
+  document.getElementById('upf').addEventListener('change',function(){var panel=document.getElementById('fotos-preview-uu');Array.from(this.files).forEach(function(file){if(window._fotosUU.length>=2){alert('Máximo 2 fotos.');return;}window._fotosUU.push(file);var r=new FileReader();r.onload=function(e){var idx=window._fotosUU.length-1;var div=document.createElement('div');div.className='foto-preview-item';div.innerHTML='<img src="'+e.target.result+'"><button class="foto-preview-del" onclick="quitarFotoUU('+idx+')">✕</button>';panel.appendChild(div);};r.readAsDataURL(file);});this.value='';});
+  document.getElementById('btn-pub-uu').addEventListener('click',subirProductoUnico);
+  if(!esGratis)actualizarPrevUnico();
+  _api('obtenerProductos',null,function(prods){
+    var misPubs=(prods||[]).filter(function(p){return p.nombre_tienda==='Particular: '+usuarioActivo.usuario;});
+    var h='';
+    if(!misPubs.length)h='<p style="color:var(--gray-400);font-size:13px;text-align:center;padding:10px;">Sin publicaciones activas.</p>';
+    else misPubs.forEach(function(p){var dias=diasHastaVencer(p.fecha_publicacion);var vcls=dias>7?'vigencia-ok':dias>0?'vigencia-warn':'vigencia-vencida';h+='<div class="prod-row"><img src="'+p.foto+'" alt=""><div class="prod-row-info"><div class="prod-row-nombre">'+p.prod_nombre+'</div><div class="prod-row-precio">$'+p.precio+'</div><span class="vigencia-badge '+vcls+'">⏳ '+Math.max(0,dias)+'d</span></div><div class="prod-row-acciones"><button class="btn-mini" style="background:#d1fae5;color:var(--success);" onclick="abrirConfirmarVenta(\''+p.id_prod+'\',\''+p.prod_nombre.replace(/'/g,"\\'")+'\')" title="Venta concluida">✅</button><button class="btn-mini" style="background:#fee2e2;color:var(--danger);" onclick="eliminarPubUnica(\''+p.id_prod+'\')">🗑️</button></div></div>';});
+    if(document.getElementById('mis-pubs-uu'))document.getElementById('mis-pubs-uu').innerHTML=h;
+  });
+}
 function actualizarPrevUnico(){var precio=parseFloat((document.getElementById('upp')||{}).value||0)||0;var tv=(document.getElementById('up-tiempo')||{}).value||'inmediato';var tObj=TIEMPOS_ENTREGA.find(function(x){return x.v===tv;})||{dias:0};var el1=document.getElementById('prev-uu-costo'),el2=document.getElementById('prev-uu-desc'),alertaEl=document.getElementById('prev-uu-alerta');if(alertaEl)alertaEl.style.display='none';if(modoGratuitoGlobal){if(el1)el1.textContent='🔥 ¡Publica ya!';if(el2)el2.textContent='';return;}if(!precio){if(el1)el1.textContent='$0.00';if(el2)el2.textContent='Ingresa el precio para ver el costo';return;}var cobro=calcularCobroPreview(precio,'Otros',tObj.dias,false);if(cobro>0){if(el1)el1.textContent='$'+cobro.toFixed(2);if(el2){if(tObj.dias>=2)el2.textContent='% de tiempo sobre $'+precio;else el2.textContent='Rango de precio';}var saldoActual=usuarioActivo?usuarioActivo.saldo||0:0;if(alertaEl&&saldoActual<cobro){alertaEl.style.display='block';alertaEl.textContent='❌ Saldo insuficiente. Necesitas $'+cobro.toFixed(2)+'. Tu saldo: $'+saldoActual.toFixed(2);}}else{if(el1)el1.textContent='$0.00';if(el2)el2.textContent=tObj.l;}}
 function mostrarTallaUnico(cat){document.getElementById('sec-talla-uu').classList.toggle('d-none',cat!=='Ropa y Calzado');}
 function quitarFotoUU(idx){window._fotosUU.splice(idx,1);var p=document.getElementById('fotos-preview-uu');if(!p)return;p.innerHTML='';(window._fotosUU||[]).forEach(function(f,i){var r=new FileReader();r.onload=function(e){var d=document.createElement('div');d.className='foto-preview-item';d.innerHTML='<img src="'+e.target.result+'"><button class="foto-preview-del" onclick="quitarFotoUU('+i+')">✕</button>';p.appendChild(d);};r.readAsDataURL(f);});}
-function subirProductoUnico(){var fotos=window._fotosUU||[];var nombre=(document.getElementById('upn')||{}).value||'',precio=(document.getElementById('upp')||{}).value||'';var stock=(document.getElementById('upstock')||{}).value||'';var cat=(document.getElementById('upcat')||{}).value||'Otros';var talla='';if(cat==='Ropa y Calzado'){talla=(document.getElementById('uptalla')||{}).value||'';if(!talla){alert('La talla es obligatoria.');return;}}if(!nombre){alert('Falta el nombre');return;}if(!precio){alert('Falta el precio');return;}if(!stock||parseInt(stock)<=0){alert('El stock es obligatorio.');return;}if(fotos.length===0){alert('Agrega al menos una foto');return;}var tv=(document.getElementById('up-tiempo')||{}).value||'inmediato';var tObj=TIEMPOS_ENTREGA.find(function(x){return x.v===tv;})||{dias:0};if(!modoGratuitoGlobal){var cobro=calcularCobroPreview(parseFloat(precio),'Otros',tObj.dias,false);if(cobro>0&&(usuarioActivo?usuarioActivo.saldo||0:0)<cobro){alert('❌ Saldo insuficiente.\n\nNecesitas $'+cobro.toFixed(2)+'.\nTu saldo: $'+(usuarioActivo?usuarioActivo.saldo||0:0).toFixed(2));return;}}document.getElementById('loader').style.display='flex';var urls=[],secIdx=_fotoSecuenciaIdx;function sig(idx){if(idx>=fotos.length){var obj={usuario:usuarioActivo.usuario,prod_nombre:nombre,precio:precio,stock:stock,talla:talla,desc:(document.getElementById('upd')||{}).value||'',whatsapp:(document.getElementById('uw')||{}).value||'',foto:urls[0]||'',foto2:urls[1]||'',entrega:(document.getElementById('up-entrega')||{}).value||'Punto Medio',categoria:cat,unidad_medida:(document.getElementById('upund')||{}).value||'Pieza',condicion:(document.getElementById('upcond')||{}).value||'Nuevo',tiempo_entrega:tv};_api('guardarProductoUnico',{obj:JSON.stringify(obj)},function(r){document.getElementById('loader').style.display='none';window._fotosUU=[];if(r&&r.saldo_nuevo!==null&&r.saldo_nuevo!==undefined)usuarioActivo.saldo=r.saldo_nuevo;alert('🎉 ¡Publicado!'+(r&&r.cobro>0?' Cobro: $'+r.cobro.toFixed(2):''));renderFormUnico();});return;}var carpeta=CARPETAS_SECUENCIA[(secIdx+idx)%CARPETAS_SECUENCIA.length];comprimirImagen(fotos[idx],function(b64){_api('subirFotoEnCarpeta',{base64:b64,nombre:'U_'+Date.now()+'_'+idx+'.jpg',folderId:carpeta},function(url){urls.push(url||'');sig(idx+1);});});}sig(0);}
+function subirProductoUnico(){
+  var fotos=window._fotosUU||[];
+  var nombre=(document.getElementById('upn')||{}).value||'',precio=(document.getElementById('upp')||{}).value||'';
+  var stock=(document.getElementById('upstock')||{}).value||'';
+  var cat=(document.getElementById('upcat')||{}).value||'Otros';
+  var talla='';
+  if(cat==='Ropa y Calzado'){talla=(document.getElementById('uptalla')||{}).value||'';if(!talla){alert('La talla es obligatoria.');return;}}
+  if(!nombre){alert('Falta el nombre');return;}
+  if(!precio){alert('Falta el precio');return;}
+  if(!stock||parseInt(stock)<=0){alert('El stock es obligatorio.');return;}
+  if(fotos.length===0){alert('Agrega al menos una foto');return;}
+  var tv=(document.getElementById('up-tiempo')||{}).value||'inmediato';
+  var tObj=TIEMPOS_ENTREGA.find(function(x){return x.v===tv;})||{dias:0};
+  if(!modoGratuitoGlobal){var cobro=calcularCobroPreview(parseFloat(precio),'Otros',tObj.dias,false);if(cobro>0&&(usuarioActivo?usuarioActivo.saldo||0:0)<cobro){alert('❌ Saldo insuficiente.\n\nNecesitas $'+cobro.toFixed(2)+'.\nTu saldo: $'+(usuarioActivo?usuarioActivo.saldo||0:0).toFixed(2));return;}}
+  document.getElementById('loader').style.display='flex';
+  var urls=[],secIdx=_fotoSecuenciaIdx;
+  function sig(idx){
+    if(idx>=fotos.length){
+      var obj={usuario:usuarioActivo.usuario,prod_nombre:nombre,precio:precio,stock:stock,talla:talla,desc:(document.getElementById('upd')||{}).value||'',whatsapp:(document.getElementById('uw')||{}).value||'',foto:urls[0]||'',foto2:urls[1]||'',entrega:(document.getElementById('up-entrega')||{}).value||'Punto Medio',categoria:cat,unidad_medida:(document.getElementById('upund')||{}).value||'Pieza',condicion:(document.getElementById('upcond')||{}).value||'Nuevo',tiempo_entrega:tv};
+      _api('guardarProductoUnico',{obj:JSON.stringify(obj)},function(r){
+        document.getElementById('loader').style.display='none';
+        window._fotosUU=[];
+        if(r&&r.saldo_nuevo!==null&&r.saldo_nuevo!==undefined)usuarioActivo.saldo=r.saldo_nuevo;
+        alert('🎉 ¡Publicado!'+(r&&r.cobro>0?' Cobro: $'+r.cobro.toFixed(2):''));
+        renderFormUnico();
+      });
+      return;
+    }
+    var carpeta=CARPETAS_SECUENCIA[(secIdx+idx)%CARPETAS_SECUENCIA.length];
+    comprimirImagen(fotos[idx],function(b64){
+      _api('subirFotoEnCarpeta',{base64:b64,nombre:'U_'+Date.now()+'_'+idx+'.jpg',folderId:carpeta},function(url){
+        urls.push(url||'');sig(idx+1);
+      });
+    });
+  }
+  sig(0);
+}
 function abrirConfirmarVenta(id,nombre){_cvProdId=id;_cvProdNombre=nombre;document.getElementById('modal-cv-prod').textContent='📦 '+nombre;document.getElementById('modal-confirmar-venta').style.display='block';}
 function eliminarPubUnica(id){if(confirm('¿Eliminar esta publicación?'))_api('eliminarProductoUnico',{id:id},function(){renderFormUnico();});}
 
@@ -1246,7 +1469,7 @@ function verDetalle(idx){
       var wa=(infoT&&infoT.whatsapp)||p.whatsapp;
       var ubic=(infoT&&infoT.ubicacion_tienda)||p.ubicacion||'';
       var fg=p.publicado_gratis==='SI';
-      var linkProd=generarLinkProducto(p.id_prod,!!p.es_unico);
+      var linkProd=generarLinkProducto(p.id_prod);
       var badgeE='';
       if(em==='Domicilio'){var lc=coms?coms.split(',').map(function(c){return c.trim();}):[];badgeE='<span class="badge-domicilio">🛵 Entrega a domicilio</span>'+(lc.length?'<p style="font-size:11px;color:var(--gray-400);margin-top:4px;">📍 '+lc.join(', ')+'</p>':'');}
       else if(em==='Punto Medio')badgeE='<span class="badge-entrega">🤝 Punto Medio</span>';
@@ -1292,7 +1515,7 @@ function verDetalle(idx){
       var btnVMT=document.querySelector('.btn-ver-mas-tienda');
       if(btnVMT)btnVMT.addEventListener('click',function(){verArticulosTienda(this.getAttribute('data-tienda-nom'));});
       document.getElementById('btn-compartir-prod').addEventListener('click',function(){
-        var ficha='🛒 *'+p.prod_nombre+'*\n💰 $'+p.precio+(p.unidad_medida?' /'+p.unidad_medida:'')+'\n🏪 '+p.nombre_tienda+(p.talla?'\n👕 Talla: '+p.talla:'')+'\n\nEncuéntralo en Bazar PIQ:\n🔗 '+APP_URL+'\n\nBusca: *'+p.prod_nombre+'*\nTienda: *'+p.nombre_tienda+'*';
+        var ficha='🛒 *'+p.prod_nombre+'*\n💰 $'+p.precio+(p.unidad_medida?' /'+p.unidad_medida:'')+'\n🏪 '+p.nombre_tienda+(p.talla?'\n👕 Talla: '+p.talla:'')+'\n\nEncuéntralo en Bazar PIQ:\n🔗 '+linkProd+'\n\nBusca: *'+p.prod_nombre+'*\nTienda: *'+p.nombre_tienda+'*';
         if(navigator.share)navigator.share({title:p.prod_nombre,text:ficha});
         else{var ta=document.createElement('textarea');ta.value=ficha;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);alert('✅ Ficha copiada.');}
       });
@@ -1329,6 +1552,7 @@ var lbFotos=[],lbIdx=0;
 function abrirLightbox(fotos,idx){lbFotos=fotos;lbIdx=idx;document.getElementById('lb-img').src=lbFotos[lbIdx]||'';var dotsEl=document.getElementById('lb-dots');dotsEl.innerHTML='';lbFotos.forEach(function(f,i){var d=document.createElement('div');d.style.cssText='display:inline-block;width:8px;height:8px;border-radius:50%;background:'+(i===lbIdx?'#fff':'rgba(255,255,255,.4)')+';margin:0 3px;cursor:pointer;';d.onclick=function(){lbIdx=i;actualizarLb();};dotsEl.appendChild(d);});document.getElementById('lightbox').classList.add('active');}
 function actualizarLb(){document.getElementById('lb-img').src=lbFotos[lbIdx]||'';document.querySelectorAll('#lb-dots div').forEach(function(d,i){d.style.background=i===lbIdx?'#fff':'rgba(255,255,255,.4)';});}
 
+// ═══ INSTALAR ═══
 function mostrarModalInstalar(){var isStandalone=window.matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;var h='<div class="modal-title">📲 Instalar / Actualizar</div>';if(isStandalone)h+='<div style="text-align:center;padding:20px;"><div style="font-size:52px;">✅</div><div style="font-family:\'Barlow Condensed\',sans-serif;font-weight:800;font-size:20px;margin-top:12px;">¡Ya está instalada!</div></div>';h+='<div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:14px;margin-bottom:10px;"><div style="font-family:\'Barlow Condensed\',sans-serif;font-weight:700;font-size:14px;color:#166534;margin-bottom:8px;">🤖 Android</div>'+(hayActualizacion_android&&urlDescarga_android?'<button onclick="window.open(\''+urlDescarga_android+'\',\'_blank\')" class="btn-success">⬇️ DESCARGAR</button>':'<p style="font-size:12px;color:#166534;">Menú ⋮ → "Agregar a pantalla de inicio"</p>')+'</div><div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:10px;padding:14px;"><div style="font-family:\'Barlow Condensed\',sans-serif;font-weight:700;font-size:14px;color:#0c4a6e;margin-bottom:8px;">🍎 iPhone / iOS</div>'+(hayActualizacion_ios&&urlDescarga_ios?'<button onclick="window.open(\''+urlDescarga_ios+'\',\'_blank\')" style="background:#0284c7;" class="btn-success">⬇️ DESCARGAR</button>':'<p style="font-size:12px;color:#0c4a6e;">Botón ⬆️ → "Agregar a pantalla de inicio"</p>')+'</div>';document.getElementById('instalar-contenido').innerHTML=h;document.getElementById('modal-instalar').style.display='block';}
 
 // ═══ INIT ═══
