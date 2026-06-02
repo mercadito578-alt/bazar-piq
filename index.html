@@ -1,4 +1,53 @@
-|:fixed;bottom:0;left:0;width:100%;background:var(--navy);display:flex;border-top:2px solid var(--blue);z-index:1000;box-shadow:0 -3px 15px rgba(0,0,0,.4);height:var(--nav-h);min-height:var(--nav-h);}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#FF6B00">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Bazar PIQ">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{height:100%;}
+body{background:#f4f6f9;font-family:'Barlow',sans-serif;color:#0d1b2a;padding-bottom:72px;font-size:14px;min-height:100%;overflow-x:hidden;}
+:root{
+  --navy:#0d1b2a;--navy-mid:#1b2d45;
+  --blue:#FF6B00;--accent:#FF9A4D;
+  --gray-100:#f4f6f9;--gray-200:#e4e9f0;--gray-400:#9aa5b4;--gray-600:#5a6678;
+  --white:#fff;--success:#0e9c6b;--danger:#d63b3b;--warning:#e08c00;
+  --employ:#7c3aed;--admin:#b45309;--gratis:#059669;
+  --header-h:56px;--nav-h:60px;
+}
+
+/* ── SPLASH ─────────────────────────────────────────────── */
+#splash-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(160deg,#0d1b2a 0%,#1b2d45 50%,#0d1b2a 100%);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .5s ease,visibility .5s ease;}
+#splash-screen.oculto{opacity:0;visibility:hidden;}
+.splash-logo-wrap{text-align:center;margin-bottom:32px;}
+.splash-titulo{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:38px;letter-spacing:2px;color:#fff;text-transform:uppercase;line-height:1.1;}
+.splash-titulo span{color:#FF9A4D;}
+.splash-sub{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;letter-spacing:4px;color:#FF9A4D;text-transform:uppercase;margin-top:4px;}
+.splash-icon{font-size:56px;margin-bottom:16px;display:block;animation:splash-bounce .8s ease infinite alternate;}
+@keyframes splash-bounce{0%{transform:translateY(0);}100%{transform:translateY(-8px);}}
+.splash-linea{width:60px;height:3px;background:linear-gradient(90deg,#FF6B00,#FF9A4D);border-radius:2px;margin:16px auto;}
+.splash-countdown-wrap{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:24px;}
+.splash-contador{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:64px;color:#FF6B00;line-height:1;text-shadow:0 0 30px rgba(255,107,0,.5);animation:splash-pulso .9s ease infinite alternate;}
+@keyframes splash-pulso{0%{transform:scale(1);opacity:1;}100%{transform:scale(1.08);opacity:.85;}}
+.splash-msg{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:2px;color:rgba(255,255,255,.6);text-transform:uppercase;}
+.splash-barra-wrap{width:180px;height:4px;background:rgba(255,255,255,.15);border-radius:2px;margin-top:8px;overflow:hidden;}
+.splash-barra{height:100%;background:linear-gradient(90deg,#FF6B00,#FF9A4D);border-radius:2px;width:0%;transition:width .05s linear;}
+
+/* ── HEADER ─────────────────────────────────────────────── */
+.header{background:linear-gradient(135deg,var(--navy),var(--navy-mid));padding:0 12px;position:sticky;top:0;z-index:1000;height:var(--header-h);min-height:var(--header-h);display:flex;align-items:center;justify-content:center;border-bottom:2px solid var(--blue);box-shadow:0 3px 12px rgba(0,0,0,.35);flex-shrink:0;}
+.header-logo{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:15px;letter-spacing:1px;color:var(--white);text-transform:uppercase;text-align:center;line-height:1.15;}
+.header-logo span{color:var(--accent);}
+.btn-back-nav{position:absolute;left:10px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);border-radius:6px;width:38px;height:38px;min-width:38px;min-height:38px;display:flex;align-items:center;justify-content:center;color:var(--white);font-size:18px;cursor:pointer;flex-shrink:0;}
+
+/* ── NAV INFERIOR ───────────────────────────────────────── */
+.nav-bottom{position:fixed;bottom:0;left:0;width:100%;background:var(--navy);display:flex;border-top:2px solid var(--blue);z-index:1000;box-shadow:0 -3px 15px rgba(0,0,0,.4);height:var(--nav-h);min-height:var(--nav-h);}
 .nav-item{flex:1;text-align:center;padding:10px 4px 8px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:10px;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;color:var(--gray-400);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-width:0;white-space:nowrap;}
 .nav-item .ni{font-size:17px;line-height:1;}
 .nav-item.active{color:var(--accent);border-top:3px solid var(--accent);}
@@ -836,12 +885,6 @@ var ACCIONES_POST = [
   'actualizarMenuDisponible','adminGuardarCfgComisiones',
   'adminGuardarPrioridades','actualizarTienda'
 ];
-  'guardarProducto','guardarProductoUnico','registrarTiendaServidor',
-  'registrarUsuarioUnico','registrarEmpresaServidor',
-  'publicarOfertaEmpleoConCobro','publicarBuscoEmpleo',
-  'actualizarMenuDisponible','adminGuardarCfgComisiones',
-  'adminGuardarPrioridades','actualizarTienda'
-];
 
 // ═══════════════════════════════════════════════════════════
 //  FUNCIÓN CENTRAL DE API — GET o POST automático
@@ -1626,4 +1669,3 @@ document.addEventListener('DOMContentLoaded',function(){
 </script>
 </body>
 </html>
-
