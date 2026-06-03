@@ -941,7 +941,7 @@ function comprimirImagen(file, callback) {
   };
   r.readAsDataURL(file);
 }
-
+function _base64ToBlob(b64){var bin=atob(b64.split(',')[1]);var arr=new Uint8Array(bin.length);for(var i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i);return arr;}
 // ═══════════════════════════════════════════════════════════
 //  COMPRIMIR PDF — chunked base64
 // ═══════════════════════════════════════════════════════════
@@ -1214,7 +1214,7 @@ function subirPdfComisiones(){
     PDF_COMISIONES_URL=b64;
     try{localStorage.setItem('pdf_comisiones',b64);}catch(e){alert('PDF muy grande para guardarlo localmente.');}
     var el=document.getElementById('pdf-link-actual');
-    if(el)el.innerHTML='📄 <span style="color:var(--blue);cursor:pointer;text-decoration:underline;" onclick="var w=window.open();w.document.write(\'<iframe width=100% height=100% src=\\\'\'+PDF_COMISIONES_URL+\'\\\'\></iframe>\');">Ver PDF de comisiones</span>';
+    if(el){var blob=new Blob([_base64ToBlob(b64)],{type:'application/pdf'});var url=URL.createObjectURL(blob);el.innerHTML='📄 <a href="'+url+'" target="_blank" style="color:var(--blue);">Ver PDF de comisiones</a>';}
     alert('✅ PDF de comisiones guardado.');
   });
 }
@@ -1229,7 +1229,7 @@ function subirPdfPoliticas(){
     PDF_POLITICAS_URL=b64;
     try{localStorage.setItem('pdf_politicas',b64);}catch(e){alert('PDF muy grande para guardarlo localmente.');}
     var el=document.getElementById('pdf-politicas-link-actual');
-    if(el)el.innerHTML='📄 <span style="color:var(--blue);cursor:pointer;text-decoration:underline;" onclick="var w=window.open();w.document.write(\'<iframe width=100% height=100% src=\\\'\'+PDF_POLITICAS_URL+\'\\\'\></iframe>\');">Ver PDF de políticas</span>';
+    if(el){var blob=new Blob([_base64ToBlob(b64)],{type:'application/pdf'});var url=URL.createObjectURL(blob);el.innerHTML='📄 <a href="'+url+'" target="_blank" style="color:var(--blue);">Ver PDF de políticas</a>';}
     alert('✅ PDF de políticas guardado.');
   });
 }
