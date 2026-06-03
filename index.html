@@ -1199,8 +1199,36 @@ function comActualizarPreview(){var cfg=comLeerFormulario(),previewEl=document.g
 function guardarComisiones(){var cfg=comLeerFormulario();document.getElementById('loader').style.display='flex';_api('adminGuardarCfgComisiones',{categoria:_comCatActual,cfg:JSON.stringify(cfg)},function(r){document.getElementById('loader').style.display='none';if(r&&r.ok){_comCfgActual=cfg;alert('✅ Guardado.');document.getElementById('modal-comisiones').style.display='none';}else alert('❌ Error.');});}
 
 // ═══ PDF ═══
-function subirPdfComisiones(){var inp=document.getElementById('pdf-comisiones-input');if(!inp||!inp.files||!inp.files[0]){alert('Selecciona un PDF.');return;}var file=inp.files[0];if(file.type!=='application/pdf'){alert('El archivo debe ser PDF.');return;}document.getElementById('loader').style.display='flex';leerPdfBase64(file,function(b64){_api('subirPdfComisiones',{base64:b64,nombre:file.name},function(url){document.getElementById('loader').style.display='none';if(url){PDF_COMISIONES_URL=url;var el=document.getElementById('pdf-link-actual');if(el)el.innerHTML='📄 <a href="'+url+'" target="_blank" style="color:var(--blue);">Ver PDF subido</a>';alert('✅ PDF de comisiones subido.');}else alert('Error al subir.');});});}
-function subirPdfPoliticas(){var inp=document.getElementById('pdf-politicas-input');if(!inp||!inp.files||!inp.files[0]){alert('Selecciona un PDF.');return;}var file=inp.files[0];if(file.type!=='application/pdf'){alert('El archivo debe ser PDF.');return;}document.getElementById('loader').style.display='flex';leerPdfBase64(file,function(b64){_api('subirPdfTerminos',{base64:b64,nombre:file.name},function(url){document.getElementById('loader').style.display='none';if(url){PDF_POLITICAS_URL=url;var el=document.getElementById('pdf-politicas-link-actual');if(el)el.innerHTML='📄 <a href="'+url+'" target="_blank" style="color:var(--blue);">Ver PDF subido</a>';alert('✅ PDF de políticas subido.');}else alert('Error al subir.');});});}
+function subirPdfComisiones(){
+  var inp=document.getElementById('pdf-comisiones-input');
+  if(!inp||!inp.files||!inp.files[0]){alert('Selecciona un PDF.');return;}
+  var file=inp.files[0];
+  if(file.type!=='application/pdf'){alert('El archivo debe ser PDF.');return;}
+  if(file.size>800000){alert('❌ El PDF es muy grande. Máximo 800KB.\n\nRedúcelo en: smallpdf.com o ilovepdf.com');return;}
+  document.getElementById('loader').style.display='flex';
+  leerPdfBase64(file,function(b64){
+    _api('subirPdfComisiones',{base64:b64,nombre:file.name},function(url){
+      document.getElementById('loader').style.display='none';
+      if(url){PDF_COMISIONES_URL=url;var el=document.getElementById('pdf-link-actual');if(el)el.innerHTML='📄 <a href="'+url+'" target="_blank" style="color:var(--blue);">Ver PDF subido</a>';alert('✅ PDF de comisiones subido.');}
+      else alert('❌ Error al subir. El PDF puede ser muy grande.\n\nRedúcelo en smallpdf.com e intenta de nuevo.');
+    });
+  });
+}
+function subirPdfPoliticas(){
+  var inp=document.getElementById('pdf-politicas-input');
+  if(!inp||!inp.files||!inp.files[0]){alert('Selecciona un PDF.');return;}
+  var file=inp.files[0];
+  if(file.type!=='application/pdf'){alert('El archivo debe ser PDF.');return;}
+  if(file.size>800000){alert('❌ El PDF es muy grande. Máximo 800KB.\n\nRedúcelo en: smallpdf.com o ilovepdf.com');return;}
+  document.getElementById('loader').style.display='flex';
+  leerPdfBase64(file,function(b64){
+    _api('subirPdfTerminos',{base64:b64,nombre:file.name},function(url){
+      document.getElementById('loader').style.display='none';
+      if(url){PDF_POLITICAS_URL=url;var el=document.getElementById('pdf-politicas-link-actual');if(el)el.innerHTML='📄 <a href="'+url+'" target="_blank" style="color:var(--blue);">Ver PDF subido</a>';alert('✅ PDF de políticas subido.');}
+      else alert('❌ Error al subir. El PDF puede ser muy grande.\n\nRedúcelo en smallpdf.com e intenta de nuevo.');
+    });
+  });
+}
 function exportarPdfComisiones(){var cfg=comLeerFormulario();document.getElementById('loader').style.display='flex';_api('generarPdfComisiones',{categoria:_comCatActual,cfg:JSON.stringify(cfg)},function(url){document.getElementById('loader').style.display='none';if(url)window.open(url,'_blank');else alert('Error.');});}
 
 // ═══ SESIÓN ═══
