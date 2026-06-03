@@ -1204,14 +1204,12 @@ function subirPdfComisiones(){
   if(!inp||!inp.files||!inp.files[0]){alert('Selecciona un PDF.');return;}
   var file=inp.files[0];
   if(file.type!=='application/pdf'){alert('El archivo debe ser PDF.');return;}
-  if(file.size>200000){alert('❌ El PDF es muy grande. Máximo 800KB.\n\nRedúcelo en: smallpdf.com o ilovepdf.com');return;}
-  document.getElementById('loader').style.display='flex';
   leerPdfBase64(file,function(b64){
-   fetch(GS_URL_REAL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'subirPdfComisiones',base64:b64,nombre:file.name})}).then(function(r){return r.json();}).then(function(url){
-      document.getElementById('loader').style.display='none';
-      if(url){PDF_COMISIONES_URL=url;var el=document.getElementById('pdf-link-actual');if(el)el.innerHTML='📄 <a href="'+url+'" target="_blank" style="color:var(--blue);">Ver PDF subido</a>';alert('✅ PDF de comisiones subido.');}
-      else alert('❌ Error al subir. El PDF puede ser muy grande.\n\nRedúcelo en smallpdf.com e intenta de nuevo.');
-    });
+    PDF_COMISIONES_URL=b64;
+    try{localStorage.setItem('pdf_comisiones',b64);}catch(e){alert('PDF muy grande para guardarlo localmente.');}
+    var el=document.getElementById('pdf-link-actual');
+    if(el)el.innerHTML='📄 <a href="'+b64+'" target="_blank" style="color:var(--blue);">Ver PDF subido</a>';
+    alert('✅ PDF de comisiones guardado.');
   });
 }
 function subirPdfPoliticas(){
@@ -1219,14 +1217,12 @@ function subirPdfPoliticas(){
   if(!inp||!inp.files||!inp.files[0]){alert('Selecciona un PDF.');return;}
   var file=inp.files[0];
   if(file.type!=='application/pdf'){alert('El archivo debe ser PDF.');return;}
-  if(file.size>200000){alert('❌ El PDF es muy grande. Máximo 800KB.\n\nRedúcelo en: smallpdf.com o ilovepdf.com');return;}
-  document.getElementById('loader').style.display='flex';
   leerPdfBase64(file,function(b64){
-    fetch(GS_URL_REAL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'subirPdfTerminos',base64:b64,nombre:file.name})}).then(function(r){return r.json();}).then(function(url){
-      document.getElementById('loader').style.display='none';
-      if(url){PDF_POLITICAS_URL=url;var el=document.getElementById('pdf-politicas-link-actual');if(el)el.innerHTML='📄 <a href="'+url+'" target="_blank" style="color:var(--blue);">Ver PDF subido</a>';alert('✅ PDF de políticas subido.');}
-      else alert('❌ Error al subir. El PDF puede ser muy grande.\n\nRedúcelo en smallpdf.com e intenta de nuevo.');
-    });
+    PDF_POLITICAS_URL=b64;
+    try{localStorage.setItem('pdf_politicas',b64);}catch(e){alert('PDF muy grande para guardarlo localmente.');}
+    var el=document.getElementById('pdf-politicas-link-actual');
+    if(el)el.innerHTML='📄 <a href="'+b64+'" target="_blank" style="color:var(--blue);">Ver PDF subido</a>';
+    alert('✅ PDF de políticas guardado.');
   });
 }
 function exportarPdfComisiones(){var cfg=comLeerFormulario();document.getElementById('loader').style.display='flex';_api('generarPdfComisiones',{categoria:_comCatActual,cfg:JSON.stringify(cfg)},function(url){document.getElementById('loader').style.display='none';if(url)window.open(url,'_blank');else alert('Error.');});}
@@ -1726,6 +1722,12 @@ document.addEventListener('DOMContentLoaded',function(){
   document.getElementById('btn-subir-pdf-politicas').addEventListener('click',subirPdfPoliticas);
   document.getElementById('btn-exportar-pdf-comisiones').addEventListener('click',exportarPdfComisiones);
   document.getElementById('modal-comisiones').addEventListener('input',function(){comActualizarPreview();});
+  try{
+    var pc=localStorage.getItem('pdf_comisiones');
+    if(pc)PDF_COMISIONES_URL=pc;
+    var pp=localStorage.getItem('pdf_politicas');
+    if(pp)PDF_POLITICAS_URL=pp;
+  }catch(e){}
   actualizarBadgeFavoritos();
   buscar();
 });
