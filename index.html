@@ -1214,7 +1214,7 @@ function subirPdfComisiones(){
     PDF_COMISIONES_URL=b64;
     try{localStorage.setItem('pdf_comisiones',b64);}catch(e){alert('PDF muy grande para guardarlo localmente.');}
     var el=document.getElementById('pdf-link-actual');
-    if(el)el.innerHTML='📄 <a href="'+b64+'" target="_blank" style="color:var(--blue);">Ver PDF subido</a>';
+    if(el)el.innerHTML='📄 <span style="color:var(--blue);cursor:pointer;text-decoration:underline;" onclick="var w=window.open();w.document.write(\'<iframe width=100% height=100% src=\\\'\'+PDF_COMISIONES_URL+\'\\\'\></iframe>\');">Ver PDF de comisiones</span>';
     alert('✅ PDF de comisiones guardado.');
   });
 }
@@ -1229,7 +1229,7 @@ function subirPdfPoliticas(){
     PDF_POLITICAS_URL=b64;
     try{localStorage.setItem('pdf_politicas',b64);}catch(e){alert('PDF muy grande para guardarlo localmente.');}
     var el=document.getElementById('pdf-politicas-link-actual');
-    if(el)el.innerHTML='📄 <a href="'+b64+'" target="_blank" style="color:var(--blue);">Ver PDF subido</a>';
+    if(el)el.innerHTML='📄 <span style="color:var(--blue);cursor:pointer;text-decoration:underline;" onclick="var w=window.open();w.document.write(\'<iframe width=100% height=100% src=\\\'\'+PDF_POLITICAS_URL+\'\\\'\></iframe>\');">Ver PDF de políticas</span>';
     alert('✅ PDF de políticas guardado.');
   });
 }
