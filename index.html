@@ -948,6 +948,10 @@ function comprimirImagen(file, callback) {
 function leerPdfBase64(file, callback) {
   var r = new FileReader();
   r.onload = function(e) { callback(e.target.result); };
+  r.onerror = function() { 
+    document.getElementById('loader').style.display='none';
+    alert('❌ Error al leer el archivo.');
+  };
   r.readAsDataURL(file);
 }
 
