@@ -1204,7 +1204,7 @@ function subirPdfComisiones(){
   if(!inp||!inp.files||!inp.files[0]){alert('Selecciona un PDF.');return;}
   var file=inp.files[0];
   if(file.type!=='application/pdf'){alert('El archivo debe ser PDF.');return;}
-  if(file.size>800000){alert('❌ El PDF es muy grande. Máximo 800KB.\n\nRedúcelo en: smallpdf.com o ilovepdf.com');return;}
+  if(file.size>200000){alert('❌ El PDF es muy grande. Máximo 800KB.\n\nRedúcelo en: smallpdf.com o ilovepdf.com');return;}
   document.getElementById('loader').style.display='flex';
   leerPdfBase64(file,function(b64){
    fetch(GS_URL_REAL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'subirPdfComisiones',base64:b64,nombre:file.name})}).then(function(r){return r.json();}).then(function(url){
@@ -1219,7 +1219,7 @@ function subirPdfPoliticas(){
   if(!inp||!inp.files||!inp.files[0]){alert('Selecciona un PDF.');return;}
   var file=inp.files[0];
   if(file.type!=='application/pdf'){alert('El archivo debe ser PDF.');return;}
-  if(file.size>800000){alert('❌ El PDF es muy grande. Máximo 800KB.\n\nRedúcelo en: smallpdf.com o ilovepdf.com');return;}
+  if(file.size>200000){alert('❌ El PDF es muy grande. Máximo 800KB.\n\nRedúcelo en: smallpdf.com o ilovepdf.com');return;}
   document.getElementById('loader').style.display='flex';
   leerPdfBase64(file,function(b64){
     fetch(GS_URL_REAL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'subirPdfTerminos',base64:b64,nombre:file.name})}).then(function(r){return r.json();}).then(function(url){
