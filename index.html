@@ -362,6 +362,7 @@ body{background:#f4f6f9;font-family:'Barlow',sans-serif;color:#0d1b2a;padding-bo
 .mb-0{margin-bottom:0!important;}
 .gratis-ocultar{display:none!important;}
 </style>
+
 <!-- ═══ SPLASH ═══ -->
 <div id="splash-screen">
   <div class="splash-logo-wrap">
@@ -1124,23 +1125,32 @@ function aplicarFiltroAvanzado(prods){return prods.filter(function(p){if(_filtro
 // ═══ SKELETON ═══
 function mostrarSkeleton(){var r=document.getElementById('res');if(!r)return;r.style.display='grid';var h='';for(var i=0;i<6;i++)h+='<div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line short"></div><div class="skeleton-line long"></div><div class="skeleton-line med"></div></div></div>';r.innerHTML=h;}
 
-// ── CAMBIO 3: precargar detalles en background ──
+// ── CAMBIO 3: precargar detalles en background (1 hilo, por tienda) ──
 function _precargarDetalles(prods) {
-  // Precarga de a 3 simultáneos para no saturar
   var idx = 0;
+  var tiendasVistas = {};
   function siguiente() {
     if (idx >= prods.length) return;
     var p = prods[idx++];
-    if (_cacheDetalles[p.id_prod]) { siguiente(); return; }
+    if (_cacheDetalles[p.id_prod]) { setTimeout(siguiente, 50); return; }
+    if (tiendasVistas[p.nombre_tienda] && tiendasVistas[p.nombre_tienda] !== true) {
+      _cacheDetalles[p.id_prod] = tiendasVistas[p.nombre_tienda];
+      setTimeout(siguiente, 50); return;
+    }
+    if (tiendasVistas[p.nombre_tienda] === true) { setTimeout(siguiente, 100); return; }
+    tiendasVistas[p.nombre_tienda] = true;
     _api('obtenerInfoTienda', {nombre: p.nombre_tienda}, function(infoT) {
       _api('obtenerMetricas', {nombre: p.nombre_tienda}, function(met) {
-        _cacheDetalles[p.id_prod] = {infoT: infoT || {}, met: met || {}};
-        siguiente();
+        var dato = {infoT: infoT || {}, met: met || {}};
+        tiendasVistas[p.nombre_tienda] = dato;
+        _prodsPaginados.forEach(function(x) {
+          if (x.nombre_tienda === p.nombre_tienda) _cacheDetalles[x.id_prod] = dato;
+        });
+        setTimeout(siguiente, 600);
       });
     });
   }
-  // Arranca 3 hilos paralelos
-  siguiente(); siguiente(); siguiente();
+  setTimeout(siguiente, 2000);
 }
 
 // ═══ RENDER PAGINADO ═══
