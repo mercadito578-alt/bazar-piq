@@ -224,6 +224,17 @@ body{background:#f4f6f9;font-family:'Barlow',sans-serif;color:#0d1b2a;padding-bo
 .modal-box.admin-modal{border-top-color:var(--admin);}
 .modal-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:20px;color:var(--navy);margin-bottom:16px;}
 
+/* ── MODAL VISOR PDF (políticas y comisiones inline) ─────── */
+.modal-pdf-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.92);z-index:9500;flex-direction:column;align-items:center;justify-content:flex-start;}
+.modal-pdf-overlay.active{display:flex;}
+.modal-pdf-header{width:100%;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--navy);border-bottom:2px solid var(--blue);flex-shrink:0;}
+.modal-pdf-titulo{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:17px;color:var(--white);}
+.modal-pdf-close{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;flex-shrink:0;}
+.modal-pdf-body{flex:1;width:100%;overflow:hidden;display:flex;align-items:center;justify-content:center;padding:16px;}
+.modal-pdf-img{max-width:100%;max-height:calc(100vh - 100px);object-fit:contain;border-radius:8px;box-shadow:0 4px 30px rgba(0,0,0,.5);}
+/* cuando es PDF embebido */
+.modal-pdf-iframe{width:100%;height:calc(100vh - 80px);border:none;border-radius:8px;}
+
 /* ── CONTRATO ───────────────────────────────────────────── */
 .contrato-box{background:#f8fafc;border:2px solid var(--blue);border-radius:10px;padding:16px;margin-bottom:12px;max-height:260px;overflow-y:auto;font-size:12px;line-height:1.6;color:var(--navy-mid);}
 .contrato-box h6{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:13px;color:var(--navy);margin:10px 0 4px;text-transform:uppercase;letter-spacing:1px;}
@@ -351,9 +362,6 @@ body{background:#f4f6f9;font-family:'Barlow',sans-serif;color:#0d1b2a;padding-bo
 .mb-0{margin-bottom:0!important;}
 .gratis-ocultar{display:none!important;}
 </style>
-</head>
-<body>
-
 <!-- ═══ SPLASH ═══ -->
 <div id="splash-screen">
   <div class="splash-logo-wrap">
@@ -392,12 +400,23 @@ body{background:#f4f6f9;font-family:'Barlow',sans-serif;color:#0d1b2a;padding-bo
   <div style="color:#fff;margin-top:12px;font-weight:600;font-size:13px;letter-spacing:1px;">PROCESANDO...</div>
 </div>
 
-<!-- ═══ LIGHTBOX ═══ -->
+<!-- ═══ LIGHTBOX (fotos producto) ═══ -->
 <div id="lightbox" class="lightbox">
   <button class="lightbox-close" id="lb-close">✕</button>
   <img id="lb-img" class="lightbox-img" src="" alt="">
   <div id="lb-dots" style="margin-top:10px;text-align:center;"></div>
   <div class="lightbox-nav"><button class="lb-btn" id="lb-prev">‹</button><button class="lb-btn" id="lb-next">›</button></div>
+</div>
+
+<!-- ═══ MODAL VISOR PDF INLINE (políticas / comisiones) ═══ -->
+<div id="modal-pdf-viewer" class="modal-pdf-overlay">
+  <div class="modal-pdf-header">
+    <span class="modal-pdf-titulo" id="modal-pdf-titulo-txt">📄 Documento</span>
+    <button class="modal-pdf-close" id="modal-pdf-close-btn">✕</button>
+  </div>
+  <div class="modal-pdf-body" id="modal-pdf-body">
+    <!-- se inyecta iframe o img según el tipo de URL -->
+  </div>
 </div>
 
 <!-- ═══ BANNER GRATIS ═══ -->
@@ -718,13 +737,13 @@ body{background:#f4f6f9;font-family:'Barlow',sans-serif;color:#0d1b2a;padding-bo
     </div>
     <div style="background:#fef3c7;border:1px solid var(--warning);border-radius:8px;padding:12px;margin-bottom:12px;">
       <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:14px;color:#78350f;margin-bottom:8px;">📄 PDF de Comisiones</div>
-      <input type="file" id="pdf-comisiones-input" accept="image/*" style="margin-bottom:8px;width:100%;font-size:12px;">
+      <input type="file" id="pdf-comisiones-input" accept="application/pdf" style="margin-bottom:8px;width:100%;font-size:12px;">
       <button id="btn-subir-pdf-comisiones" class="pdf-viewer-btn" style="font-size:13px;padding:10px;">📤 SUBIR PDF DE COMISIONES</button>
       <div id="pdf-link-actual" style="font-size:11px;color:var(--gray-400);margin-top:4px;"></div>
     </div>
     <div style="background:#dbeafe;border:1px solid #3b82f6;border-radius:8px;padding:12px;margin-bottom:12px;">
       <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:14px;color:#1d4ed8;margin-bottom:8px;">📄 PDF de Políticas</div>
-      <input type="file" id="pdf-politicas-input" accept="image/*" style="margin-bottom:8px;width:100%;font-size:12px;">
+      <input type="file" id="pdf-politicas-input" accept="application/pdf" style="margin-bottom:8px;width:100%;font-size:12px;">
       <button id="btn-subir-pdf-politicas" class="pdf-viewer-btn" style="font-size:13px;padding:10px;background:linear-gradient(135deg,#1d4ed8,#1e40af);">📤 SUBIR PDF DE POLÍTICAS</button>
       <div id="pdf-politicas-link-actual" style="font-size:11px;color:var(--gray-400);margin-top:4px;"></div>
     </div>
@@ -733,6 +752,7 @@ body{background:#f4f6f9;font-family:'Barlow',sans-serif;color:#0d1b2a;padding-bo
     <button onclick="document.getElementById('modal-comisiones').style.display='none'" class="btn-out">Cancelar</button>
   </div>
 </div>
+
 <!-- ═══ HEADER ═══ -->
 <div class="header">
   <button id="main-back" class="btn-back-nav d-none">⬅</button>
@@ -870,7 +890,6 @@ body{background:#f4f6f9;font-family:'Barlow',sans-serif;color:#0d1b2a;padding-bo
     <button id="btn-cerrar-admin-panel" class="btn-out" style="margin-top:10px;border-color:var(--danger);color:var(--danger);">Cerrar sesión admin</button>
   </div>
 </div>
-
 <script>
 // ═══════════════════════════════════════════════════════════
 //  CONFIGURACIÓN — PROXY CLOUDFLARE → GOOGLE APPS SCRIPT
@@ -878,9 +897,6 @@ body{background:#f4f6f9;font-family:'Barlow',sans-serif;color:#0d1b2a;padding-bo
 var APP_URL = 'https://bazar-piq-proxy.mercadito578.workers.dev';
 var GS_URL_REAL = 'https://script.google.com/macros/s/AKfycbz9j2Z_2AyeCIQXlb9KZEnbxp-EDrNThcU9tMi1F4h-reRyZbIfJMiPRRPWvbrZ7YqO/exec';
 
-// ═══════════════════════════════════════════════════════════
-//  ACCIONES QUE USAN POST (datos grandes)
-// ═══════════════════════════════════════════════════════════
 var ACCIONES_POST = [
   'subirFotoEnCarpeta','subirPdfComisiones','subirPdfTerminos',
   'guardarProducto','guardarProductoUnico','registrarTiendaServidor',
@@ -890,9 +906,6 @@ var ACCIONES_POST = [
   'adminGuardarPrioridades','actualizarTienda'
 ];
 
-// ═══════════════════════════════════════════════════════════
-//  FUNCIÓN CENTRAL DE API — GET o POST automático
-// ═══════════════════════════════════════════════════════════
 function _api(action, params, callback) {
   var usaPost = ACCIONES_POST.indexOf(action) !== -1;
   if (usaPost) {
@@ -921,9 +934,6 @@ function _api(action, params, callback) {
   }
 }
 
-// ═══════════════════════════════════════════════════════════
-//  COMPRIMIR IMAGEN — max 700px, calidad 65%
-// ═══════════════════════════════════════════════════════════
 function comprimirImagen(file, callback) {
   var r = new FileReader();
   r.onload = function(ev) {
@@ -942,13 +952,11 @@ function comprimirImagen(file, callback) {
   r.readAsDataURL(file);
 }
 function _base64ToBlob(b64){var bin=atob(b64.split(',')[1]);var arr=new Uint8Array(bin.length);for(var i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i);return arr;}
-// ═══════════════════════════════════════════════════════════
-//  COMPRIMIR PDF — chunked base64
-// ═══════════════════════════════════════════════════════════
+
 function leerPdfBase64(file, callback) {
   var r = new FileReader();
   r.onload = function(e) { callback(e.target.result); };
-  r.onerror = function() { 
+  r.onerror = function() {
     document.getElementById('loader').style.display='none';
     alert('❌ Error al leer el archivo.');
   };
@@ -979,6 +987,9 @@ var _prodsPaginados=[],_pagActual=0,_pagTam=20;
 var _filtrosActivos={tiendas:[],ubicaciones:[],domicilio:'',comunidades:[]};
 var _scrollAntesDeDEtalle=0,_paginaAntesDeDEtalle=0;
 
+// ── CAMBIO 3: cache de detalles precargados ──
+var _cacheDetalles={};   // key: id_prod  value: {infoT, met}
+
 var CATEGORIAS=['Comida y Bebida','Ropa y Calzado','Hogar y Limpieza','Ferretería y Herramientas','Refacciones Automotrices','Motos','Autos y Camionetas','Regalos y Juguetes','Electrónica','Belleza y Salud','Otros'];
 var DIAS=['Lun','Mar','Mie','Jue','Vie','Sab','Dom'];
 var UNIDADES=['Pieza','Kg','Gramo','Litro','Mililitro','Metro','Metro Cuadrado','Millar','Docena','Caja','Bolsa','Rollo','Par','Tonelada'];
@@ -998,9 +1009,52 @@ function carpetaEnSecuencia(){var idx=_fotoSecuenciaIdx%CARPETAS_SECUENCIA.lengt
 function horaQueretaro(){var now=new Date();return new Date(now.getTime()+now.getTimezoneOffset()*60000+(-6*3600000));}
 function tiendaEnHorario(t){if(!t||!t.h_abre||!t.h_cierra)return true;var ahora=horaQueretaro(),h=ahora.getHours(),m=ahora.getMinutes(),minA=h*60+m;var pA=t.h_abre.split(':'),pC=t.h_cierra.split(':');return minA>=(parseInt(pA[0])*60+(parseInt(pA[1])||0))&&minA<(parseInt(pC[0])*60+(parseInt(pC[1])||0));}
 function diasHastaVencer(fp){if(!fp)return 30;var pub=new Date(fp),vence=new Date(pub.getTime()+30*24*3600*1000);return Math.ceil((vence-new Date())/(1000*3600*24));}
-function verPdfComisiones(){if(!PDF_COMISIONES_URL){alert('No hay PDF de comisiones disponible.');return;}window.open(PDF_COMISIONES_URL,'_blank');}
-function verPdfPoliticas(){if(!PDF_POLITICAS_URL){alert('No hay PDF de políticas disponible.');return;}window.open(PDF_POLITICAS_URL,'_blank');}
 function generarLinkProducto(id){return 'https://mercadito578-alt.github.io/bazar-piq/?prod='+encodeURIComponent(id);}
+
+// ── CAMBIO 1 y 2: visor PDF inline (no window.open) ──
+function abrirVisorPdf(url, titulo) {
+  if (!url) { alert('No hay documento disponible.'); return; }
+  var overlay = document.getElementById('modal-pdf-viewer');
+  var body    = document.getElementById('modal-pdf-body');
+  var tituloEl= document.getElementById('modal-pdf-titulo-txt');
+  tituloEl.textContent = titulo || '📄 Documento';
+  body.innerHTML = '';
+
+  // Si es base64 de PDF → iframe con data URI
+  // Si es URL normal (http/https) → iframe src
+  // Si es imagen base64 → img
+  var esBase64Img = url.startsWith('data:image');
+  var esBase64Pdf = url.startsWith('data:application/pdf') || url.startsWith('data:application/octet');
+  var esUrlHttp   = url.startsWith('http');
+
+  if (esBase64Img) {
+    var img = document.createElement('img');
+    img.src = url;
+    img.className = 'modal-pdf-img';
+    body.appendChild(img);
+  } else if (esBase64Pdf || esUrlHttp) {
+    var iframe = document.createElement('iframe');
+    iframe.src = url;
+    iframe.className = 'modal-pdf-iframe';
+    iframe.setAttribute('allowfullscreen','true');
+    body.appendChild(iframe);
+  } else {
+    // fallback: intenta mostrar como imagen
+    var img2 = document.createElement('img');
+    img2.src = url;
+    img2.className = 'modal-pdf-img';
+    body.appendChild(img2);
+  }
+  overlay.classList.add('active');
+}
+function cerrarVisorPdf() {
+  var overlay = document.getElementById('modal-pdf-viewer');
+  overlay.classList.remove('active');
+  document.getElementById('modal-pdf-body').innerHTML = '';
+}
+
+function verPdfComisiones(){ abrirVisorPdf(PDF_COMISIONES_URL, '📄 Comisiones'); }
+function verPdfPoliticas(){  abrirVisorPdf(PDF_POLITICAS_URL,  '📄 Políticas');  }
 
 // ═══ MODO GRATUITO ═══
 function aplicarModoGratis(activo){
@@ -1022,7 +1076,6 @@ function actualizarModoGratis(activo){
   else{btn.className='btn-toggle-on';btn.textContent='🎁 ACTIVAR MODO GRATUITO';if(badge)badge.innerHTML='<span style="background:#fee2e2;color:#991b1b;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;">💰 COMISIONES ACTIVAS</span>';}
 }
 
-// ═══ CALCULAR COBRO PREVIEW ═══
 function calcularCobroPreview(precio,categoria,diasEntrega,tienePaquete){precio=parseFloat(precio)||0;if(precio<=0)return 0;if(!_comCfgActual)return -1;var tiempos=_comCfgActual.tiempos||{'1-2':0,'2-3':5,'3-4':10,'5-6':18};var tClave=diasEntrega<=1?'1-2':diasEntrega<=3?'2-3':diasEntrega<=4?'3-4':'5-6';var pct=tiempos[tClave]||0;if(tienePaquete){return pct>0?Math.round(precio*pct/100*100)/100:0;}if(diasEntrega>=2){return pct>0?Math.round(precio*pct/100*100)/100:0;}else{var rangos=_comCfgActual.rangos||[3,5,8,12,18,25,35,50,80];var maxes=[50,150,300,1000,2000,5000,12000,50000,Infinity];var idx=maxes.length-1;for(var i=0;i<maxes.length;i++){if(precio<=maxes[i]){idx=i;break;}}return(rangos[idx]||0);}}
 
 // ═══ NAVEGACIÓN ═══
@@ -1035,7 +1088,18 @@ function ir(id,guardar){
   ['p-comprar','p-vender','p-empleo','p-form','p-detalle','p-admin-panel','p-tienda-vitrina'].forEach(function(pg){var el=document.getElementById(pg);if(el)el.classList.add('d-none');});
   document.getElementById(id).classList.remove('d-none');
   ['nav-comprar','nav-vender','nav-empleo'].forEach(function(n){document.getElementById(n).classList.remove('active');});
-  if(id==='p-comprar'){document.getElementById('nav-comprar').classList.add('active');_revisarStockYVigencia();if(allProds.length===0){buscar();}else{_pagActual=_paginaAntesDeDEtalle;renderPaginaActual(true);setTimeout(function(){window.scrollTo(0,_scrollAntesDeDEtalle);},200);}}
+  if(id==='p-comprar'){
+    document.getElementById('nav-comprar').classList.add('active');
+    _revisarStockYVigencia();
+    if(allProds.length===0){
+      buscar();
+    } else {
+      // ── CAMBIO 4: restaura lista sin recargar ──
+      _pagActual=_paginaAntesDeDEtalle;
+      renderPaginaActual(true);
+      setTimeout(function(){window.scrollTo(0,_scrollAntesDeDEtalle);},200);
+    }
+  }
   if(id==='p-vender')document.getElementById('nav-vender').classList.add('active');
   if(id==='p-empleo'){document.getElementById('nav-empleo').classList.add('active');cargarListaEmpleo();}
   if(id==='p-admin-panel')cargarPanelAdmin();
@@ -1047,7 +1111,6 @@ function _revisarStockYVigencia(){_api('revisarStockYVigencia',null,function(){}
 // ═══ CONTRATO ═══
 function abrirContrato(cb){_contratoCallback=cb;document.getElementById('chk-todo').checked=false;document.getElementById('chk-comisiones').checked=false;var btnOk=document.getElementById('btn-contrato-ok'),btnNo=document.getElementById('btn-contrato-no');if(!cb){btnOk.style.display='none';btnNo.textContent='Cerrar';}else{btnOk.style.display='';btnNo.textContent='Cancelar';}document.getElementById('modal-contrato').style.display='block';}
 
-// ═══ RECUPERAR ═══
 function abrirModalRecuperar(){document.getElementById('rec-pass-nombre').value='';document.getElementById('rec-pass-tel').value='';document.getElementById('modal-recuperar').style.display='block';}
 function procesarRecuperacion(tipo){var nombre=document.getElementById('rec-pass-nombre').value.trim();var tel=document.getElementById('rec-pass-tel').value.trim();if(!nombre){alert('Ingresa tu nombre.');return;}if(!tel){alert('Ingresa tu teléfono.');return;}var tL=tipo==='tienda'?'🏪 Tienda':tipo==='empresa'?'🏢 Empresa':'👤 Usuario';var msj='🔑 *RECUPERAR CONTRASEÑA — Bazar PIQ*\n\n'+tL+': *'+nombre+'*\n📞 Tel: '+tel+'\n\n_Por favor ayúdame a recuperar mi contraseña._';document.getElementById('modal-recuperar').style.display='none';window.open('https://wa.me/'+SOPORTE_WA_JS+'?text='+encodeURIComponent(msj));}
 
@@ -1060,6 +1123,25 @@ function aplicarFiltroAvanzado(prods){return prods.filter(function(p){if(_filtro
 
 // ═══ SKELETON ═══
 function mostrarSkeleton(){var r=document.getElementById('res');if(!r)return;r.style.display='grid';var h='';for(var i=0;i<6;i++)h+='<div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line short"></div><div class="skeleton-line long"></div><div class="skeleton-line med"></div></div></div>';r.innerHTML=h;}
+
+// ── CAMBIO 3: precargar detalles en background ──
+function _precargarDetalles(prods) {
+  // Precarga de a 3 simultáneos para no saturar
+  var idx = 0;
+  function siguiente() {
+    if (idx >= prods.length) return;
+    var p = prods[idx++];
+    if (_cacheDetalles[p.id_prod]) { siguiente(); return; }
+    _api('obtenerInfoTienda', {nombre: p.nombre_tienda}, function(infoT) {
+      _api('obtenerMetricas', {nombre: p.nombre_tienda}, function(met) {
+        _cacheDetalles[p.id_prod] = {infoT: infoT || {}, met: met || {}};
+        siguiente();
+      });
+    });
+  }
+  // Arranca 3 hilos paralelos
+  siguiente(); siguiente(); siguiente();
+}
 
 // ═══ RENDER PAGINADO ═══
 function renderPaginaActual(esPrimeraCarga){
@@ -1081,7 +1163,7 @@ function renderPaginaActual(esPrimeraCarga){
   if(fin<_prodsPaginados.length){var btnMas=document.createElement('button');btnMas.id='btn-ver-mas-prods';btnMas.className='btn-ver-mas-prods';var restantes=_prodsPaginados.length-fin;btnMas.textContent='⬇️ Ver '+(restantes>_pagTam?_pagTam:restantes)+' más de '+_prodsPaginados.length+' productos';btnMas.addEventListener('click',function(){var cardsActuales=r.querySelectorAll('.card-p-wrap');var refScroll=cardsActuales.length>0?cardsActuales[cardsActuales.length-1]:null;_pagActual++;renderPaginaActual(false);if(refScroll){setTimeout(function(){var rect=refScroll.getBoundingClientRect();var scrollTop=window.pageYOffset||document.documentElement.scrollTop;window.scrollTo({top:scrollTop+rect.bottom-60,behavior:'smooth'});},80);}});r.appendChild(btnMas);}
 }
 
-// ═══ BUSCAR — BUG CORREGIDO ═══
+// ═══ BUSCAR ═══
 function buscar(){
   var q=document.getElementById('bus').value.toLowerCase().trim();
   var cat=categoriaFiltroActiva;
@@ -1105,13 +1187,36 @@ function buscar(){
     if(hayFiltros)filtrados=aplicarFiltroAvanzado(filtrados);
     _prodsPaginados=filtrados;_pagActual=0;
     renderPaginaActual(true);
+    // ── CAMBIO 3: precarga detalles en background ──
+    setTimeout(function(){ _precargarDetalles(filtrados); }, 800);
   });
 }
 
-// ═══ COMPARTIR TIENDA ═══
+// ── CAMBIO 4: botón REGRESAR restaura sin recargar ──
+function regresarALista() {
+  document.getElementById('bus').value='';
+  categoriaFiltroActiva='';
+  limpiarFiltros();
+  document.querySelectorAll('#filtro-cats .filtro-btn').forEach(function(b){b.classList.remove('active');});
+  document.querySelector('#filtro-cats .filtro-btn[data-cat=""]').classList.add('active');
+  // Si ya hay productos cargados, no llames a buscar(), solo restaura
+  if(allProds.length>0){
+    var barr=document.getElementById('barra-regresar-busqueda');
+    if(barr)barr.classList.add('d-none');
+    _prodsPaginados=allProds.filter(function(p){
+      if((p.categoria||'')==='Comida y Bebida'){if(p.estatus_tienda==='CERRADO')return false;if(p.fuera_horario===true)return false;if(p.fuera_dia_laboral===true)return false;}
+      if(p.oculto_por_stock==='SI')return false;
+      return true;
+    });
+    _pagActual=0;
+    renderPaginaActual(true);
+  } else {
+    buscar();
+  }
+}
+
 function compartirTiendaLink(nombre,link){var texto='🏪 *'+nombre+'*\n\nEncuentra todos nuestros productos en Bazar PIQ:\n\n🔗 '+link+'\n\nTe esperamos 😊';if(navigator.share)navigator.share({title:nombre,text:texto});else{var ta=document.createElement('textarea');ta.value=texto;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);alert('✅ Mensaje copiado al portapapeles.');}}
 
-// ═══ VER ARTÍCULOS DE TIENDA ═══
 function verArticulosTienda(nombreTienda){
   ir('p-tienda-vitrina');
   var cont=document.getElementById('tienda-vitrina-contenido');
@@ -1128,7 +1233,7 @@ function verArticulosTienda(nombreTienda){
 </script>
 <script>
 // ═══════════════════════════════════════════
-//  ADMIN
+//  ADMIN  (sin cambios respecto al original)
 // ═══════════════════════════════════════════
 function abrirModalAdmin(){if(adminLogueado){ir('p-admin-panel');return;}document.getElementById('admin-pass-input').value='';document.getElementById('modal-admin').style.display='block';}
 
@@ -1193,7 +1298,7 @@ function toggleRegaloAdmin(a){_api('toggleRegalo',{activo:String(a)},function(){
 function mostrarAdminComentarios(){_api('adminObtenerCalificacionesApp',null,function(d){if(!d)return;var h='<button onclick="mostrarAdminTiendas()" style="background:none;border:1px solid var(--gray-200);border-radius:6px;padding:5px 10px;cursor:pointer;font-size:12px;margin-bottom:12px;">⬅ Volver</button><div style="background:linear-gradient(135deg,var(--navy),var(--navy-mid));border-radius:10px;padding:12px;color:#fff;text-align:center;margin-bottom:14px;"><div style="font-family:\'Barlow Condensed\',sans-serif;font-weight:800;font-size:30px;">⭐ '+d.promedio+'</div><div style="font-size:12px;color:var(--gray-400);">'+d.total+' calificaciones</div></div>';(d.comentarios||[]).forEach(function(c){var e='';for(var i=1;i<=5;i++)e+=(i<=c.estrellas?'★':'☆');h+='<div style="background:var(--white);border:1px solid var(--gray-200);border-radius:8px;padding:12px;margin-bottom:8px;"><div style="display:flex;justify-content:space-between;"><b>'+c.usuario+'</b><span style="color:#f4c430;">'+e+'</span></div>'+(c.comentario?'<p style="font-size:12px;color:var(--gray-600);">'+c.comentario+'</p>':'')+'<span style="font-size:10px;color:var(--gray-400);">'+c.fecha+'</span></div>';});document.getElementById('admin-panel-contenido').innerHTML=h;});}
 
 // ═══ COMISIONES ═══
-function abrirModalComisiones(){_comPaqSel=null;['basico','medio','pro'].forEach(function(p){document.getElementById('paq-btn-'+p).classList.remove('sel');document.getElementById('paq-fields-'+p).classList.remove('visible');});document.getElementById('com-cat-select').value='global';document.querySelectorAll('.com-tab').forEach(function(b){b.classList.remove('active');});document.querySelectorAll('.com-section').forEach(function(s){s.classList.remove('active');});document.querySelector('.com-tab').classList.add('active');document.getElementById('com-sec-paquetes').classList.add('active');document.getElementById('modal-comisiones').style.display='block';document.getElementById('loader').style.display='flex';_api('adminObtenerCfgComisiones',{categoria:'global'},function(cfg){document.getElementById('loader').style.display='none';if(!cfg)return;_comCfgActual=cfg;_comCatActual='global';comCargarValores(cfg);_api('obtenerEstadoConfig',null,function(c){if(!c)return;if(c.pdf_comisiones_url){PDF_COMISIONES_URL=c.pdf_comisiones_url;var el=document.getElementById('pdf-link-actual');if(el)el.innerHTML='📄 <a href="'+c.pdf_comisiones_url+'" target="_blank" style="color:var(--blue);">Ver PDF actual</a>';}if(c.pdf_terminos_url){PDF_POLITICAS_URL=c.pdf_terminos_url;var elP=document.getElementById('pdf-politicas-link-actual');if(elP)elP.innerHTML='📄 <a href="'+c.pdf_terminos_url+'" target="_blank" style="color:var(--blue);">Ver PDF actual</a>';}});});}
+function abrirModalComisiones(){_comPaqSel=null;['basico','medio','pro'].forEach(function(p){document.getElementById('paq-btn-'+p).classList.remove('sel');document.getElementById('paq-fields-'+p).classList.remove('visible');});document.getElementById('com-cat-select').value='global';document.querySelectorAll('.com-tab').forEach(function(b){b.classList.remove('active');});document.querySelectorAll('.com-section').forEach(function(s){s.classList.remove('active');});document.querySelector('.com-tab').classList.add('active');document.getElementById('com-sec-paquetes').classList.add('active');document.getElementById('modal-comisiones').style.display='block';document.getElementById('loader').style.display='flex';_api('adminObtenerCfgComisiones',{categoria:'global'},function(cfg){document.getElementById('loader').style.display='none';if(!cfg)return;_comCfgActual=cfg;_comCatActual='global';comCargarValores(cfg);_api('obtenerEstadoConfig',null,function(c){if(!c)return;if(c.pdf_comisiones_url){PDF_COMISIONES_URL=c.pdf_comisiones_url;var el=document.getElementById('pdf-link-actual');if(el)el.innerHTML='📄 <a href="javascript:void(0)" onclick="verPdfComisiones()" style="color:var(--blue);">Ver PDF actual</a>';}if(c.pdf_terminos_url){PDF_POLITICAS_URL=c.pdf_terminos_url;var elP=document.getElementById('pdf-politicas-link-actual');if(elP)elP.innerHTML='📄 <a href="javascript:void(0)" onclick="verPdfPoliticas()" style="color:var(--blue);">Ver PDF actual</a>';}});});}
 function comCatCambio(){_comCatActual=document.getElementById('com-cat-select').value;document.getElementById('loader').style.display='flex';_api('adminObtenerCfgComisiones',{categoria:_comCatActual},function(cfg){document.getElementById('loader').style.display='none';if(!cfg)return;_comCfgActual=cfg;comCargarValores(cfg);comActualizarPreview();});}
 function comTab(sec,btn){document.querySelectorAll('.com-tab').forEach(function(b){b.classList.remove('active');});document.querySelectorAll('.com-section').forEach(function(s){s.classList.remove('active');});btn.classList.add('active');document.getElementById('com-sec-'+sec).classList.add('active');comActualizarPreview();}
 function comSelPaq(tipo){['basico','medio','pro'].forEach(function(p){document.getElementById('paq-btn-'+p).classList.remove('sel');document.getElementById('paq-fields-'+p).classList.remove('visible');});if(_comPaqSel===tipo){_comPaqSel=null;return;}_comPaqSel=tipo;document.getElementById('paq-btn-'+tipo).classList.add('sel');document.getElementById('paq-fields-'+tipo).classList.add('visible');}
@@ -1202,86 +1307,47 @@ function comLeerFormulario(){var cfg={paquetes:{basico:{costo_paquete:parseFloat
 function comActualizarPreview(){var cfg=comLeerFormulario(),previewEl=document.getElementById('com-preview'),textoEl=document.getElementById('com-preview-texto');if(!previewEl||!textoEl)return;var lineas=[];['basico','medio','pro'].forEach(function(p){var paq=cfg.paquetes[p];if(paq.costo_paquete>0&&paq.limite>0){var em={basico:'⭐',medio:'🌟',pro:'💎'};lineas.push(em[p]+' <b>'+p.charAt(0).toUpperCase()+p.slice(1)+'</b>: $'+paq.costo_paquete.toFixed(2)+' · '+paq.limite+' pubs');}});if(cfg.empleo.costo_publicacion>0)lineas.push('💼 Empleo: $'+cfg.empleo.costo_publicacion.toFixed(2));if(lineas.length>0){previewEl.style.display='block';textoEl.innerHTML=lineas.join('<br>');}else previewEl.style.display='none';}
 function guardarComisiones(){var cfg=comLeerFormulario();document.getElementById('loader').style.display='flex';_api('adminGuardarCfgComisiones',{categoria:_comCatActual,cfg:JSON.stringify(cfg)},function(r){document.getElementById('loader').style.display='none';if(r&&r.ok){_comCfgActual=cfg;alert('✅ Guardado.');document.getElementById('modal-comisiones').style.display='none';}else alert('❌ Error.');});}
 
-// ═══ PDF ═══
+// ═══ PDF — CAMBIO 1: subirPdfPoliticas guarda igual que comisiones ═══
 function subirPdfComisiones(){
   var inp=document.getElementById('pdf-comisiones-input');
-  if(!inp||!inp.files||!inp.files[0]){alert('Selecciona una imagen.');return;}
+  if(!inp||!inp.files||!inp.files[0]){alert('Selecciona un PDF.');return;}
   var file=inp.files[0];
+  if(file.type!=='application/pdf'){alert('El archivo debe ser PDF.');return;}
   document.getElementById('loader').style.display='flex';
-  comprimirImagen(file,function(b64){
-    _api('subirFotoEnCarpeta',{base64:b64,nombre:'COMISIONES_'+Date.now()+'.jpg',folderId:CARPETAS_SECUENCIA[0]},function(url){
-      document.getElementById('loader').style.display='none';
-      if(url){
-        PDF_COMISIONES_URL=url;
-        try{localStorage.setItem('pdf_comisiones',url);}catch(e){}
-        var el=document.getElementById('pdf-link-actual');
-        if(el)el.innerHTML='📄 <a href="'+url+'" target="_blank" style="color:var(--blue);">Ver imagen de comisiones</a>';
-        alert('✅ Imagen de comisiones subida.');
-      }else alert('❌ Error al subir.');
-    });
+  leerPdfBase64(file,function(b64){
+    document.getElementById('loader').style.display='none';
+    PDF_COMISIONES_URL=b64;
+    try{localStorage.setItem('pdf_comisiones',b64);}catch(e){alert('PDF muy grande para guardarlo localmente.');}
+    var el=document.getElementById('pdf-link-actual');
+    if(el){el.innerHTML='📄 <a href="javascript:void(0)" onclick="verPdfComisiones()" style="color:var(--blue);">Ver PDF de comisiones</a>';}
+    alert('✅ PDF de comisiones guardado.');
   });
 }
 function subirPdfPoliticas(){
   var inp=document.getElementById('pdf-politicas-input');
-  if(!inp||!inp.files||!inp.files[0]){alert('Selecciona una imagen.');return;}
+  if(!inp||!inp.files||!inp.files[0]){alert('Selecciona un PDF.');return;}
   var file=inp.files[0];
+  if(file.type!=='application/pdf'){alert('El archivo debe ser PDF.');return;}
   document.getElementById('loader').style.display='flex';
-  comprimirImagen(file,function(b64){
-    _api('subirFotoEnCarpeta',{base64:b64,nombre:'POLITICAS_'+Date.now()+'.jpg',folderId:CARPETAS_SECUENCIA[0]},function(url){
-      document.getElementById('loader').style.display='none';
-      if(url){
-        PDF_POLITICAS_URL=url;
-        try{localStorage.setItem('pdf_politicas',url);}catch(e){}
-        var el=document.getElementById('pdf-politicas-link-actual');
-        if(el)el.innerHTML='📄 <a href="'+url+'" target="_blank" style="color:var(--blue);">Ver imagen de políticas</a>';
-        alert('✅ Imagen de políticas subida.');
-      }else alert('❌ Error al subir.');
-    });
+  leerPdfBase64(file,function(b64){
+    document.getElementById('loader').style.display='none';
+    PDF_POLITICAS_URL=b64;
+    try{localStorage.setItem('pdf_politicas',b64);}catch(e){alert('PDF muy grande para guardarlo localmente.');}
+    var el=document.getElementById('pdf-politicas-link-actual');
+    if(el){el.innerHTML='📄 <a href="javascript:void(0)" onclick="verPdfPoliticas()" style="color:var(--blue);">Ver PDF de políticas</a>';}
+    alert('✅ PDF de políticas guardado.');
   });
 }
-function exportarPdfComisiones(){var cfg=comLeerFormulario();document.getElementById('loader').style.display='flex';_api('generarPdfComisiones',{categoria:_comCatActual,cfg:JSON.stringify(cfg)},function(url){document.getElementById('loader').style.display='none';if(url)window.open(url,'_blank');else alert('Error.');});}
+function exportarPdfComisiones(){var cfg=comLeerFormulario();document.getElementById('loader').style.display='flex';_api('generarPdfComisiones',{categoria:_comCatActual,cfg:JSON.stringify(cfg)},function(url){document.getElementById('loader').style.display='none';if(url)abrirVisorPdf(url,'📄 Comisiones');else alert('Error.');});}
 
 // ═══ SESIÓN ═══
 function cerrarSesionTienda(){tiendaActiva=null;try{localStorage.removeItem('t_n');localStorage.removeItem('t_p');}catch(e){}cerrarModalConfig();ir('p-vender');}
 function cerrarSesionUsuario(){usuarioActivo=null;try{localStorage.removeItem('uu_n');localStorage.removeItem('uu_p');}catch(e){}ir('p-vender');}
 
 // ═══ ELIMINAR CUENTAS ═══
-function eliminarMiTienda(){
-  if(!tiendaActiva)return;
-  if(!confirm('⚠️ ¿Eliminar definitivamente tu tienda "'+tiendaActiva.nombre+'"?\n\nSe borrarán todos tus productos y fotos. Esta acción NO se puede deshacer.'))return;
-  var confirm2=prompt('Escribe el nombre de tu tienda para confirmar:');
-  if(!confirm2||confirm2.trim().toLowerCase()!==tiendaActiva.nombre.toLowerCase()){alert('❌ Nombre incorrecto. No se eliminó nada.');return;}
-  document.getElementById('loader').style.display='flex';
-  _api('adminEliminarTienda',{nombre:tiendaActiva.nombre},function(r){
-    document.getElementById('loader').style.display='none';
-    if(r&&r.ok){alert('✅ Tu tienda ha sido eliminada.');tiendaActiva=null;try{localStorage.removeItem('t_n');localStorage.removeItem('t_p');}catch(e){}cerrarModalConfig();ir('p-comprar');}
-    else alert('❌ Error al eliminar: '+(r?r.msg:''));
-  });
-}
-function eliminarMiCuentaUsuario(){
-  if(!usuarioActivo)return;
-  if(!confirm('⚠️ ¿Eliminar tu cuenta "'+usuarioActivo.usuario+'"?\n\nSe borrarán todas tus publicaciones. Esta acción NO se puede deshacer.'))return;
-  var confirm2=prompt('Escribe tu usuario para confirmar:');
-  if(!confirm2||confirm2.trim().toLowerCase()!==usuarioActivo.usuario.toLowerCase()){alert('❌ Usuario incorrecto. No se eliminó nada.');return;}
-  document.getElementById('loader').style.display='flex';
-  _api('eliminarCuentaUsuarioUnico',{usuario:usuarioActivo.usuario},function(r){
-    document.getElementById('loader').style.display='none';
-    if(r&&r.ok){alert('✅ Cuenta eliminada.');usuarioActivo=null;try{localStorage.removeItem('uu_n');localStorage.removeItem('uu_p');}catch(e){}ir('p-comprar');}
-    else alert('❌ Error: '+(r?r.msg:''));
-  });
-}
-function eliminarMiEmpresa(){
-  if(!empresaActiva)return;
-  if(!confirm('⚠️ ¿Eliminar tu empresa "'+empresaActiva.nombre+'"?\n\nSe borrarán todas tus vacantes. Esta acción NO se puede deshacer.'))return;
-  var confirm2=prompt('Escribe el nombre de tu empresa para confirmar:');
-  if(!confirm2||confirm2.trim().toLowerCase()!==empresaActiva.nombre.toLowerCase()){alert('❌ Nombre incorrecto. No se eliminó nada.');return;}
-  document.getElementById('loader').style.display='flex';
-  _api('eliminarCuentaEmpresa',{nombre:empresaActiva.nombre},function(r){
-    document.getElementById('loader').style.display='none';
-    if(r&&r.ok){alert('✅ Empresa eliminada.');empresaActiva=null;try{localStorage.removeItem('emp_n');}catch(e){}ir('p-empleo');}
-    else alert('❌ Error: '+(r?r.msg:''));
-  });
-}
+function eliminarMiTienda(){if(!tiendaActiva)return;if(!confirm('⚠️ ¿Eliminar definitivamente tu tienda "'+tiendaActiva.nombre+'"?\n\nSe borrarán todos tus productos y fotos. Esta acción NO se puede deshacer.'))return;var confirm2=prompt('Escribe el nombre de tu tienda para confirmar:');if(!confirm2||confirm2.trim().toLowerCase()!==tiendaActiva.nombre.toLowerCase()){alert('❌ Nombre incorrecto. No se eliminó nada.');return;}document.getElementById('loader').style.display='flex';_api('adminEliminarTienda',{nombre:tiendaActiva.nombre},function(r){document.getElementById('loader').style.display='none';if(r&&r.ok){alert('✅ Tu tienda ha sido eliminada.');tiendaActiva=null;try{localStorage.removeItem('t_n');localStorage.removeItem('t_p');}catch(e){}cerrarModalConfig();ir('p-comprar');}else alert('❌ Error al eliminar: '+(r?r.msg:''));});}
+function eliminarMiCuentaUsuario(){if(!usuarioActivo)return;if(!confirm('⚠️ ¿Eliminar tu cuenta "'+usuarioActivo.usuario+'"?\n\nSe borrarán todas tus publicaciones. Esta acción NO se puede deshacer.'))return;var confirm2=prompt('Escribe tu usuario para confirmar:');if(!confirm2||confirm2.trim().toLowerCase()!==usuarioActivo.usuario.toLowerCase()){alert('❌ Usuario incorrecto. No se eliminó nada.');return;}document.getElementById('loader').style.display='flex';_api('eliminarCuentaUsuarioUnico',{usuario:usuarioActivo.usuario},function(r){document.getElementById('loader').style.display='none';if(r&&r.ok){alert('✅ Cuenta eliminada.');usuarioActivo=null;try{localStorage.removeItem('uu_n');localStorage.removeItem('uu_p');}catch(e){}ir('p-comprar');}else alert('❌ Error: '+(r?r.msg:''));});}
+function eliminarMiEmpresa(){if(!empresaActiva)return;if(!confirm('⚠️ ¿Eliminar tu empresa "'+empresaActiva.nombre+'"?\n\nSe borrarán todas tus vacantes. Esta acción NO se puede deshacer.'))return;var confirm2=prompt('Escribe el nombre de tu empresa para confirmar:');if(!confirm2||confirm2.trim().toLowerCase()!==empresaActiva.nombre.toLowerCase()){alert('❌ Nombre incorrecto. No se eliminó nada.');return;}document.getElementById('loader').style.display='flex';_api('eliminarCuentaEmpresa',{nombre:empresaActiva.nombre},function(r){document.getElementById('loader').style.display='none';if(r&&r.ok){alert('✅ Empresa eliminada.');empresaActiva=null;try{localStorage.removeItem('emp_n');}catch(e){}ir('p-empleo');}else alert('❌ Error: '+(r?r.msg:''));});}
 
 // ═══ TIENDAS ═══
 function abrirForm(tipo){ir('p-form');if(tipo==='REG'){abrirContrato(function(){mostrarFormRegistro();});}else{var sN=localStorage.getItem('t_n')||'',sP=localStorage.getItem('t_p')||'';document.getElementById('cont-form').innerHTML='<h2 class="h2-form">Acceso a mi Tienda</h2><label class="fl">Nombre</label><input id="ln" class="fc" value="'+sN+'" placeholder="Nombre"><label class="fl">Contraseña</label><input id="lp" type="password" class="fc" value="'+sP+'"><button id="btn-login" class="btn-dark">ENTRAR</button><button id="btn-olvide-tienda" class="btn-out" style="font-size:13px;">🔑 ¿Olvidaste tu contraseña?</button>';document.getElementById('btn-login').addEventListener('click',login);document.getElementById('btn-olvide-tienda').addEventListener('click',abrirModalRecuperar);}}
@@ -1324,11 +1390,9 @@ function panelTienda(){
   });
 }
 
-// ═══ CONSULTAS WA ═══
 function _cargarConsultasWA(tienda){_api('obtenerConsultasWA',{tienda:tienda},function(consultas){var sec=document.getElementById('sec-consultas-wa');if(!sec)return;if(!consultas||!consultas.length){sec.innerHTML='';return;}var h='<div style="background:#fffbeb;border:2px solid var(--warning);border-radius:10px;padding:14px;margin-bottom:14px;"><div style="font-family:\'Barlow Condensed\',sans-serif;font-weight:800;font-size:15px;color:#78350f;margin-bottom:10px;">📲 Consultas recibidas por WhatsApp</div>';consultas.forEach(function(c){h+='<div style="background:var(--white);border:1px solid var(--gray-200);border-radius:8px;padding:10px;margin-bottom:8px;"><div style="font-weight:700;font-size:13px;color:var(--navy);margin-bottom:4px;">'+c.prod_nombre+'</div><div style="font-size:11px;color:var(--gray-400);margin-bottom:8px;">📅 '+c.fecha+'</div><div style="display:flex;gap:6px;"><button class="btn-mini" style="background:#d1fae5;color:var(--success);padding:7px 12px;" onclick="responderConsultaWA(\''+c.id+'\',\''+c.id_prod+'\',true)">✅ Sí vendí</button><button class="btn-mini" style="background:#fee2e2;color:var(--danger);padding:7px 12px;" onclick="responderConsultaWA(\''+c.id+'\',\''+c.id_prod+'\',false)">❌ No vendí</button></div></div>';});h+='</div>';sec.innerHTML=h;});}
 function responderConsultaWA(idConsulta,idProd,vendio){document.getElementById('loader').style.display='flex';_api('responderConsultaWA',{idConsulta:idConsulta,idProd:idProd,vendio:String(vendio)},function(r){document.getElementById('loader').style.display='none';if(r&&r.ok){if(vendio&&r.stock_nuevo!==undefined)alert('✅ Venta registrada. Stock: '+r.stock_nuevo);else if(!vendio)alert('OK. Consulta eliminada.');panelTienda();}});}
 
-// ═══ FOTOS ═══
 function subirFotoProducto(id){var inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.onchange=function(){if(!inp.files||!inp.files[0])return;document.getElementById('loader').style.display='flex';comprimirImagen(inp.files[0],function(b64){_api('subirFotoEnCarpeta',{base64:b64,nombre:'F_'+Date.now()+'.jpg',folderId:carpetaEnSecuencia()},function(url){if(url){_api('actualizarFotoProducto',{id:id,url:url},function(){document.getElementById('loader').style.display='none';alert('✅ Foto actualizada.');panelTienda();});}else{document.getElementById('loader').style.display='none';alert('Error al subir foto.');}});});};inp.click();}
 function abrirModalPaqueteTienda(nombre){document.getElementById('modal-recarga-titulo').textContent='📦 Solicitar Paquete';var optsP='<option value="basico">⭐ Básico</option><option value="medio">🌟 Medio</option><option value="pro">💎 Pro</option>';document.getElementById('modal-recarga-contenido').innerHTML='<label class="fl">Tienda</label><input type="text" id="rec-tienda-v" class="fc" value="'+nombre+'" readonly><label class="fl">Paquete deseado</label><select id="rec-paquete" class="fc">'+optsP+'</select><button onclick="enviarSolicitudPaquete()" class="btn-success">📲 SOLICITAR POR WHATSAPP</button>';document.getElementById('modal-recarga').style.display='block';}
 function enviarSolicitudPaquete(){var tienda=(document.getElementById('rec-tienda-v')||{}).value||'',paq=(document.getElementById('rec-paquete')||{}).value||'';var msj='📦 *SOLICITUD DE PAQUETE — Bazar PIQ*\n\n🏪 Tienda: *'+tienda+'*\n📦 Paquete: *'+paq.toUpperCase()+'*';document.getElementById('modal-recarga').style.display='none';window.open('https://wa.me/'+SOPORTE_WA_JS+'?text='+encodeURIComponent(msj));}
@@ -1426,11 +1490,7 @@ function subirP(){
 
 // ═══ EMPLEO ═══
 function cargarListaEmpleo(){var lista=document.getElementById('empleo-lista');lista.innerHTML='<div style="text-align:center;padding:30px;color:var(--gray-400);">Cargando...</div>';if(tabEmpleoActivo==='ofertas')_api('obtenerOfertasEmpleo',null,function(it){renderEmpleo(it||[],'oferta');});else _api('obtenerSolicitudesEmpleo',null,function(it){renderEmpleo(it||[],'solicitud');});}
-function renderEmpleo(items,tipo){
-  var q=(document.getElementById('bus-empleo')||{}).value||'';
-  q=q.toLowerCase().trim();
-  if(q){items=items.filter(function(it){return (it.puesto||'').toLowerCase().includes(q)||(it.empresa||'').toLowerCase().includes(q)||(it.oficio||'').toLowerCase().includes(q)||(it.descripcion||'').toLowerCase().includes(q);});}
-  var lista=document.getElementById('empleo-lista');if(!items||!items.length){lista.innerHTML='<div style="text-align:center;padding:30px;color:var(--gray-400);">Sin publicaciones</div>';return;}var h='';items.forEach(function(it){if(tipo==='oferta'){var tH='';if(it.transporte==='SI')tH='<span class="empleo-pill pill-transporte">🚌 Transporte incluido</span>';h+='<div class="card-empleo"><div class="empleo-tipo oferta">💼 OFERTA DE EMPLEO</div><div class="empleo-puesto">'+it.puesto+'</div><div class="empleo-empresa">🏭 '+it.empresa+'</div><div>'+(it.sueldo?'<span class="empleo-pill pill-sueldo">💰 '+it.sueldo+'</span>':'')+(it.turnos?'<span class="empleo-pill pill-ubic">🔄 '+it.turnos+' turno(s)</span>':'')+(it.ubicacion?'<span class="empleo-pill pill-ubic">📍 '+it.ubicacion+'</span>':'')+tH+'</div><button class="btn-employ" style="margin-top:10px;margin-bottom:0;font-size:13px;padding:9px;" onclick="abrirModalVacante('+JSON.stringify(it).replace(/"/g,"'").replace(/\\/g,'\\\\')+')" >👁️ VER VACANTE</button></div>';}else{h+='<div class="card-empleo solicitud"><div class="empleo-tipo solicitud">👤 BUSCA EMPLEO</div><div class="empleo-puesto">'+it.oficio+'</div><div class="empleo-empresa">👤 '+it.nombre+'</div>'+(it.descripcion?'<p style="font-size:12px;color:var(--gray-600);margin-top:8px;line-height:1.5;">'+it.descripcion+'</p>':'')+(it.whatsapp?'<a href="https://wa.me/'+it.whatsapp+'?text='+encodeURIComponent('Hola '+it.nombre+', vi tu perfil en Bazar PIQ.')+'" target="_blank"><button class="btn-success" style="margin-top:10px;font-size:13px;padding:9px;">📲 CONTACTAR</button></a>':'')+'</div>';}});lista.innerHTML=h;}
+function renderEmpleo(items,tipo){var q=(document.getElementById('bus-empleo')||{}).value||'';q=q.toLowerCase().trim();if(q){items=items.filter(function(it){return (it.puesto||'').toLowerCase().includes(q)||(it.empresa||'').toLowerCase().includes(q)||(it.oficio||'').toLowerCase().includes(q)||(it.descripcion||'').toLowerCase().includes(q);});}var lista=document.getElementById('empleo-lista');if(!items||!items.length){lista.innerHTML='<div style="text-align:center;padding:30px;color:var(--gray-400);">Sin publicaciones</div>';return;}var h='';items.forEach(function(it){if(tipo==='oferta'){var tH='';if(it.transporte==='SI')tH='<span class="empleo-pill pill-transporte">🚌 Transporte incluido</span>';h+='<div class="card-empleo"><div class="empleo-tipo oferta">💼 OFERTA DE EMPLEO</div><div class="empleo-puesto">'+it.puesto+'</div><div class="empleo-empresa">🏭 '+it.empresa+'</div><div>'+(it.sueldo?'<span class="empleo-pill pill-sueldo">💰 '+it.sueldo+'</span>':'')+(it.turnos?'<span class="empleo-pill pill-ubic">🔄 '+it.turnos+' turno(s)</span>':'')+(it.ubicacion?'<span class="empleo-pill pill-ubic">📍 '+it.ubicacion+'</span>':'')+tH+'</div><button class="btn-employ" style="margin-top:10px;margin-bottom:0;font-size:13px;padding:9px;" onclick="abrirModalVacante('+JSON.stringify(it).replace(/"/g,"'").replace(/\\/g,'\\\\')+')" >👁️ VER VACANTE</button></div>';}else{h+='<div class="card-empleo solicitud"><div class="empleo-tipo solicitud">👤 BUSCA EMPLEO</div><div class="empleo-puesto">'+it.oficio+'</div><div class="empleo-empresa">👤 '+it.nombre+'</div>'+(it.descripcion?'<p style="font-size:12px;color:var(--gray-600);margin-top:8px;line-height:1.5;">'+it.descripcion+'</p>':'')+(it.whatsapp?'<a href="https://wa.me/'+it.whatsapp+'?text='+encodeURIComponent('Hola '+it.nombre+', vi tu perfil en Bazar PIQ.')+'" target="_blank"><button class="btn-success" style="margin-top:10px;font-size:13px;padding:9px;">📲 CONTACTAR</button></a>':'')+'</div>';}});lista.innerHTML=h;}
 function abrirModalVacante(it){
   _vacanteActiva=it;
   _scrollAntesDeVacante=window.pageYOffset||document.documentElement.scrollTop;
@@ -1444,15 +1504,8 @@ function abrirModalVacante(it){
     '<button id="btn-postular-det" class="btn-employ" style="flex:1;">📲 POSTULARME POR WHATSAPP</button>'+
     '<button id="btn-volver-vacante" class="btn-out" style="flex:1;">⬅ Regresar</button>'+
     '</div>';
-  document.getElementById('btn-postular-det').addEventListener('click',function(){
-    var v=_vacanteActiva;
-    var msj='📋 *POSTULACIÓN — Bazar PIQ*\n\n🏭 *Empresa:* '+v.empresa+'\n💼 *Puesto:* '+v.puesto+'\n\n'+(v.sueldo?'💰 *Sueldo:* '+v.sueldo+'\n':'')+(v.turnos?'🔄 *Turnos:* '+v.turnos+'\n':'')+(v.horario?'🕐 *Horario:* '+v.horario+'\n':'')+(v.ubicacion?'📍 *Ubicación:* '+v.ubicacion+'\n':'')+(v.transporte==='SI'?'🚌 *Transporte:* ✅ Incluido'+(v.comunidades_transporte?'\n📍 Rutas: '+v.comunidades_transporte:''):'🚌 *Transporte:* ❌ Sin transporte')+'\n\n_Hola, me interesa esta vacante y deseo postularme._';
-    window.open('https://wa.me/'+v.whatsapp+'?text='+encodeURIComponent(msj));
-  });
-  document.getElementById('btn-volver-vacante').addEventListener('click',function(){
-    volver();
-    setTimeout(function(){window.scrollTo(0,_scrollAntesDeVacante);},200);
-  });
+  document.getElementById('btn-postular-det').addEventListener('click',function(){var v=_vacanteActiva;var msj='📋 *POSTULACIÓN — Bazar PIQ*\n\n🏭 *Empresa:* '+v.empresa+'\n💼 *Puesto:* '+v.puesto+'\n\n'+(v.sueldo?'💰 *Sueldo:* '+v.sueldo+'\n':'')+(v.turnos?'🔄 *Turnos:* '+v.turnos+'\n':'')+(v.horario?'🕐 *Horario:* '+v.horario+'\n':'')+(v.ubicacion?'📍 *Ubicación:* '+v.ubicacion+'\n':'')+(v.transporte==='SI'?'🚌 *Transporte:* ✅ Incluido'+(v.comunidades_transporte?'\n📍 Rutas: '+v.comunidades_transporte:''):'🚌 *Transporte:* ❌ Sin transporte')+'\n\n_Hola, me interesa esta vacante y deseo postularme._';window.open('https://wa.me/'+v.whatsapp+'?text='+encodeURIComponent(msj));});
+  document.getElementById('btn-volver-vacante').addEventListener('click',function(){volver();setTimeout(function(){window.scrollTo(0,_scrollAntesDeVacante);},200);});
 }
 function mostrarFormOferta(){var optsU=COMUNIDADES.map(function(c){return '<option>'+c+'</option>';}).join('');document.getElementById('cont-form').innerHTML='<h2 class="h2-form">💼 Publicar Vacante</h2><label class="fl">Empresa</label><input id="oe-empresa" class="fc" value="'+(empresaActiva?empresaActiva.nombre:'')+'" placeholder="Empresa"><label class="fl">Puesto</label><input id="oe-puesto" class="fc" placeholder="Ej: Cocinero, Mecánico..."><div class="form-row"><div><label class="fl">Sueldo</label><input id="oe-sueldo" class="fc" placeholder="$3,000 sem"></div><div><label class="fl">Horario</label><input id="oe-horario" class="fc" placeholder="8am-4pm"></div></div><label class="fl">Turnos</label><select id="oe-turnos" class="fc"><option value="1">1 Turno</option><option value="2">2 Turnos</option><option value="3">3 Turnos</option></select><label class="fl">Ubicación</label><select id="oe-ubicacion" class="fc">'+optsU+'</select><label class="fl">Descripción del puesto</label><textarea id="oe-desc" class="fc" rows="4" placeholder="Funciones, requisitos..."></textarea><label class="fl">WhatsApp</label><input id="oe-wa" class="fc" value="'+(empresaActiva?empresaActiva.whatsapp:'')+'" placeholder="521442..."><div style="background:var(--gray-100);border-radius:10px;padding:14px;margin-bottom:10px;"><label class="fl">🚌 ¿Cuentan con transporte para empleados?</label><div style="display:flex;gap:8px;margin-bottom:8px;"><button id="btn-trans-si" class="btn-out" style="flex:1;margin-bottom:0;border-color:var(--success);color:var(--success);" onclick="selTransporte(\'SI\')">✅ Sí, tenemos</button><button id="btn-trans-no" class="btn-out" style="flex:1;margin-bottom:0;border-color:var(--danger);color:var(--danger);" onclick="selTransporte(\'NO\')">❌ No tenemos</button></div><div id="sec-comunidades-trans" class="d-none"><label class="fl">Comunidades de ruta</label><div style="border:1px solid var(--gray-200);border-radius:8px;padding:10px;max-height:180px;overflow-y:auto;background:var(--white);">'+COMUNIDADES.map(function(c){return '<div style="display:inline-block;margin-right:8px;margin-bottom:6px;"><input type="checkbox" name="com_trans" value="'+c+'"> '+c+'</div>';}).join('')+'</div></div></div><button id="btn-pub-oferta-ok" class="btn-employ">PUBLICAR VACANTE</button><button id="btn-cancelar-oferta" class="btn-out">Cancelar</button>';window._transporteSeleccionado='NO';document.getElementById('btn-pub-oferta-ok').addEventListener('click',publicarOferta);document.getElementById('btn-cancelar-oferta').addEventListener('click',function(){if(empresaActiva)panelEmpresa();else ir('p-empleo');});}
 function selTransporte(val){window._transporteSeleccionado=val;var btnSi=document.getElementById('btn-trans-si'),btnNo=document.getElementById('btn-trans-no'),secComs=document.getElementById('sec-comunidades-trans');if(val==='SI'){btnSi.style.background='var(--success)';btnSi.style.color='#fff';btnNo.style.background='transparent';btnNo.style.color='var(--danger)';secComs.classList.remove('d-none');}else{btnNo.style.background='var(--danger)';btnNo.style.color='#fff';btnSi.style.background='transparent';btnSi.style.color='var(--success)';secComs.classList.add('d-none');}}
@@ -1477,134 +1530,93 @@ function renderFormUnico(){var esGratis=modoGratuitoGlobal,saldo=usuarioActivo.s
   document.getElementById('upf').addEventListener('change',function(){var panel=document.getElementById('fotos-preview-uu');Array.from(this.files).forEach(function(file){if(window._fotosUU.length>=2){alert('Máximo 2 fotos.');return;}window._fotosUU.push(file);var r=new FileReader();r.onload=function(e){var idx=window._fotosUU.length-1;var div=document.createElement('div');div.className='foto-preview-item';div.innerHTML='<img src="'+e.target.result+'"><button class="foto-preview-del" onclick="quitarFotoUU('+idx+')">✕</button>';panel.appendChild(div);};r.readAsDataURL(file);});this.value='';});
   document.getElementById('btn-pub-uu').addEventListener('click',subirProductoUnico);
   if(!esGratis)actualizarPrevUnico();
-  _api('obtenerProductos',null,function(prods){
-    var misPubs=(prods||[]).filter(function(p){return p.nombre_tienda==='Particular: '+usuarioActivo.usuario;});
-    var h='';
-    if(!misPubs.length)h='<p style="color:var(--gray-400);font-size:13px;text-align:center;padding:10px;">Sin publicaciones activas.</p>';
-    else misPubs.forEach(function(p){var dias=diasHastaVencer(p.fecha_publicacion);var vcls=dias>7?'vigencia-ok':dias>0?'vigencia-warn':'vigencia-vencida';h+='<div class="prod-row"><img src="'+p.foto+'" alt=""><div class="prod-row-info"><div class="prod-row-nombre">'+p.prod_nombre+'</div><div class="prod-row-precio">$'+p.precio+'</div><span class="vigencia-badge '+vcls+'">⏳ '+Math.max(0,dias)+'d</span></div><div class="prod-row-acciones"><button class="btn-mini" style="background:#d1fae5;color:var(--success);" onclick="abrirConfirmarVenta(\''+p.id_prod+'\',\''+p.prod_nombre.replace(/'/g,"\\'")+'\')" title="Venta concluida">✅</button><button class="btn-mini" style="background:#fee2e2;color:var(--danger);" onclick="eliminarPubUnica(\''+p.id_prod+'\')">🗑️</button></div></div>';});
-    if(document.getElementById('mis-pubs-uu'))document.getElementById('mis-pubs-uu').innerHTML=h;
-  });
-}
+  _api('obtenerProductos',null,function(prods){var misPubs=(prods||[]).filter(function(p){return p.nombre_tienda==='Particular: '+usuarioActivo.usuario;});var h='';if(!misPubs.length)h='<p style="color:var(--gray-400);font-size:13px;text-align:center;padding:10px;">Sin publicaciones activas.</p>';else misPubs.forEach(function(p){var dias=diasHastaVencer(p.fecha_publicacion);var vcls=dias>7?'vigencia-ok':dias>0?'vigencia-warn':'vigencia-vencida';h+='<div class="prod-row"><img src="'+p.foto+'" alt=""><div class="prod-row-info"><div class="prod-row-nombre">'+p.prod_nombre+'</div><div class="prod-row-precio">$'+p.precio+'</div><span class="vigencia-badge '+vcls+'">⏳ '+Math.max(0,dias)+'d</span></div><div class="prod-row-acciones"><button class="btn-mini" style="background:#d1fae5;color:var(--success);" onclick="abrirConfirmarVenta(\''+p.id_prod+'\',\''+p.prod_nombre.replace(/'/g,"\\'")+'\')" title="Venta concluida">✅</button><button class="btn-mini" style="background:#fee2e2;color:var(--danger);" onclick="eliminarPubUnica(\''+p.id_prod+'\')">🗑️</button></div></div>';});if(document.getElementById('mis-pubs-uu'))document.getElementById('mis-pubs-uu').innerHTML=h;});}
 function actualizarPrevUnico(){var precio=parseFloat((document.getElementById('upp')||{}).value||0)||0;var tv=(document.getElementById('up-tiempo')||{}).value||'inmediato';var tObj=TIEMPOS_ENTREGA.find(function(x){return x.v===tv;})||{dias:0};var el1=document.getElementById('prev-uu-costo'),el2=document.getElementById('prev-uu-desc'),alertaEl=document.getElementById('prev-uu-alerta');if(alertaEl)alertaEl.style.display='none';if(modoGratuitoGlobal){if(el1)el1.textContent='🔥 ¡Publica ya!';if(el2)el2.textContent='';return;}if(!precio){if(el1)el1.textContent='$0.00';if(el2)el2.textContent='Ingresa el precio para ver el costo';return;}var cobro=calcularCobroPreview(precio,'Otros',tObj.dias,false);if(cobro>0){if(el1)el1.textContent='$'+cobro.toFixed(2);if(el2){if(tObj.dias>=2)el2.textContent='% de tiempo sobre $'+precio;else el2.textContent='Rango de precio';}var saldoActual=usuarioActivo?usuarioActivo.saldo||0:0;if(alertaEl&&saldoActual<cobro){alertaEl.style.display='block';alertaEl.textContent='❌ Saldo insuficiente. Necesitas $'+cobro.toFixed(2)+'. Tu saldo: $'+saldoActual.toFixed(2);}}else{if(el1)el1.textContent='$0.00';if(el2)el2.textContent=tObj.l;}}
 function mostrarTallaUnico(cat){document.getElementById('sec-talla-uu').classList.toggle('d-none',cat!=='Ropa y Calzado');}
 function quitarFotoUU(idx){window._fotosUU.splice(idx,1);var p=document.getElementById('fotos-preview-uu');if(!p)return;p.innerHTML='';(window._fotosUU||[]).forEach(function(f,i){var r=new FileReader();r.onload=function(e){var d=document.createElement('div');d.className='foto-preview-item';d.innerHTML='<img src="'+e.target.result+'"><button class="foto-preview-del" onclick="quitarFotoUU('+i+')">✕</button>';p.appendChild(d);};r.readAsDataURL(f);});}
-function subirProductoUnico(){
-  var fotos=window._fotosUU||[];
-  var nombre=(document.getElementById('upn')||{}).value||'',precio=(document.getElementById('upp')||{}).value||'';
-  var stock=(document.getElementById('upstock')||{}).value||'';
-  var cat=(document.getElementById('upcat')||{}).value||'Otros';
-  var talla='';
-  if(cat==='Ropa y Calzado'){talla=(document.getElementById('uptalla')||{}).value||'';if(!talla){alert('La talla es obligatoria.');return;}}
-  if(!nombre){alert('Falta el nombre');return;}
-  if(!precio){alert('Falta el precio');return;}
-  if(!stock||parseInt(stock)<=0){alert('El stock es obligatorio.');return;}
-  if(fotos.length===0){alert('Agrega al menos una foto');return;}
-  var tv=(document.getElementById('up-tiempo')||{}).value||'inmediato';
-  var tObj=TIEMPOS_ENTREGA.find(function(x){return x.v===tv;})||{dias:0};
-  if(!modoGratuitoGlobal){var cobro=calcularCobroPreview(parseFloat(precio),'Otros',tObj.dias,false);if(cobro>0&&(usuarioActivo?usuarioActivo.saldo||0:0)<cobro){alert('❌ Saldo insuficiente.\n\nNecesitas $'+cobro.toFixed(2)+'.\nTu saldo: $'+(usuarioActivo?usuarioActivo.saldo||0:0).toFixed(2));return;}}
-  document.getElementById('loader').style.display='flex';
-  var urls=[],secIdx=_fotoSecuenciaIdx;
-  function sig(idx){
-    if(idx>=fotos.length){
-      var obj={usuario:usuarioActivo.usuario,prod_nombre:nombre,precio:precio,stock:stock,talla:talla,desc:(document.getElementById('upd')||{}).value||'',whatsapp:(document.getElementById('uw')||{}).value||'',foto:urls[0]||'',foto2:urls[1]||'',entrega:(document.getElementById('up-entrega')||{}).value||'Punto Medio',categoria:cat,unidad_medida:(document.getElementById('upund')||{}).value||'Pieza',condicion:(document.getElementById('upcond')||{}).value||'Nuevo',tiempo_entrega:tv};
-      _api('guardarProductoUnico',{obj:JSON.stringify(obj)},function(r){
-        document.getElementById('loader').style.display='none';
-        window._fotosUU=[];
-        if(r&&r.saldo_nuevo!==null&&r.saldo_nuevo!==undefined)usuarioActivo.saldo=r.saldo_nuevo;
-        alert('🎉 ¡Publicado!'+(r&&r.cobro>0?' Cobro: $'+r.cobro.toFixed(2):''));
-        renderFormUnico();
-      });
-      return;
-    }
-    var carpeta=CARPETAS_SECUENCIA[(secIdx+idx)%CARPETAS_SECUENCIA.length];
-    comprimirImagen(fotos[idx],function(b64){
-      _api('subirFotoEnCarpeta',{base64:b64,nombre:'U_'+Date.now()+'_'+idx+'.jpg',folderId:carpeta},function(url){
-        if(!url){document.getElementById('loader').style.display='none';alert('❌ Error al subir foto. Intenta de nuevo.');return;}
-        urls.push(url);sig(idx+1);
-      });
-    });
-  }
-  sig(0);
-}
+function subirProductoUnico(){var fotos=window._fotosUU||[];var nombre=(document.getElementById('upn')||{}).value||'',precio=(document.getElementById('upp')||{}).value||'';var stock=(document.getElementById('upstock')||{}).value||'';var cat=(document.getElementById('upcat')||{}).value||'Otros';var talla='';if(cat==='Ropa y Calzado'){talla=(document.getElementById('uptalla')||{}).value||'';if(!talla){alert('La talla es obligatoria.');return;}}if(!nombre){alert('Falta el nombre');return;}if(!precio){alert('Falta el precio');return;}if(!stock||parseInt(stock)<=0){alert('El stock es obligatorio.');return;}if(fotos.length===0){alert('Agrega al menos una foto');return;}var tv=(document.getElementById('up-tiempo')||{}).value||'inmediato';var tObj=TIEMPOS_ENTREGA.find(function(x){return x.v===tv;})||{dias:0};if(!modoGratuitoGlobal){var cobro=calcularCobroPreview(parseFloat(precio),'Otros',tObj.dias,false);if(cobro>0&&(usuarioActivo?usuarioActivo.saldo||0:0)<cobro){alert('❌ Saldo insuficiente.\n\nNecesitas $'+cobro.toFixed(2)+'.\nTu saldo: $'+(usuarioActivo?usuarioActivo.saldo||0:0).toFixed(2));return;}}document.getElementById('loader').style.display='flex';var urls=[],secIdx=_fotoSecuenciaIdx;function sig(idx){if(idx>=fotos.length){var obj={usuario:usuarioActivo.usuario,prod_nombre:nombre,precio:precio,stock:stock,talla:talla,desc:(document.getElementById('upd')||{}).value||'',whatsapp:(document.getElementById('uw')||{}).value||'',foto:urls[0]||'',foto2:urls[1]||'',entrega:(document.getElementById('up-entrega')||{}).value||'Punto Medio',categoria:cat,unidad_medida:(document.getElementById('upund')||{}).value||'Pieza',condicion:(document.getElementById('upcond')||{}).value||'Nuevo',tiempo_entrega:tv};_api('guardarProductoUnico',{obj:JSON.stringify(obj)},function(r){document.getElementById('loader').style.display='none';window._fotosUU=[];if(r&&r.saldo_nuevo!==null&&r.saldo_nuevo!==undefined)usuarioActivo.saldo=r.saldo_nuevo;alert('🎉 ¡Publicado!'+(r&&r.cobro>0?' Cobro: $'+r.cobro.toFixed(2):''));renderFormUnico();});return;}var carpeta=CARPETAS_SECUENCIA[(secIdx+idx)%CARPETAS_SECUENCIA.length];comprimirImagen(fotos[idx],function(b64){_api('subirFotoEnCarpeta',{base64:b64,nombre:'U_'+Date.now()+'_'+idx+'.jpg',folderId:carpeta},function(url){if(!url){document.getElementById('loader').style.display='none';alert('❌ Error al subir foto. Intenta de nuevo.');return;}urls.push(url);sig(idx+1);});});}sig(0);}
 function abrirConfirmarVenta(id,nombre){_cvProdId=id;_cvProdNombre=nombre;document.getElementById('modal-cv-prod').textContent='📦 '+nombre;document.getElementById('modal-confirmar-venta').style.display='block';}
 function eliminarPubUnica(id){if(confirm('¿Eliminar esta publicación?'))_api('eliminarProductoUnico',{id:id},function(){renderFormUnico();});}
 
-// ═══ DETALLE PRODUCTO ═══
+// ═══ DETALLE PRODUCTO — CAMBIO 3: usa cache si existe ═══
 function verDetalle(idx){
-  var p=allProds[idx];ir('p-detalle');
+  var p=allProds[idx];
+  ir('p-detalle');
   document.getElementById('det-contenido').innerHTML='<div style="text-align:center;padding:40px;"><div class="spinner" style="margin:auto;"></div></div>';
-  _api('obtenerInfoTienda',{nombre:p.nombre_tienda},function(infoT){
-    _api('obtenerMetricas',{nombre:p.nombre_tienda},function(met){
-      var em=(infoT&&infoT.entrega_modo)||p.entrega||'';
-      var coms=(infoT&&infoT.comunidades_entrega)||'';
-      var wa=(infoT&&infoT.whatsapp)||p.whatsapp;
-      var ubic=(infoT&&infoT.ubicacion_tienda)||p.ubicacion||'';
-      var fg=p.publicado_gratis==='SI';
-      var linkProd=generarLinkProducto(p.id_prod);
-      var badgeE='';
-      if(em==='Domicilio'){var lc=coms?coms.split(',').map(function(c){return c.trim();}):[];badgeE='<span class="badge-domicilio">🛵 Entrega a domicilio</span>'+(lc.length?'<p style="font-size:11px;color:var(--gray-400);margin-top:4px;">📍 '+lc.join(', ')+'</p>':'');}
-      else if(em==='Punto Medio')badgeE='<span class="badge-entrega">🤝 Punto Medio</span>';
-      else badgeE='<span class="badge-entrega">🏪 Recoger en tienda</span>';
-      var stockInfo='';if(p.stock){if(String(p.stock).toLowerCase()==='bajo pedido')stockInfo='<div class="det-info-row"><span class="det-info-label">Stock</span><span class="det-info-val"><span style="background:#fffbeb;color:#92400e;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:700;">📋 Bajo Pedido</span></span></div>';else stockInfo='<div class="det-info-row"><span class="det-info-label">Stock</span><span class="det-info-val">'+p.stock+' disponibles</span></div>';}
-      var tiempoInfo='';if(p.tiempo_entrega){var tObj=TIEMPOS_ENTREGA.find(function(x){return x.v===p.tiempo_entrega;})||null;if(tObj)tiempoInfo='<div class="det-info-row"><span class="det-info-label">Entrega</span><span class="det-info-val">'+tObj.l+(tObj.rapido?' ⚡':'')+'</span></div>';}
-      var tallaInfo=p.talla?'<div class="det-info-row"><span class="det-info-label">Talla</span><span class="det-info-val">'+p.talla+'</span></div>':'';
-      pedidoWaTel=wa;pedidoWaTienda=p.nombre_tienda;
-      comunidadesVendedor=coms?coms.split(',').map(function(c){return c.trim();}):[];
-      var fotos=[p.foto,p.foto2].filter(function(f){return f&&f.length>4;});
-      if(fotos.length===0)fotos=[''];
-      var carHTML='<div class="fotos-carrusel"><div class="fotos-track" id="det-track">';
-      fotos.forEach(function(f,fi){carHTML+='<img src="'+f+'" alt="Foto '+(fi+1)+'" data-idx="'+fi+'">';});
-      carHTML+='</div>';
-      if(fotos.length>1){carHTML+='<div class="fotos-dots" id="det-dots">';fotos.forEach(function(f,fi){carHTML+='<div class="foto-dot'+(fi===0?' active':'')+'"></div>';});carHTML+='</div>';}
-      carHTML+='</div>';
-      var favKey='fav_'+p.id_prod,esFav=localStorage.getItem(favKey)==='1';
-      var mostrarBtn=p.categoria==='Comida y Bebida';
-      var vigH='';if(p.fecha_publicacion&&p.es_unico){var dias=diasHastaVencer(p.fecha_publicacion);var vcls=dias>7?'vigencia-ok':dias>0?'vigencia-warn':'vigencia-vencida';vigH='<span class="vigencia-badge '+vcls+'">⏳ Vigencia: '+Math.max(0,dias)+' días</span><br>';}
-      var menuH='';
-      if(p.categoria==='Comida y Bebida'){var menu=allProds.filter(function(x){return x.nombre_tienda===p.nombre_tienda&&x.categoria==='Comida y Bebida'&&x.disponible_hoy!=='NO';});menu.forEach(function(m,mi){menuH+='<div class="menu-comida-item"><div><b style="font-size:13px;">'+m.prod_nombre+'</b><br><span class="menu-precio">$'+m.precio+'</span></div><div style="display:flex;align-items:center;gap:6px;"><input type="number" id="cant-'+mi+'" class="input-cant" value="1" min="1"><button class="btn-anadir" data-nombre="'+m.prod_nombre+'" data-precio="'+m.precio+'" data-idx="'+mi+'" data-tienda="'+p.nombre_tienda+'" data-gratis="'+m.publicado_gratis+'">+ Añadir</button></div></div>';});}
-      var totalTienda=allProds.filter(function(x){return (x.nombre_tienda||'').toLowerCase()===(p.nombre_tienda||'').toLowerCase();}).length;
-      var btnVerMasTienda=totalTienda>1?'<button class="btn-ver-mas-tienda" data-tienda-nom="'+p.nombre_tienda.replace(/"/g,'&quot;')+'">🏪 Ver los '+totalTienda+' artículos de '+p.nombre_tienda+'</button>':'';
-      document.getElementById('det-contenido').innerHTML=
-        carHTML+
-        '<div class="det-acciones"><button class="btn-accion" id="btn-compartir-prod">📤 Compartir</button>'+
-        '<button class="btn-accion" id="btn-favorito-prod" style="'+(esFav?'background:#fff1f2;color:#e11d48;border-color:#fca5a5;':'')+'">'+( esFav?'❤️ Guardado':'🤍 Guardar')+'</button></div>'+
-        '<div style="margin-bottom:8px;"><span class="metric-pill">⭐ '+(met?met.promedio:'Nuevo')+'</span><span class="metric-pill">📦 '+(met?met.ventas:0)+' ventas</span></div>'+
-        '<div style="font-family:\'Barlow Condensed\',sans-serif;font-weight:800;font-size:30px;color:var(--blue);">$'+p.precio+(p.unidad_medida?'<span style="font-size:16px;font-weight:600;color:var(--gray-400);"> /'+p.unidad_medida+'</span>':'')+'</div>'+
-        '<h2 style="font-family:\'Barlow Condensed\',sans-serif;font-weight:800;font-size:22px;color:var(--navy);margin:4px 0;">'+p.prod_nombre+'</h2>'+
-        vigH+'<p style="font-size:12px;color:var(--gray-400);margin-top:4px;">🏪 '+(p.nombre_tienda||'')+' · 📍 '+(ubic||'Tienda')+'</p>'+
-        btnVerMasTienda+
-        '<div style="background:var(--gray-100);border-radius:8px;padding:10px;margin:10px 0;">'+stockInfo+tiempoInfo+tallaInfo+'<div class="det-info-row" style="border-bottom:none;">'+badgeE+'</div></div>'+
-        '<hr style="margin:14px 0;"><p style="font-size:14px;line-height:1.6;color:var(--gray-600);">'+(p.desc||'')+'</p>'+
-        (p.categoria==='Comida y Bebida'&&menuH?'<h3 style="font-family:\'Barlow Condensed\',sans-serif;font-weight:800;font-size:18px;margin-top:18px;margin-bottom:10px;">📋 MENÚ DE HOY</h3>'+menuH:'')+'<div id="area-resumen"></div>'+
-        (mostrarBtn?'<button id="btn-pedido-completo" class="btn-pedido-completo">🛵 ARMAR PEDIDO</button>':'')+
-        '<div class="stars-wrap"><p style="font-size:12px;font-weight:700;margin-bottom:6px;">CALIFICAR</p><div id="estrellas" style="font-size:26px;color:#f4c430;cursor:pointer;"><span data-pts="1">★</span><span data-pts="2">★</span><span data-pts="3">★</span><span data-pts="4">★</span><span data-pts="5">★</span></div></div>'+
-        '<button id="btn-whatsapp" class="btn-success" style="margin-top:10px;">📲 CONTACTAR POR WHATSAPP</button>';
-      var trackEl=document.getElementById('det-track'),dotsEl=document.getElementById('det-dots'),curF=0;
-      function irFoto(n){curF=Math.max(0,Math.min(n,fotos.length-1));if(trackEl)trackEl.style.transform='translateX(-'+curF*100+'%)';if(dotsEl)dotsEl.querySelectorAll('.foto-dot').forEach(function(d,i){d.classList.toggle('active',i===curF);});}
-      if(trackEl){var tx0=0;trackEl.addEventListener('touchstart',function(e){tx0=e.touches[0].clientX;},{passive:true});trackEl.addEventListener('touchend',function(e){var dx=e.changedTouches[0].clientX-tx0;if(dx<-40)irFoto(curF+1);else if(dx>40)irFoto(curF-1);});trackEl.querySelectorAll('img').forEach(function(img,fi){img.addEventListener('click',function(){abrirLightbox(fotos,fi);});});}
-      if(dotsEl)dotsEl.querySelectorAll('.foto-dot').forEach(function(d,i){d.addEventListener('click',function(){irFoto(i);});});
-      var btnVMT=document.querySelector('.btn-ver-mas-tienda');
-      if(btnVMT)btnVMT.addEventListener('click',function(){verArticulosTienda(this.getAttribute('data-tienda-nom'));});
-      document.getElementById('btn-compartir-prod').addEventListener('click',function(){
-        var ficha='🛒 *'+p.prod_nombre+'*\n💰 $'+p.precio+(p.unidad_medida?' /'+p.unidad_medida:'')+'\n🏪 '+p.nombre_tienda+(p.talla?'\n👕 Talla: '+p.talla:'')+'\n\nEncuéntralo en Bazar PIQ:\n🔗 '+linkProd+'\n\nBusca: *'+p.prod_nombre+'*\nTienda: *'+p.nombre_tienda+'*';
-        if(navigator.share)navigator.share({title:p.prod_nombre,text:ficha});
-        else{var ta=document.createElement('textarea');ta.value=ficha;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);alert('✅ Ficha copiada.');}
+
+  function renderConDatos(infoT, met) {
+    var em=(infoT&&infoT.entrega_modo)||p.entrega||'';
+    var coms=(infoT&&infoT.comunidades_entrega)||'';
+    var wa=(infoT&&infoT.whatsapp)||p.whatsapp;
+    var ubic=(infoT&&infoT.ubicacion_tienda)||p.ubicacion||'';
+    var fg=p.publicado_gratis==='SI';
+    var linkProd=generarLinkProducto(p.id_prod);
+    var badgeE='';
+    if(em==='Domicilio'){var lc=coms?coms.split(',').map(function(c){return c.trim();}):[];badgeE='<span class="badge-domicilio">🛵 Entrega a domicilio</span>'+(lc.length?'<p style="font-size:11px;color:var(--gray-400);margin-top:4px;">📍 '+lc.join(', ')+'</p>':'');}
+    else if(em==='Punto Medio')badgeE='<span class="badge-entrega">🤝 Punto Medio</span>';
+    else badgeE='<span class="badge-entrega">🏪 Recoger en tienda</span>';
+    var stockInfo='';if(p.stock){if(String(p.stock).toLowerCase()==='bajo pedido')stockInfo='<div class="det-info-row"><span class="det-info-label">Stock</span><span class="det-info-val"><span style="background:#fffbeb;color:#92400e;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:700;">📋 Bajo Pedido</span></span></div>';else stockInfo='<div class="det-info-row"><span class="det-info-label">Stock</span><span class="det-info-val">'+p.stock+' disponibles</span></div>';}
+    var tiempoInfo='';if(p.tiempo_entrega){var tObj=TIEMPOS_ENTREGA.find(function(x){return x.v===p.tiempo_entrega;})||null;if(tObj)tiempoInfo='<div class="det-info-row"><span class="det-info-label">Entrega</span><span class="det-info-val">'+tObj.l+(tObj.rapido?' ⚡':'')+'</span></div>';}
+    var tallaInfo=p.talla?'<div class="det-info-row"><span class="det-info-label">Talla</span><span class="det-info-val">'+p.talla+'</span></div>':'';
+    pedidoWaTel=wa;pedidoWaTienda=p.nombre_tienda;
+    comunidadesVendedor=coms?coms.split(',').map(function(c){return c.trim();}):[];
+    var fotos=[p.foto,p.foto2].filter(function(f){return f&&f.length>4;});
+    if(fotos.length===0)fotos=[''];
+    var carHTML='<div class="fotos-carrusel"><div class="fotos-track" id="det-track">';
+    fotos.forEach(function(f,fi){carHTML+='<img src="'+f+'" alt="Foto '+(fi+1)+'" data-idx="'+fi+'">';});
+    carHTML+='</div>';
+    if(fotos.length>1){carHTML+='<div class="fotos-dots" id="det-dots">';fotos.forEach(function(f,fi){carHTML+='<div class="foto-dot'+(fi===0?' active':'')+'"></div>';});carHTML+='</div>';}
+    carHTML+='</div>';
+    var favKey='fav_'+p.id_prod,esFav=localStorage.getItem(favKey)==='1';
+    var mostrarBtn=p.categoria==='Comida y Bebida';
+    var vigH='';if(p.fecha_publicacion&&p.es_unico){var dias=diasHastaVencer(p.fecha_publicacion);var vcls=dias>7?'vigencia-ok':dias>0?'vigencia-warn':'vigencia-vencida';vigH='<span class="vigencia-badge '+vcls+'">⏳ Vigencia: '+Math.max(0,dias)+' días</span><br>';}
+    var menuH='';
+    if(p.categoria==='Comida y Bebida'){var menu=allProds.filter(function(x){return x.nombre_tienda===p.nombre_tienda&&x.categoria==='Comida y Bebida'&&x.disponible_hoy!=='NO';});menu.forEach(function(m,mi){menuH+='<div class="menu-comida-item"><div><b style="font-size:13px;">'+m.prod_nombre+'</b><br><span class="menu-precio">$'+m.precio+'</span></div><div style="display:flex;align-items:center;gap:6px;"><input type="number" id="cant-'+mi+'" class="input-cant" value="1" min="1"><button class="btn-anadir" data-nombre="'+m.prod_nombre+'" data-precio="'+m.precio+'" data-idx="'+mi+'" data-tienda="'+p.nombre_tienda+'" data-gratis="'+m.publicado_gratis+'">+ Añadir</button></div></div>';});}
+    var totalTienda=allProds.filter(function(x){return (x.nombre_tienda||'').toLowerCase()===(p.nombre_tienda||'').toLowerCase();}).length;
+    var btnVerMasTienda=totalTienda>1?'<button class="btn-ver-mas-tienda" data-tienda-nom="'+p.nombre_tienda.replace(/"/g,'&quot;')+'">🏪 Ver los '+totalTienda+' artículos de '+p.nombre_tienda+'</button>':'';
+    document.getElementById('det-contenido').innerHTML=
+      carHTML+
+      '<div class="det-acciones"><button class="btn-accion" id="btn-compartir-prod">📤 Compartir</button>'+
+      '<button class="btn-accion" id="btn-favorito-prod" style="'+(esFav?'background:#fff1f2;color:#e11d48;border-color:#fca5a5;':'')+'">'+( esFav?'❤️ Guardado':'🤍 Guardar')+'</button></div>'+
+      '<div style="margin-bottom:8px;"><span class="metric-pill">⭐ '+(met?met.promedio:'Nuevo')+'</span><span class="metric-pill">📦 '+(met?met.ventas:0)+' ventas</span></div>'+
+      '<div style="font-family:\'Barlow Condensed\',sans-serif;font-weight:800;font-size:30px;color:var(--blue);">$'+p.precio+(p.unidad_medida?'<span style="font-size:16px;font-weight:600;color:var(--gray-400);"> /'+p.unidad_medida+'</span>':'')+'</div>'+
+      '<h2 style="font-family:\'Barlow Condensed\',sans-serif;font-weight:800;font-size:22px;color:var(--navy);margin:4px 0;">'+p.prod_nombre+'</h2>'+
+      vigH+'<p style="font-size:12px;color:var(--gray-400);margin-top:4px;">🏪 '+(p.nombre_tienda||'')+' · 📍 '+(ubic||'Tienda')+'</p>'+
+      btnVerMasTienda+
+      '<div style="background:var(--gray-100);border-radius:8px;padding:10px;margin:10px 0;">'+stockInfo+tiempoInfo+tallaInfo+'<div class="det-info-row" style="border-bottom:none;">'+badgeE+'</div></div>'+
+      '<hr style="margin:14px 0;"><p style="font-size:14px;line-height:1.6;color:var(--gray-600);">'+(p.desc||'')+'</p>'+
+      (p.categoria==='Comida y Bebida'&&menuH?'<h3 style="font-family:\'Barlow Condensed\',sans-serif;font-weight:800;font-size:18px;margin-top:18px;margin-bottom:10px;">📋 MENÚ DE HOY</h3>'+menuH:'')+'<div id="area-resumen"></div>'+
+      (mostrarBtn?'<button id="btn-pedido-completo" class="btn-pedido-completo">🛵 ARMAR PEDIDO</button>':'')+
+      '<div class="stars-wrap"><p style="font-size:12px;font-weight:700;margin-bottom:6px;">CALIFICAR</p><div id="estrellas" style="font-size:26px;color:#f4c430;cursor:pointer;"><span data-pts="1">★</span><span data-pts="2">★</span><span data-pts="3">★</span><span data-pts="4">★</span><span data-pts="5">★</span></div></div>'+
+      '<button id="btn-whatsapp" class="btn-success" style="margin-top:10px;">📲 CONTACTAR POR WHATSAPP</button>';
+    var trackEl=document.getElementById('det-track'),dotsEl=document.getElementById('det-dots'),curF=0;
+    function irFoto(n){curF=Math.max(0,Math.min(n,fotos.length-1));if(trackEl)trackEl.style.transform='translateX(-'+curF*100+'%)';if(dotsEl)dotsEl.querySelectorAll('.foto-dot').forEach(function(d,i){d.classList.toggle('active',i===curF);});}
+    if(trackEl){var tx0=0;trackEl.addEventListener('touchstart',function(e){tx0=e.touches[0].clientX;},{passive:true});trackEl.addEventListener('touchend',function(e){var dx=e.changedTouches[0].clientX-tx0;if(dx<-40)irFoto(curF+1);else if(dx>40)irFoto(curF-1);});trackEl.querySelectorAll('img').forEach(function(img,fi){img.addEventListener('click',function(){abrirLightbox(fotos,fi);});});}
+    if(dotsEl)dotsEl.querySelectorAll('.foto-dot').forEach(function(d,i){d.addEventListener('click',function(){irFoto(i);});});
+    var btnVMT=document.querySelector('.btn-ver-mas-tienda');
+    if(btnVMT)btnVMT.addEventListener('click',function(){verArticulosTienda(this.getAttribute('data-tienda-nom'));});
+    document.getElementById('btn-compartir-prod').addEventListener('click',function(){var ficha='🛒 *'+p.prod_nombre+'*\n💰 $'+p.precio+(p.unidad_medida?' /'+p.unidad_medida:'')+'\n🏪 '+p.nombre_tienda+(p.talla?'\n👕 Talla: '+p.talla:'')+'\n\nEncuéntralo en Bazar PIQ:\n🔗 '+linkProd+'\n\nBusca: *'+p.prod_nombre+'*\nTienda: *'+p.nombre_tienda+'*';if(navigator.share)navigator.share({title:p.prod_nombre,text:ficha});else{var ta=document.createElement('textarea');ta.value=ficha;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);alert('✅ Ficha copiada.');}});
+    document.getElementById('btn-favorito-prod').addEventListener('click',function(){var es=localStorage.getItem(favKey)==='1';if(es){localStorage.removeItem(favKey);this.textContent='🤍 Guardar';this.style.cssText='';}else{localStorage.setItem(favKey,'1');this.textContent='❤️ Guardado';this.style.background='#fff1f2';this.style.color='#e11d48';this.style.borderColor='#fca5a5';}actualizarBadgeFavoritos();});
+    document.querySelectorAll('#det-contenido .btn-anadir').forEach(function(btn){btn.addEventListener('click',function(){agregarComida(this.getAttribute('data-nombre'),parseFloat(this.getAttribute('data-precio')),this.getAttribute('data-idx'),this.getAttribute('data-tienda'),this.getAttribute('data-gratis')==='SI');});});
+    if(mostrarBtn)document.getElementById('btn-pedido-completo').addEventListener('click',function(){abrirModalPedido(em);});
+    document.querySelectorAll('#estrellas span').forEach(function(star){star.addEventListener('click',function(){calificar(p.nombre_tienda,parseInt(this.getAttribute('data-pts')));});});
+    document.getElementById('btn-whatsapp').addEventListener('click',function(){var msjWa='';if(p.categoria==='Comida y Bebida'&&ordenComida.length>0){var total=0;msjWa='Hola! Mi pedido para *'+p.nombre_tienda+'*:\n\n';ordenComida.forEach(function(it){msjWa+='• '+it.cant+' '+it.nombre+' ($'+(it.cant*it.precio)+')'+(it.nota?' ← '+it.nota:'')+'\n';total+=it.cant*it.precio;});msjWa+='\n*TOTAL: $'+total+'*';}else{msjWa='Hola, me interesa contactar al vendedor *'+p.nombre_tienda+'*:\n\n📦 *Producto:* '+p.prod_nombre+'\n💰 *Precio:* $'+p.precio+(p.unidad_medida?' /'+p.unidad_medida:'')+'\n'+(p.talla?'👕 *Talla:* '+p.talla+'\n':'')+(p.desc?'\n📋 *Descripción:* '+p.desc.substring(0,200)+(p.desc.length>200?'...':'')+'\n':'')+(linkProd?'\n🔗 '+linkProd:'');if(!p.es_unico&&p.categoria!=='Comida y Bebida')_api('registrarConsultaWA',{idProd:p.id_prod,prodNombre:p.prod_nombre,tienda:p.nombre_tienda,stock:p.stock},function(){});}_api('registrarVenta',{nombre:p.nombre_tienda,precio:p.precio||0,fueGratis:String(fg||false)},function(){});window.open('https://wa.me/'+wa+'?text='+encodeURIComponent(msjWa));});
+    if(ordenComida.length>0&&ordenComida[0].tienda!==p.nombre_tienda)ordenComida=[];
+    renderResumen();
+  }
+
+  // Usa cache si disponible, si no hace las 2 llamadas
+  var cached = _cacheDetalles[p.id_prod];
+  if(cached){
+    renderConDatos(cached.infoT, cached.met);
+  } else {
+    _api('obtenerInfoTienda',{nombre:p.nombre_tienda},function(infoT){
+      _api('obtenerMetricas',{nombre:p.nombre_tienda},function(met){
+        _cacheDetalles[p.id_prod]={infoT:infoT||{},met:met||{}};
+        renderConDatos(infoT, met);
       });
-      document.getElementById('btn-favorito-prod').addEventListener('click',function(){var es=localStorage.getItem(favKey)==='1';if(es){localStorage.removeItem(favKey);this.textContent='🤍 Guardar';this.style.cssText='';}else{localStorage.setItem(favKey,'1');this.textContent='❤️ Guardado';this.style.background='#fff1f2';this.style.color='#e11d48';this.style.borderColor='#fca5a5';}actualizarBadgeFavoritos();});
-      document.querySelectorAll('#det-contenido .btn-anadir').forEach(function(btn){btn.addEventListener('click',function(){agregarComida(this.getAttribute('data-nombre'),parseFloat(this.getAttribute('data-precio')),this.getAttribute('data-idx'),this.getAttribute('data-tienda'),this.getAttribute('data-gratis')==='SI');});});
-      if(mostrarBtn)document.getElementById('btn-pedido-completo').addEventListener('click',function(){abrirModalPedido(em);});
-      document.querySelectorAll('#estrellas span').forEach(function(star){star.addEventListener('click',function(){calificar(p.nombre_tienda,parseInt(this.getAttribute('data-pts')));});});
-      document.getElementById('btn-whatsapp').addEventListener('click',function(){
-        var msjWa='';
-        if(p.categoria==='Comida y Bebida'&&ordenComida.length>0){var total=0;msjWa='Hola! Mi pedido para *'+p.nombre_tienda+'*:\n\n';ordenComida.forEach(function(it){msjWa+='• '+it.cant+' '+it.nombre+' ($'+(it.cant*it.precio)+')'+(it.nota?' ← '+it.nota:'')+'\n';total+=it.cant*it.precio;});msjWa+='\n*TOTAL: $'+total+'*';}
-        else{msjWa='Hola, me interesa contactar al vendedor *'+p.nombre_tienda+'*:\n\n📦 *Producto:* '+p.prod_nombre+'\n💰 *Precio:* $'+p.precio+(p.unidad_medida?' /'+p.unidad_medida:'')+'\n'+(p.talla?'👕 *Talla:* '+p.talla+'\n':'')+(p.desc?'\n📋 *Descripción:* '+p.desc.substring(0,200)+(p.desc.length>200?'...':'')+'\n':'')+(linkProd?'\n🔗 '+linkProd:'');if(!p.es_unico&&p.categoria!=='Comida y Bebida')_api('registrarConsultaWA',{idProd:p.id_prod,prodNombre:p.prod_nombre,tienda:p.nombre_tienda,stock:p.stock},function(){});}
-        _api('registrarVenta',{nombre:p.nombre_tienda,precio:p.precio||0,fueGratis:String(fg||false)},function(){});
-        window.open('https://wa.me/'+wa+'?text='+encodeURIComponent(msjWa));
-      });
-      if(ordenComida.length>0&&ordenComida[0].tienda!==p.nombre_tienda)ordenComida=[];
-      renderResumen();
     });
-  });
+  }
 }
 function calificar(tienda,pts){_api('guardarCalificacion',{tienda:tienda,estrellas:pts},function(){alert('¡Calificado! '+'⭐'.repeat(pts));volver();});}
 
@@ -1630,6 +1642,10 @@ function mostrarModalInstalar(){var isStandalone=window.matchMedia('(display-mod
 document.addEventListener('DOMContentLoaded',function(){
   history.pushState({page:'bazar'},'','');
   window.addEventListener('popstate',function(e){e.preventDefault();volver();history.pushState({page:'bazar'},'','');});
+
+  // Cierre del visor PDF inline
+  document.getElementById('modal-pdf-close-btn').addEventListener('click',cerrarVisorPdf);
+
   _api('obtenerEstadoConfig',null,function(cfg){
     if(!cfg)return;
     actualizarModoGratis(cfg.modo_gratuito);
@@ -1645,6 +1661,15 @@ document.addEventListener('DOMContentLoaded',function(){
   _api('adminObtenerCfgComisiones',{categoria:'global'},function(cfg){if(cfg)_comCfgActual=cfg;});
   try{var sN=localStorage.getItem('t_n'),sP=localStorage.getItem('t_p');if(sN&&sP)_api('loginTienda',{nombre:sN,pass:sP},function(user){if(user){tiendaActiva=user;actualizarModoGratis(user.modo_gratuito_global||false);_api('adminObtenerCfgComisiones',{categoria:user.categoria||'global'},function(cfg){if(cfg)_comCfgActual=cfg;});}});}catch(e){}
   try{var uN=localStorage.getItem('uu_n'),uP=localStorage.getItem('uu_p');if(uN&&uP)_api('loginUsuarioUnico',{usuario:uN,pass:uP},function(user){if(user)usuarioActivo=user;});}catch(e){}
+
+  // Recupera PDFs del localStorage
+  try{
+    var pc=localStorage.getItem('pdf_comisiones');
+    if(pc)PDF_COMISIONES_URL=pc;
+    var pp=localStorage.getItem('pdf_politicas');
+    if(pp)PDF_POLITICAS_URL=pp;
+  }catch(e){}
+
   document.getElementById('nav-comprar').addEventListener('click',function(){ir('p-comprar');});
   document.getElementById('nav-vender').addEventListener('click',function(){ir('p-vender');});
   document.getElementById('nav-empleo').addEventListener('click',function(){ir('p-empleo');});
@@ -1666,7 +1691,10 @@ document.addEventListener('DOMContentLoaded',function(){
   document.getElementById('btn-toggle-filtros').addEventListener('click',function(){document.getElementById('panel-filtros').classList.toggle('visible');});
   document.getElementById('btn-aplicar-filtros').addEventListener('click',function(){document.getElementById('panel-filtros').classList.remove('visible');buscar();});
   document.getElementById('btn-limpiar-filtros').addEventListener('click',limpiarFiltros);
-  document.getElementById('btn-regresar-busqueda').addEventListener('click',function(){document.getElementById('bus').value='';categoriaFiltroActiva='';limpiarFiltros();document.querySelectorAll('#filtro-cats .filtro-btn').forEach(function(b){b.classList.remove('active');});document.querySelector('#filtro-cats .filtro-btn[data-cat=""]').classList.add('active');buscar();});
+
+  // ── CAMBIO 4: botón REGRESAR usa regresarALista() ──
+  document.getElementById('btn-regresar-busqueda').addEventListener('click',regresarALista);
+
   document.querySelectorAll('#filtro-cats .filtro-btn').forEach(function(btn){btn.addEventListener('click',function(){document.querySelectorAll('#filtro-cats .filtro-btn').forEach(function(b){b.classList.remove('active');});this.classList.add('active');categoriaFiltroActiva=this.getAttribute('data-cat');buscar();});});
   document.getElementById('btn-producto-unico').addEventListener('click',formProductoUnico);
   document.getElementById('btn-nueva-tienda').addEventListener('click',function(){abrirForm('REG');});
@@ -1736,12 +1764,6 @@ document.addEventListener('DOMContentLoaded',function(){
   document.getElementById('btn-subir-pdf-politicas').addEventListener('click',subirPdfPoliticas);
   document.getElementById('btn-exportar-pdf-comisiones').addEventListener('click',exportarPdfComisiones);
   document.getElementById('modal-comisiones').addEventListener('input',function(){comActualizarPreview();});
-  try{
-    var pc=localStorage.getItem('pdf_comisiones');
-    if(pc)PDF_COMISIONES_URL=pc;
-    var pp=localStorage.getItem('pdf_politicas');
-    if(pp)PDF_POLITICAS_URL=pp;
-  }catch(e){}
   actualizarBadgeFavoritos();
   buscar();
 });
