@@ -718,13 +718,13 @@ body{background:#f4f6f9;font-family:'Barlow',sans-serif;color:#0d1b2a;padding-bo
     </div>
     <div style="background:#fef3c7;border:1px solid var(--warning);border-radius:8px;padding:12px;margin-bottom:12px;">
       <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:14px;color:#78350f;margin-bottom:8px;">📄 PDF de Comisiones</div>
-      <input type="file" id="pdf-comisiones-input" accept="application/pdf" style="margin-bottom:8px;width:100%;font-size:12px;">
+      <input type="file" id="pdf-comisiones-input" accept="image/*" style="margin-bottom:8px;width:100%;font-size:12px;">
       <button id="btn-subir-pdf-comisiones" class="pdf-viewer-btn" style="font-size:13px;padding:10px;">📤 SUBIR PDF DE COMISIONES</button>
       <div id="pdf-link-actual" style="font-size:11px;color:var(--gray-400);margin-top:4px;"></div>
     </div>
     <div style="background:#dbeafe;border:1px solid #3b82f6;border-radius:8px;padding:12px;margin-bottom:12px;">
       <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:14px;color:#1d4ed8;margin-bottom:8px;">📄 PDF de Políticas</div>
-      <input type="file" id="pdf-politicas-input" accept="application/pdf" style="margin-bottom:8px;width:100%;font-size:12px;">
+      <input type="file" id="pdf-politicas-input" accept="image/*" style="margin-bottom:8px;width:100%;font-size:12px;">
       <button id="btn-subir-pdf-politicas" class="pdf-viewer-btn" style="font-size:13px;padding:10px;background:linear-gradient(135deg,#1d4ed8,#1e40af);">📤 SUBIR PDF DE POLÍTICAS</button>
       <div id="pdf-politicas-link-actual" style="font-size:11px;color:var(--gray-400);margin-top:4px;"></div>
     </div>
@@ -1205,32 +1205,38 @@ function guardarComisiones(){var cfg=comLeerFormulario();document.getElementById
 // ═══ PDF ═══
 function subirPdfComisiones(){
   var inp=document.getElementById('pdf-comisiones-input');
-  if(!inp||!inp.files||!inp.files[0]){alert('Selecciona un PDF.');return;}
+  if(!inp||!inp.files||!inp.files[0]){alert('Selecciona una imagen.');return;}
   var file=inp.files[0];
-  if(file.type!=='application/pdf'){alert('El archivo debe ser PDF.');return;}
   document.getElementById('loader').style.display='flex';
-  leerPdfBase64(file,function(b64){
-    document.getElementById('loader').style.display='none';
-    PDF_COMISIONES_URL=b64;
-    try{localStorage.setItem('pdf_comisiones',b64);}catch(e){alert('PDF muy grande para guardarlo localmente.');}
-    var el=document.getElementById('pdf-link-actual');
-    if(el){var blob=new Blob([_base64ToBlob(b64)],{type:'application/pdf'});var url=URL.createObjectURL(blob);el.innerHTML='📄 <a href="'+url+'" target="_blank" style="color:var(--blue);">Ver PDF de comisiones</a>';}
-    alert('✅ PDF de comisiones guardado.');
+  comprimirImagen(file,function(b64){
+    _api('subirFotoEnCarpeta',{base64:b64,nombre:'COMISIONES_'+Date.now()+'.jpg',folderId:CARPETAS_SECUENCIA[0]},function(url){
+      document.getElementById('loader').style.display='none';
+      if(url){
+        PDF_COMISIONES_URL=url;
+        try{localStorage.setItem('pdf_comisiones',url);}catch(e){}
+        var el=document.getElementById('pdf-link-actual');
+        if(el)el.innerHTML='📄 <a href="'+url+'" target="_blank" style="color:var(--blue);">Ver imagen de comisiones</a>';
+        alert('✅ Imagen de comisiones subida.');
+      }else alert('❌ Error al subir.');
+    });
   });
 }
 function subirPdfPoliticas(){
   var inp=document.getElementById('pdf-politicas-input');
-  if(!inp||!inp.files||!inp.files[0]){alert('Selecciona un PDF.');return;}
+  if(!inp||!inp.files||!inp.files[0]){alert('Selecciona una imagen.');return;}
   var file=inp.files[0];
-  if(file.type!=='application/pdf'){alert('El archivo debe ser PDF.');return;}
   document.getElementById('loader').style.display='flex';
-  leerPdfBase64(file,function(b64){
-    document.getElementById('loader').style.display='none';
-    PDF_POLITICAS_URL=b64;
-    try{localStorage.setItem('pdf_politicas',b64);}catch(e){alert('PDF muy grande para guardarlo localmente.');}
-    var el=document.getElementById('pdf-politicas-link-actual');
-    if(el){var blob=new Blob([_base64ToBlob(b64)],{type:'application/pdf'});var url=URL.createObjectURL(blob);el.innerHTML='📄 <a href="'+url+'" target="_blank" style="color:var(--blue);">Ver PDF de políticas</a>';}
-    alert('✅ PDF de políticas guardado.');
+  comprimirImagen(file,function(b64){
+    _api('subirFotoEnCarpeta',{base64:b64,nombre:'POLITICAS_'+Date.now()+'.jpg',folderId:CARPETAS_SECUENCIA[0]},function(url){
+      document.getElementById('loader').style.display='none';
+      if(url){
+        PDF_POLITICAS_URL=url;
+        try{localStorage.setItem('pdf_politicas',url);}catch(e){}
+        var el=document.getElementById('pdf-politicas-link-actual');
+        if(el)el.innerHTML='📄 <a href="'+url+'" target="_blank" style="color:var(--blue);">Ver imagen de políticas</a>';
+        alert('✅ Imagen de políticas subida.');
+      }else alert('❌ Error al subir.');
+    });
   });
 }
 function exportarPdfComisiones(){var cfg=comLeerFormulario();document.getElementById('loader').style.display='flex';_api('generarPdfComisiones',{categoria:_comCatActual,cfg:JSON.stringify(cfg)},function(url){document.getElementById('loader').style.display='none';if(url)window.open(url,'_blank');else alert('Error.');});}
