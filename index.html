@@ -1352,7 +1352,7 @@ function subirPdfPoliticas(){
   });
 }
 function exportarPdfComisiones(){
-  var cfg=comLeerFormulario();
+  var cfg=_comCfgActual||{paquetes:{basico:{costo_paquete:0,limite:0},medio:{costo_paquete:0,limite:0},pro:{costo_paquete:0,limite:0}},rangos:[0,0,0,0,0,0,0,0,0],tiempos:{'1-2':0,'2-3':0,'3-4':0,'5-6':0},empleo:{costo_publicacion:0}};
   var cat=_comCatActual||'Global';
   var paq=cfg.paquetes||{};
   var rangos=cfg.rangos||[];
