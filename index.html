@@ -1379,11 +1379,11 @@ function exportarPdfComisiones(){
   html+='</body></html>';
   var blob=new Blob([html],{type:'text/html'});
   var url=URL.createObjectURL(blob);
-  var a=document.createElement('a');
-  a.href=url;a.download='Comisiones_BazarPIQ.html';
-  document.body.appendChild(a);a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+  var ventana=window.open('','_blank');
+  ventana.document.write(html);
+  ventana.document.close();
+  ventana.focus();
+  setTimeout(function(){ventana.print();},500);
 }
 
 // ═══ SESIÓN ═══
