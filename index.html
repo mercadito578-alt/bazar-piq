@@ -362,7 +362,6 @@ body{background:#f4f6f9;font-family:'Barlow',sans-serif;color:#0d1b2a;padding-bo
 .mb-0{margin-bottom:0!important;}
 .gratis-ocultar{display:none!important;}
 </style>
-
 <!-- ═══ SPLASH ═══ -->
 <div id="splash-screen">
   <div class="splash-logo-wrap">
@@ -988,6 +987,8 @@ var _prodsPaginados=[],_pagActual=0,_pagTam=20;
 var _filtrosActivos={tiendas:[],ubicaciones:[],domicilio:'',comunidades:[]};
 var _scrollAntesDeDEtalle=0,_paginaAntesDeDEtalle=0;
 
+// ── CAMBIO 3: cache de detalles precargados ──
+var _cacheDetalles={};   // key: id_prod  value: {infoT, met}
 
 var CATEGORIAS=['Comida y Bebida','Ropa y Calzado','Hogar y Limpieza','Ferretería y Herramientas','Refacciones Automotrices','Motos','Autos y Camionetas','Regalos y Juguetes','Electrónica','Belleza y Salud','Otros'];
 var DIAS=['Lun','Mar','Mie','Jue','Vie','Sab','Dom'];
@@ -1123,7 +1124,24 @@ function aplicarFiltroAvanzado(prods){return prods.filter(function(p){if(_filtro
 // ═══ SKELETON ═══
 function mostrarSkeleton(){var r=document.getElementById('res');if(!r)return;r.style.display='grid';var h='';for(var i=0;i<6;i++)h+='<div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-body"><div class="skeleton-line short"></div><div class="skeleton-line long"></div><div class="skeleton-line med"></div></div></div>';r.innerHTML=h;}
 
-
+// ── CAMBIO 3: precargar detalles en background ──
+function _precargarDetalles(prods) {
+  // Precarga de a 3 simultáneos para no saturar
+  var idx = 0;
+  function siguiente() {
+    if (idx >= prods.length) return;
+    var p = prods[idx++];
+    if (_cacheDetalles[p.id_prod]) { siguiente(); return; }
+    _api('obtenerInfoTienda', {nombre: p.nombre_tienda}, function(infoT) {
+      _api('obtenerMetricas', {nombre: p.nombre_tienda}, function(met) {
+        _cacheDetalles[p.id_prod] = {infoT: infoT || {}, met: met || {}};
+        siguiente();
+      });
+    });
+  }
+  // Arranca 3 hilos paralelos
+  siguiente(); siguiente(); siguiente();
+}
 
 // ═══ RENDER PAGINADO ═══
 function renderPaginaActual(esPrimeraCarga){
@@ -1169,6 +1187,8 @@ function buscar(){
     if(hayFiltros)filtrados=aplicarFiltroAvanzado(filtrados);
     _prodsPaginados=filtrados;_pagActual=0;
     renderPaginaActual(true);
+    // ── CAMBIO 3: precarga detalles en background ──
+    setTimeout(function(){ _precargarDetalles(filtrados); }, 800);
   });
 }
 
@@ -1585,11 +1605,18 @@ function verDetalle(idx){
     renderResumen();
   }
 
-  _api('obtenerInfoTienda',{nombre:p.nombre_tienda},function(infoT){
-    _api('obtenerMetricas',{nombre:p.nombre_tienda},function(met){
-      renderConDatos(infoT, met);
+  // Usa cache si disponible, si no hace las 2 llamadas
+  var cached = _cacheDetalles[p.id_prod];
+  if(cached){
+    renderConDatos(cached.infoT, cached.met);
+  } else {
+    _api('obtenerInfoTienda',{nombre:p.nombre_tienda},function(infoT){
+      _api('obtenerMetricas',{nombre:p.nombre_tienda},function(met){
+        _cacheDetalles[p.id_prod]={infoT:infoT||{},met:met||{}};
+        renderConDatos(infoT, met);
+      });
     });
-  });
+  }
 }
 function calificar(tienda,pts){_api('guardarCalificacion',{tienda:tienda,estrellas:pts},function(){alert('¡Calificado! '+'⭐'.repeat(pts));volver();});}
 
