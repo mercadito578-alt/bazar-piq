@@ -1377,13 +1377,12 @@ function exportarPdfComisiones(){
   html+='</table>';
   html+='<h2>💼 Empleo</h2><table><tr><th>Publicación vacante</th><td>$'+(emp.costo_publicacion||0)+'</td></tr></table>';
   html+='</body></html>';
-  var blob=new Blob([html],{type:'text/html'});
-  var url=URL.createObjectURL(blob);
   var ventana=window.open('','_blank');
+  if(!ventana){alert('Permite las ventanas emergentes para descargar el PDF.');return;}
   ventana.document.write(html);
   ventana.document.close();
   ventana.focus();
-  setTimeout(function(){ventana.print();},500);
+  setTimeout(function(){ventana.print();ventana.close();},800);
 }
 
 // ═══ SESIÓN ═══
