@@ -1351,7 +1351,40 @@ function subirPdfPoliticas(){
     alert('✅ PDF de políticas guardado.');
   });
 }
-function exportarPdfComisiones(){var cfg=comLeerFormulario();document.getElementById('loader').style.display='flex';_api('generarPdfComisiones',{categoria:_comCatActual,cfg:JSON.stringify(cfg)},function(url){document.getElementById('loader').style.display='none';if(url)abrirVisorPdf(url,'📄 Comisiones');else alert('Error.');});}
+function exportarPdfComisiones(){
+  var cfg=comLeerFormulario();
+  var cat=_comCatActual||'Global';
+  var paq=cfg.paquetes||{};
+  var rangos=cfg.rangos||[];
+  var tiempos=cfg.tiempos||{};
+  var emp=cfg.empleo||{};
+  var html='<html><head><meta charset="UTF-8"><style>body{font-family:Arial,sans-serif;padding:30px;color:#0d1b2a;}h1{color:#FF6B00;font-size:22px;}h2{font-size:16px;color:#1b2d45;margin-top:20px;}table{width:100%;border-collapse:collapse;margin-top:10px;}th{background:#0d1b2a;color:#FF9A4D;padding:8px;text-align:left;font-size:13px;}td{padding:8px;border-bottom:1px solid #e4e9f0;font-size:13px;}tr:nth-child(even)td{background:#f4f6f9;}</style></head><body>';
+  html+='<h1>📄 Comisiones Bazar PIQ</h1><p>Categoría: <b>'+cat+'</b></p>';
+  html+='<h2>📦 Paquetes</h2><table><tr><th>Paquete</th><th>Costo</th><th>Límite pubs</th></tr>';
+  html+='<tr><td>⭐ Básico</td><td>$'+(paq.basico?paq.basico.costo_paquete:0)+'</td><td>'+(paq.basico?paq.basico.limite:0)+'</td></tr>';
+  html+='<tr><td>🌟 Medio</td><td>$'+(paq.medio?paq.medio.costo_paquete:0)+'</td><td>'+(paq.medio?paq.medio.limite:0)+'</td></tr>';
+  html+='<tr><td>💎 Pro</td><td>$'+(paq.pro?paq.pro.costo_paquete:0)+'</td><td>'+(paq.pro?paq.pro.limite:0)+'</td></tr>';
+  html+='</table>';
+  html+='<h2>💲 Rangos de Precio</h2><table><tr><th>Rango</th><th>Cobro</th></tr>';
+  var labels=['$0—$50','$51—$150','$151—$300','$301—$1,000','$1,001—$2,000','$2,001—$5,000','$5,001—$12,000','$12,001—$50,000','+$50,000'];
+  labels.forEach(function(l,i){html+='<tr><td>'+l+'</td><td>$'+(rangos[i]||0)+'</td></tr>';});
+  html+='</table>';
+  html+='<h2>⏱️ Tiempos de Entrega</h2><table><tr><th>Tiempo</th><th>%</th></tr>';
+  html+='<tr><td>Inmediato / 1 día</td><td>'+(tiempos['1-2']||0)+'%</td></tr>';
+  html+='<tr><td>2–3 días</td><td>'+(tiempos['2-3']||0)+'%</td></tr>';
+  html+='<tr><td>3–4 días</td><td>'+(tiempos['3-4']||0)+'%</td></tr>';
+  html+='<tr><td>5–6 días</td><td>'+(tiempos['5-6']||0)+'%</td></tr>';
+  html+='</table>';
+  html+='<h2>💼 Empleo</h2><table><tr><th>Publicación vacante</th><td>$'+(emp.costo_publicacion||0)+'</td></tr></table>';
+  html+='</body></html>';
+  var blob=new Blob([html],{type:'text/html'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=url;a.download='Comisiones_BazarPIQ.html';
+  document.body.appendChild(a);a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
 
 // ═══ SESIÓN ═══
 function cerrarSesionTienda(){tiendaActiva=null;try{localStorage.removeItem('t_n');localStorage.removeItem('t_p');}catch(e){}cerrarModalConfig();ir('p-vender');}
