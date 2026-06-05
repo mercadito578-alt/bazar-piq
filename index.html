@@ -1187,8 +1187,6 @@ function buscar(){
     if(hayFiltros)filtrados=aplicarFiltroAvanzado(filtrados);
     _prodsPaginados=filtrados;_pagActual=0;
     renderPaginaActual(true);
-    // ── CAMBIO 3: precarga detalles en background ──
-    setTimeout(function(){ _precargarDetalles(filtrados); }, 800);
   });
 }
 
