@@ -411,12 +411,11 @@ body{background:#f4f6f9;font-family:'Barlow',sans-serif;color:#0d1b2a;padding-bo
 <!-- ═══ MODAL VISOR PDF INLINE (políticas / comisiones) ═══ -->
 <div id="modal-pdf-viewer" class="modal-pdf-overlay">
   <div class="modal-pdf-header">
+    <button id="modal-pdf-back-btn" style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:8px;width:auto;padding:0 14px;height:36px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;gap:6px;">⬅ Regresar</button>
     <span class="modal-pdf-titulo" id="modal-pdf-titulo-txt">📄 Documento</span>
     <button class="modal-pdf-close" id="modal-pdf-close-btn">✕</button>
   </div>
-  <div class="modal-pdf-body" id="modal-pdf-body">
-    <!-- se inyecta iframe o img según el tipo de URL -->
-  </div>
+  <div class="modal-pdf-body" id="modal-pdf-body"></div>
 </div>
 
 <!-- ═══ BANNER GRATIS ═══ -->
@@ -1019,31 +1018,45 @@ function abrirVisorPdf(url, titulo) {
   var tituloEl= document.getElementById('modal-pdf-titulo-txt');
   tituloEl.textContent = titulo || '📄 Documento';
   body.innerHTML = '';
+  if (overlay._blobUrl) { URL.revokeObjectURL(overlay._blobUrl); overlay._blobUrl = null; }
 
-  // Si es base64 de PDF → iframe con data URI
-  // Si es URL normal (http/https) → iframe src
-  // Si es imagen base64 → img
+  var esDrive   = url.includes('drive.google.com') || url.includes('script.google.com');
   var esBase64Img = url.startsWith('data:image');
   var esBase64Pdf = url.startsWith('data:application/pdf') || url.startsWith('data:application/octet');
-  var esUrlHttp   = url.startsWith('http');
 
-  if (esBase64Img) {
+  if (esDrive) {
+    body.innerHTML =
+      '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:20px;padding:32px;text-align:center;">' +
+      '<div style="font-size:52px;">📄</div>' +
+      '<div style="font-family:\'Barlow Condensed\',sans-serif;font-weight:800;font-size:20px;color:#fff;">' + (titulo||'Documento') + '</div>' +
+      '<p style="color:rgba(255,255,255,.7);font-size:13px;line-height:1.6;">Este documento está en Google Drive.<br>Toca el botón para abrirlo.</p>' +
+      '<a href="' + url + '" target="_blank" style="background:#FF6B00;color:#fff;padding:14px 28px;border-radius:10px;font-family:\'Barlow Condensed\',sans-serif;font-weight:800;font-size:16px;text-decoration:none;box-shadow:0 4px 15px rgba(255,107,0,.4);">📂 Abrir PDF</a>' +
+      '</div>';
+  } else if (esBase64Img) {
     var img = document.createElement('img');
-    img.src = url;
-    img.className = 'modal-pdf-img';
+    img.src = url; img.className = 'modal-pdf-img';
     body.appendChild(img);
-  } else if (esBase64Pdf || esUrlHttp) {
-    var iframe = document.createElement('iframe');
-    iframe.src = url;
-    iframe.className = 'modal-pdf-iframe';
-    iframe.setAttribute('allowfullscreen','true');
-    body.appendChild(iframe);
+  } else if (esBase64Pdf) {
+    try {
+      var b64 = url.split(',')[1];
+      var bin = atob(b64);
+      var arr = new Uint8Array(bin.length);
+      for (var i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+      var blob = new Blob([arr], {type:'application/pdf'});
+      var blobUrl = URL.createObjectURL(blob);
+      var iframe = document.createElement('iframe');
+      iframe.src = blobUrl; iframe.className = 'modal-pdf-iframe';
+      iframe.setAttribute('allowfullscreen','true');
+      body.appendChild(iframe);
+      overlay._blobUrl = blobUrl;
+    } catch(e) {
+      body.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:16px;padding:32px;text-align:center;"><div style="font-size:52px;">📄</div><p style="color:rgba(255,255,255,.7);font-size:13px;">No se puede mostrar en este navegador.</p><a href="' + url + '" download="documento.pdf" style="background:#FF6B00;color:#fff;padding:12px 24px;border-radius:8px;font-family:\'Barlow Condensed\',sans-serif;font-weight:800;font-size:15px;text-decoration:none;">⬇️ Descargar PDF</a></div>';
+    }
   } else {
-    // fallback: intenta mostrar como imagen
-    var img2 = document.createElement('img');
-    img2.src = url;
-    img2.className = 'modal-pdf-img';
-    body.appendChild(img2);
+    var iframe2 = document.createElement('iframe');
+    iframe2.src = url; iframe2.className = 'modal-pdf-iframe';
+    iframe2.setAttribute('allowfullscreen','true');
+    body.appendChild(iframe2);
   }
   overlay.classList.add('active');
 }
@@ -1051,6 +1064,7 @@ function cerrarVisorPdf() {
   var overlay = document.getElementById('modal-pdf-viewer');
   overlay.classList.remove('active');
   document.getElementById('modal-pdf-body').innerHTML = '';
+  if (overlay._blobUrl) { URL.revokeObjectURL(overlay._blobUrl); overlay._blobUrl = null; }
 }
 
 function verPdfComisiones(){ abrirVisorPdf(PDF_COMISIONES_URL, '📄 Comisiones'); }
@@ -1643,6 +1657,7 @@ document.addEventListener('DOMContentLoaded',function(){
 
   // Cierre del visor PDF inline
   document.getElementById('modal-pdf-close-btn').addEventListener('click',cerrarVisorPdf);
+document.getElementById('modal-pdf-back-btn').addEventListener('click',cerrarVisorPdf);
 
   _api('obtenerEstadoConfig',null,function(cfg){
     if(!cfg)return;
